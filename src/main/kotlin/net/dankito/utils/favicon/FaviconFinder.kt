@@ -27,7 +27,8 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
             try {
                 callback(AsyncResult(true, result = extractFavicons(url)))
             } catch(e: Exception) {
-                log.error("Could not get favicons for " + url, e)
+                log.error("Could not get favicons for $url", e)
+
                 callback(AsyncResult(false, e))
             }
         }
@@ -35,7 +36,7 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
 
     open fun extractFavicons(url: String) : List<Favicon> {
         webClient.get(RequestParameters(url)).let { response ->
-            if(response.isSuccessful) {
+            if (response.isSuccessful) {
                 return extractFavicons(response, url)
             }
         }
@@ -50,7 +51,7 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
     }
 
     open fun extractFavicons(document: Document, url: String): List<Favicon> {
-        val extractedFavicons = document.head().select("link, meta").map { mapElementToFavicon(it, url) }.filterNotNull().toMutableList()
+        val extractedFavicons = document.head().select("link, meta").mapNotNull { mapElementToFavicon(it, url) }.toMutableList()
 
         tryToFindDefaultFavicon(url, extractedFavicons)
 
@@ -61,15 +62,15 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
         val urlInstance = URL(url)
         val defaultFaviconUrl = urlInstance.protocol + "://" + urlInstance.host + "/favicon.ico"
         webClient.get(RequestParameters(defaultFaviconUrl, responseType = ResponseType.Bytes)).let { response ->
-            if(response.isSuccessful && containsIconWithUrl(extractedFavicons, defaultFaviconUrl) == false) {
+            if (response.isSuccessful && containsIconWithUrl(extractedFavicons, defaultFaviconUrl) == false) {
                 extractedFavicons.add(Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon))
             }
         }
     }
 
     protected open fun containsIconWithUrl(extractedFavicons: MutableList<Favicon>, faviconUrl: String): Boolean {
-        extractedFavicons.forEach {
-            if(it.url == faviconUrl) {
+        extractedFavicons.forEach { favicon ->
+            if (favicon.url == faviconUrl) {
                 return true
             }
         }
@@ -82,10 +83,10 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
      * and here https://en.wikipedia.org/wiki/Favicon
      */
     protected open fun mapElementToFavicon(linkOrMetaElement: Element, siteUrl: String): Favicon? {
-        if(linkOrMetaElement.nodeName() == "link") {
+        if (linkOrMetaElement.nodeName() == "link") {
             return mapLinkElementToFavicon(linkOrMetaElement, siteUrl)
         }
-        else if(linkOrMetaElement.nodeName() == "meta") {
+        else if (linkOrMetaElement.nodeName() == "meta") {
             return mapMetaElementToFavicon(linkOrMetaElement, siteUrl)
         }
 
@@ -93,13 +94,13 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
     }
 
     protected open fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? {
-        if(linkElement.hasAttr("rel")) {
+        if (linkElement.hasAttr("rel")) {
             val relValue = linkElement.attr("rel")
 
             if(relValue == "icon") {
                 return createFavicon(linkElement.attr("href"), siteUrl, FaviconType.Icon, linkElement.attr("sizes"), linkElement.attr("type"))
             }
-            else if(relValue.startsWith("apple-touch-icon")) {
+            else if (relValue.startsWith("apple-touch-icon")) {
                 val iconType = if(relValue.endsWith("-precomposed")) FaviconType.AppleTouchPrecomposed else FaviconType.AppleTouch
                 return createFavicon(linkElement.attr("href"), siteUrl, iconType, linkElement.attr("sizes"), linkElement.attr("type"))
             }
@@ -112,10 +113,10 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
     }
 
     protected open fun mapMetaElementToFavicon(metaElement: Element, siteUrl: String): Favicon? {
-        if(isOpenGraphImageDeclaration(metaElement)) {
+        if (isOpenGraphImageDeclaration(metaElement)) {
             return Favicon(urlUtil.makeLinkAbsolute(metaElement.attr("content"), siteUrl), FaviconType.OpenGraphImage)
         }
-        else if(isMsTileMetaElement(metaElement)) {
+        else if (isMsTileMetaElement(metaElement)) {
             return Favicon(urlUtil.makeLinkAbsolute(metaElement.attr("content"), siteUrl), FaviconType.MsTileImage)
         }
 
@@ -128,13 +129,14 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
 
 
     protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, sizesString: String?, type: String?): Favicon? {
-        if(url != null) {
+        if (url != null) {
             val favicon = Favicon(urlUtil.makeLinkAbsolute(url, siteUrl), iconType, type = type)
 
             if (sizesString != null) {
                 val sizes = extractSizesFromString(sizesString)
-                if(sizes.isNotEmpty()) {
-                    favicon.size = sizes.sortedDescending().first()
+
+                if (sizes.isNotEmpty()) {
+                    favicon.size = sizes.max()!!
                 }
             }
 
@@ -145,17 +147,17 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
     }
 
     protected open fun extractSizesFromString(sizesString: String): List<Size> {
-        val sizes = sizesString.split(" ").map { sizeString -> mapSizeString(sizeString) }.filterNotNull()
+        val sizes = sizesString.split(" ").mapNotNull { sizeString -> mapSizeString(sizeString) }
 
         return sizes
     }
 
     protected open fun mapSizeString(sizeString: String) : Size? {
         var parts = sizeString.split('x')
-        if(parts.size != 2) {
+        if (parts.size != 2) {
             parts = sizeString.split('×') // actually doesn't meet specification, see https://www.w3schools.com/tags/att_link_sizes.asp, but New York Times uses it
         }
-        if(parts.size != 2) {
+        if (parts.size != 2) {
             parts = sizeString.split('X')
         }
 
