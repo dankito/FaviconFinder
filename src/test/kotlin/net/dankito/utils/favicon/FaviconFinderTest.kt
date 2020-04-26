@@ -1,9 +1,7 @@
 package net.dankito.utils.favicon
 
 import net.dankito.utils.web.client.OkHttpWebClient
-import org.hamcrest.CoreMatchers.`is`
-import org.hamcrest.CoreMatchers.notNullValue
-import org.junit.Assert.assertThat
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 
@@ -80,12 +78,12 @@ class FaviconFinderTest {
         return underTest.extractFavicons(url)
     }
 
-    private fun testExtractedFavicons(extractedIcons: List<Favicon>, countIconsToBe: Int) {
-        assertThat(extractedIcons.size, `is`(countIconsToBe))
+    private fun testExtractedFavicons(extractedIcons: List<Favicon>, countMinimumFavicons: Int) {
+        assertThat(extractedIcons.size).isGreaterThanOrEqualTo(countMinimumFavicons)
 
         for (favicon in extractedIcons) {
-            assertThat(favicon.url, notNullValue())
-            assertThat(favicon.url.startsWith("http"), `is`(true))
+            assertThat(favicon.url).isNotNull()
+            assertThat(favicon.url).startsWith("http")
         }
     }
 
