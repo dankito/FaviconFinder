@@ -30,7 +30,7 @@
 
 // Copied from http://blog.jaimon.co.uk/simpleimageinfo/SimpleImageInfo.java.html (https://jaimonmathew.wordpress.com/2011/01/29/simpleimageinfo/)
 
-package net.dankito.faviconextractor
+package net.dankito.utils.favicon
 
 import java.io.*
 

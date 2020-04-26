@@ -1,4 +1,4 @@
-package net.dankito.faviconextractor
+package net.dankito.utils.favicon
 
 import net.dankito.utils.Size
 

@@ -1,4 +1,4 @@
-package net.dankito.faviconextractor
+package net.dankito.utils.favicon
 
 
 enum class FaviconType {
