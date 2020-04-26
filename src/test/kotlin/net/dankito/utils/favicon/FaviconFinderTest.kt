@@ -61,6 +61,21 @@ class FaviconFinderTest {
     }
 
 
+    @Test
+    fun spardaBank() {
+        val extractedIcons = getFaviconsForUrl("https://www.sparda-b.de")
+
+        testExtractedFavicons(extractedIcons, 1)
+    }
+
+    @Test
+    fun deutscheBank() {
+        val extractedIcons = getFaviconsForUrl("https://www.deutsche-bank.de/pfb/content/blz-finden.html?c=6923861946&t=query&bank=...")
+
+        testExtractedFavicons(extractedIcons, 2)
+    }
+
+
     private fun getFaviconsForUrl(url: String): List<Favicon> {
         return underTest.extractFavicons(url)
     }
