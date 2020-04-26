@@ -33,7 +33,7 @@ class FaviconFinderTest {
         val extractedIcons = getFaviconsForUrl("https://www.nytimes.com/")
 
 
-        testExtractedFavicons(extractedIcons, 6)
+        testExtractedFavicons(extractedIcons, 7)
     }
 
     @Test
@@ -49,7 +49,7 @@ class FaviconFinderTest {
         val extractedIcons = getFaviconsForUrl("https://www.heise.de")
 
 
-        testExtractedFavicons(extractedIcons, 6)
+        testExtractedFavicons(extractedIcons, 8)
     }
 
     @Test
@@ -57,7 +57,7 @@ class FaviconFinderTest {
         val extractedIcons = getFaviconsForUrl("http://www.der-postillon.com")
 
 
-        testExtractedFavicons(extractedIcons, 2)
+        testExtractedFavicons(extractedIcons, 3)
     }
 
 
