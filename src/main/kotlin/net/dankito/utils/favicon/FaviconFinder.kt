@@ -95,21 +95,28 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
 
     protected open fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? {
         if (linkElement.hasAttr("rel")) {
-            val relValue = linkElement.attr("rel")
+            getFaviconTypeForLinkElements(linkElement)?.let { faviconType ->
+                val href = linkElement.attr("href")
+                val sizes = linkElement.attr("sizes")
+                val type = linkElement.attr("type")
 
-            if(relValue == "icon") {
-                return createFavicon(linkElement.attr("href"), siteUrl, FaviconType.Icon, linkElement.attr("sizes"), linkElement.attr("type"))
-            }
-            else if (relValue.startsWith("apple-touch-icon")) {
-                val iconType = if(relValue.endsWith("-precomposed")) FaviconType.AppleTouchPrecomposed else FaviconType.AppleTouch
-                return createFavicon(linkElement.attr("href"), siteUrl, iconType, linkElement.attr("sizes"), linkElement.attr("type"))
-            }
-            else if(relValue == "shortcut icon") {
-                return createFavicon(linkElement.attr("href"), siteUrl, FaviconType.ShortcutIcon, linkElement.attr("sizes"), linkElement.attr("type"))
+                return createFavicon(href, siteUrl, faviconType, sizes, type)
             }
         }
 
         return null
+    }
+
+    protected open fun getFaviconTypeForLinkElements(linkElement: Element): FaviconType? {
+        val relValue = linkElement.attr("rel")
+
+        return when (relValue) {
+            "icon" -> FaviconType.Icon
+            "apple-touch-icon-precomposed" -> FaviconType.AppleTouchPrecomposed
+            "apple-touch-icon" -> FaviconType.AppleTouch
+            "shortcut icon" -> FaviconType.ShortcutIcon
+            else -> return null
+        }
     }
 
     protected open fun mapMetaElementToFavicon(metaElement: Element, siteUrl: String): Favicon? {
