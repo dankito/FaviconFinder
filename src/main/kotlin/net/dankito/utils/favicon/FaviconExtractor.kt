@@ -22,7 +22,7 @@ open class FaviconExtractor(protected val webClient : IWebClient, protected val 
     }
 
 
-    fun extractFaviconsAsync(url: String, callback: (AsyncResult<List<Favicon>>) -> Unit) {
+    open fun extractFaviconsAsync(url: String, callback: (AsyncResult<List<Favicon>>) -> Unit) {
         thread {
             try {
                 callback(AsyncResult(true, result = extractFavicons(url)))
@@ -33,7 +33,7 @@ open class FaviconExtractor(protected val webClient : IWebClient, protected val 
         }
     }
 
-    private fun extractFavicons(url: String) : List<Favicon> {
+    open fun extractFavicons(url: String) : List<Favicon> {
         webClient.get(RequestParameters(url)).let { response ->
             if(response.isSuccessful) {
                 return extractFavicons(response, url)
@@ -43,13 +43,13 @@ open class FaviconExtractor(protected val webClient : IWebClient, protected val 
         return listOf()
     }
 
-    private fun extractFavicons(response: WebClientResponse, url: String): List<Favicon> {
+    protected open fun extractFavicons(response: WebClientResponse, url: String): List<Favicon> {
         val document = Jsoup.parse(response.body, url)
 
         return extractFavicons(document, url)
     }
 
-    fun extractFavicons(document: Document, url: String): List<Favicon> {
+    open fun extractFavicons(document: Document, url: String): List<Favicon> {
         val extractedFavicons = document.head().select("link, meta").map { mapElementToFavicon(it, url) }.filterNotNull().toMutableList()
 
         tryToFindDefaultFavicon(url, extractedFavicons)
@@ -57,7 +57,7 @@ open class FaviconExtractor(protected val webClient : IWebClient, protected val 
         return extractedFavicons
     }
 
-    private fun tryToFindDefaultFavicon(url: String, extractedFavicons: MutableList<Favicon>) {
+    protected open fun tryToFindDefaultFavicon(url: String, extractedFavicons: MutableList<Favicon>) {
         val urlInstance = URL(url)
         val defaultFaviconUrl = urlInstance.protocol + "://" + urlInstance.host + "/favicon.ico"
         webClient.get(RequestParameters(defaultFaviconUrl, responseType = ResponseType.Bytes)).let { response ->
@@ -67,7 +67,7 @@ open class FaviconExtractor(protected val webClient : IWebClient, protected val 
         }
     }
 
-    private fun containsIconWithUrl(extractedFavicons: MutableList<Favicon>, faviconUrl: String): Boolean {
+    protected open fun containsIconWithUrl(extractedFavicons: MutableList<Favicon>, faviconUrl: String): Boolean {
         extractedFavicons.forEach {
             if(it.url == faviconUrl) {
                 return true
@@ -81,7 +81,7 @@ open class FaviconExtractor(protected val webClient : IWebClient, protected val 
      * Possible formats are documented here https://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url#answer-22007642
      * and here https://en.wikipedia.org/wiki/Favicon
      */
-    private fun mapElementToFavicon(linkOrMetaElement: Element, siteUrl: String): Favicon? {
+    protected open fun mapElementToFavicon(linkOrMetaElement: Element, siteUrl: String): Favicon? {
         if(linkOrMetaElement.nodeName() == "link") {
             return mapLinkElementToFavicon(linkOrMetaElement, siteUrl)
         }
@@ -92,7 +92,7 @@ open class FaviconExtractor(protected val webClient : IWebClient, protected val 
         return null
     }
 
-    private fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? {
+    protected open fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? {
         if(linkElement.hasAttr("rel")) {
             val relValue = linkElement.attr("rel")
 
@@ -111,7 +111,7 @@ open class FaviconExtractor(protected val webClient : IWebClient, protected val 
         return null
     }
 
-    private fun mapMetaElementToFavicon(metaElement: Element, siteUrl: String): Favicon? {
+    protected open fun mapMetaElementToFavicon(metaElement: Element, siteUrl: String): Favicon? {
         if(isOpenGraphImageDeclaration(metaElement)) {
             return Favicon(urlUtil.makeLinkAbsolute(metaElement.attr("content"), siteUrl), FaviconType.OpenGraphImage)
         }
@@ -122,12 +122,12 @@ open class FaviconExtractor(protected val webClient : IWebClient, protected val 
         return null
     }
 
-    private fun isOpenGraphImageDeclaration(metaElement: Element) = metaElement.hasAttr("property") && metaElement.attr("property") == "og:image" && metaElement.hasAttr("content")
+    protected open fun isOpenGraphImageDeclaration(metaElement: Element) = metaElement.hasAttr("property") && metaElement.attr("property") == "og:image" && metaElement.hasAttr("content")
 
-    private fun isMsTileMetaElement(metaElement: Element) = metaElement.hasAttr("name") && metaElement.attr("name") == "msapplication-TileImage" && metaElement.hasAttr("content")
+    protected open fun isMsTileMetaElement(metaElement: Element) = metaElement.hasAttr("name") && metaElement.attr("name") == "msapplication-TileImage" && metaElement.hasAttr("content")
 
 
-    private fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, sizesString: String?, type: String?): Favicon? {
+    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, sizesString: String?, type: String?): Favicon? {
         if(url != null) {
             val favicon = Favicon(urlUtil.makeLinkAbsolute(url, siteUrl), iconType, type = type)
 
@@ -144,13 +144,13 @@ open class FaviconExtractor(protected val webClient : IWebClient, protected val 
         return null
     }
 
-    private fun extractSizesFromString(sizesString: String): List<Size> {
+    protected open fun extractSizesFromString(sizesString: String): List<Size> {
         val sizes = sizesString.split(" ").map { sizeString -> mapSizeString(sizeString) }.filterNotNull()
 
         return sizes
     }
 
-    private fun mapSizeString(sizeString: String) : Size? {
+    protected open fun mapSizeString(sizeString: String) : Size? {
         var parts = sizeString.split('x')
         if(parts.size != 2) {
             parts = sizeString.split('×') // actually doesn't meet specification, see https://www.w3schools.com/tags/att_link_sizes.asp, but New York Times uses it

@@ -7,7 +7,7 @@ import net.dankito.utils.web.client.ResponseType
 import org.slf4j.LoggerFactory
 
 
-class FaviconComparator(val webClient : IWebClient) {
+open class FaviconComparator(val webClient : IWebClient) {
 
     companion object {
         const val DEFAULT_MIN_SIZE = 32
@@ -16,7 +16,7 @@ class FaviconComparator(val webClient : IWebClient) {
     }
 
 
-    fun getBestIcon(favicons: List<Favicon>, minSize: Int = DEFAULT_MIN_SIZE, maxSize: Int? = null, returnSquarishOneIfPossible: Boolean = false) : Favicon? {
+    open fun getBestIcon(favicons: List<Favicon>, minSize: Int = DEFAULT_MIN_SIZE, maxSize: Int? = null, returnSquarishOneIfPossible: Boolean = false) : Favicon? {
         // retrieve sizes of icons which's size isn't known yet
         favicons.filter { it.size == null }.forEach {
             it.size = retrieveIconSize(it)
@@ -44,7 +44,7 @@ class FaviconComparator(val webClient : IWebClient) {
         return null
     }
 
-    fun doesFitSize(iconUrl: String, minSize: Int = DEFAULT_MIN_SIZE, maxSize: Int? = null, mustBeSquarish: Boolean = false): Boolean {
+    open fun doesFitSize(iconUrl: String, minSize: Int = DEFAULT_MIN_SIZE, maxSize: Int? = null, mustBeSquarish: Boolean = false): Boolean {
         retrieveIconSize(iconUrl)?.let {
             return doesFitSize(it, minSize, maxSize, mustBeSquarish)
         }
@@ -52,7 +52,7 @@ class FaviconComparator(val webClient : IWebClient) {
         return false
     }
 
-    private fun doesFitSize(favicon: Favicon, minSize: Int, maxSize: Int? = null, mustBeSquarish: Boolean) : Boolean {
+    protected open fun doesFitSize(favicon: Favicon, minSize: Int, maxSize: Int? = null, mustBeSquarish: Boolean) : Boolean {
         favicon.size?.let { faviconSize ->
             return doesFitSize(faviconSize, minSize, maxSize, mustBeSquarish)
         }
@@ -60,7 +60,7 @@ class FaviconComparator(val webClient : IWebClient) {
         return false
     }
 
-    private fun doesFitSize(faviconSize: Size, minSize: Int, maxSize: Int? = null, mustBeSquarish: Boolean) : Boolean {
+    protected open fun doesFitSize(faviconSize: Size, minSize: Int, maxSize: Int? = null, mustBeSquarish: Boolean) : Boolean {
         var result = hasMinSize(faviconSize, minSize)
 
         maxSize?.let { result = result.and(hasMaxSize(faviconSize, maxSize)) }
@@ -72,7 +72,7 @@ class FaviconComparator(val webClient : IWebClient) {
         return result
     }
 
-    private fun hasMinSize(iconSize: Size?, minSize: Int = DEFAULT_MIN_SIZE): Boolean {
+    protected open fun hasMinSize(iconSize: Size?, minSize: Int = DEFAULT_MIN_SIZE): Boolean {
         if(iconSize != null) {
             return iconSize.width >= minSize && iconSize.height >= minSize
         }
@@ -80,7 +80,7 @@ class FaviconComparator(val webClient : IWebClient) {
         return false
     }
 
-    private fun hasMaxSize(iconSize: Size?, maxSize: Int): Boolean {
+    protected open fun hasMaxSize(iconSize: Size?, maxSize: Int): Boolean {
         if(iconSize != null) {
             return iconSize.width <= maxSize && iconSize.height <= maxSize
         }
@@ -88,11 +88,11 @@ class FaviconComparator(val webClient : IWebClient) {
         return false
     }
 
-    private fun retrieveIconSize(favicon: Favicon) : Size? {
+    protected open fun retrieveIconSize(favicon: Favicon) : Size? {
         return retrieveIconSize(favicon.url)
     }
 
-    private fun retrieveIconSize(iconUrl: String) : Size? {
+    protected open fun retrieveIconSize(iconUrl: String) : Size? {
         try {
             val downloadedBytes = mutableListOf<Byte>()
 
@@ -109,4 +109,5 @@ class FaviconComparator(val webClient : IWebClient) {
 
         return null
     }
+
 }
