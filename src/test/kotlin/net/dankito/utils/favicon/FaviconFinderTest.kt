@@ -2,7 +2,7 @@ package net.dankito.utils.favicon
 
 import net.dankito.utils.web.client.OkHttpWebClient
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 
 class FaviconFinderTest {
