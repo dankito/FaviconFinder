@@ -100,7 +100,9 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
                 val sizes = linkElement.attr("sizes")
                 val type = linkElement.attr("type")
 
-                return createFavicon(href, siteUrl, faviconType, sizes, type)
+                if (href.startsWith("data:;base64") == false) {
+                    return createFavicon(href, siteUrl, faviconType, sizes, type)
+                }
             }
         }
 
