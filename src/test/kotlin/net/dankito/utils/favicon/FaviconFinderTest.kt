@@ -8,9 +8,10 @@ import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
-class FaviconExtractorTest {
 
-    private val underTest : FaviconExtractor = FaviconExtractor(OkHttpWebClient())
+class FaviconFinderTest {
+
+    private val underTest : FaviconFinder = FaviconFinder(OkHttpWebClient())
 
 
     @Test

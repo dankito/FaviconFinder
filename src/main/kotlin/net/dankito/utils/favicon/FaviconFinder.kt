@@ -15,10 +15,10 @@ import java.net.URL
 import kotlin.concurrent.thread
 
 
-open class FaviconExtractor(protected val webClient : IWebClient, protected val urlUtil: UrlUtil = UrlUtil()) {
+open class FaviconFinder(protected val webClient : IWebClient, protected val urlUtil: UrlUtil = UrlUtil()) {
 
     companion object {
-        private val log = LoggerFactory.getLogger(FaviconExtractor::class.java)
+        private val log = LoggerFactory.getLogger(FaviconFinder::class.java)
     }
 
 
