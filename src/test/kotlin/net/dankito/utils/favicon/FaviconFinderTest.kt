@@ -5,8 +5,6 @@ import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.junit.Assert.assertThat
 import org.junit.Test
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 
 class FaviconFinderTest {
@@ -63,21 +61,11 @@ class FaviconFinderTest {
     }
 
 
-    private fun getFaviconsForUrl(url: String): MutableList<Favicon> {
-        val extractedIcons = mutableListOf<Favicon>()
-        val countDownLatch = CountDownLatch(1)
-
-        underTest.extractFaviconsAsync(url) {
-            it.result?.let { extractedIcons.addAll(it) }
-
-            countDownLatch.countDown()
-        }
-
-        countDownLatch.await(20, TimeUnit.SECONDS)
-        return extractedIcons
+    private fun getFaviconsForUrl(url: String): List<Favicon> {
+        return underTest.extractFavicons(url)
     }
 
-    private fun testExtractedFavicons(extractedIcons: MutableList<Favicon>, countIconsToBe: Int) {
+    private fun testExtractedFavicons(extractedIcons: List<Favicon>, countIconsToBe: Int) {
         assertThat(extractedIcons.size, `is`(countIconsToBe))
 
         for (favicon in extractedIcons) {
