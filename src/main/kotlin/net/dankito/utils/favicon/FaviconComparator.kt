@@ -34,7 +34,7 @@ open class FaviconComparator(val webClient : IWebClient) {
         }
 
         if(maxSize != null) { // if maxSize is set, try next without maxSize
-            favicons.filter { doesFitSize(it, minSize, null, false) }.sortedByDescending { it.size }.firstOrNull()?.let {
+            favicons.filter { doesFitSize(it, minSize, null, false) }.sortedBy { it.size }.firstOrNull()?.let {
                 return it
             }
         }
