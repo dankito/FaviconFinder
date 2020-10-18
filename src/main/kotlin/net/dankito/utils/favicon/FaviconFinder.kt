@@ -61,9 +61,11 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
     protected open fun tryToFindDefaultFavicon(url: String, extractedFavicons: MutableList<Favicon>) {
         val urlInstance = URL(url)
         val defaultFaviconUrl = urlInstance.protocol + "://" + urlInstance.host + "/favicon.ico"
-        webClient.get(RequestParameters(defaultFaviconUrl, responseType = ResponseType.Bytes)).let { response ->
-            if (response.isSuccessful && containsIconWithUrl(extractedFavicons, defaultFaviconUrl) == false) {
-                extractedFavicons.add(Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon))
+        if (containsIconWithUrl(extractedFavicons, defaultFaviconUrl) == false) {
+            webClient.get(RequestParameters(defaultFaviconUrl, responseType = ResponseType.Bytes)).let { response ->
+                if (response.isSuccessful) {
+                    extractedFavicons.add(Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon))
+                }
             }
         }
     }
