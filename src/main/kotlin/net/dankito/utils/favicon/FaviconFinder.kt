@@ -3,6 +3,7 @@ package net.dankito.utils.favicon
 import net.dankito.utils.AsyncResult
 import net.dankito.utils.Size
 import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import net.dankito.utils.favicon.web.WebResponse
 import net.dankito.utils.web.UrlUtil
 import org.jsoup.Jsoup
@@ -13,7 +14,10 @@ import java.net.URL
 import kotlin.concurrent.thread
 
 
-open class FaviconFinder(protected val webClient : IWebClient, protected val urlUtil: UrlUtil = UrlUtil()) {
+open class FaviconFinder @JvmOverloads constructor(
+        protected val webClient : IWebClient = UrlConnectionWebClient(),
+        protected val urlUtil: UrlUtil = UrlUtil()
+) {
 
     companion object {
         private val log = LoggerFactory.getLogger(FaviconFinder::class.java)
