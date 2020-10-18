@@ -1,9 +1,7 @@
 package net.dankito.utils.favicon
 
 import net.dankito.utils.Size
-import net.dankito.utils.web.client.IWebClient
-import net.dankito.utils.web.client.RequestParameters
-import net.dankito.utils.web.client.ResponseType
+import net.dankito.utils.favicon.web.IWebClient
 import org.slf4j.LoggerFactory
 
 
@@ -94,16 +92,12 @@ open class FaviconComparator(val webClient : IWebClient) {
 
     protected open fun retrieveIconSize(iconUrl: String) : Size? {
         try {
-            val downloadedBytes = mutableListOf<Byte>()
-
-            val parameters = RequestParameters(iconUrl)
-            parameters.responseType = ResponseType.Bytes
-            parameters.downloadProgressListener = { _, downloadedChunk -> downloadedBytes.addAll(downloadedChunk.toList()) }
-
-            val response = webClient.get(parameters)
-            if (response.isSuccessful) {
-                val imageInfo = SimpleImageInfo(downloadedBytes.toByteArray())
-                return Size(imageInfo.width, imageInfo.height)
+            val response = webClient.get(iconUrl)
+            if (response.successful) {
+                response.receivedData?.let { receivedData ->
+                    val imageInfo = SimpleImageInfo(receivedData)
+                    return Size(imageInfo.width, imageInfo.height)
+                }
             }
         } catch(e: Exception) { log.error("Could not retrieve icon size for url $iconUrl", e) }
 

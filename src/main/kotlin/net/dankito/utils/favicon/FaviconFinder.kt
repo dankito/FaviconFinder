@@ -2,11 +2,9 @@ package net.dankito.utils.favicon
 
 import net.dankito.utils.AsyncResult
 import net.dankito.utils.Size
+import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.utils.favicon.web.WebResponse
 import net.dankito.utils.web.UrlUtil
-import net.dankito.utils.web.client.IWebClient
-import net.dankito.utils.web.client.RequestParameters
-import net.dankito.utils.web.client.ResponseType
-import net.dankito.utils.web.client.WebClientResponse
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -35,8 +33,8 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
     }
 
     open fun extractFavicons(url: String) : List<Favicon> {
-        webClient.get(RequestParameters(url)).let { response ->
-            if (response.isSuccessful) {
+        webClient.get(url).let { response ->
+            if (response.successful) {
                 return extractFavicons(response, url)
             }
         }
@@ -44,7 +42,7 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
         return listOf()
     }
 
-    protected open fun extractFavicons(response: WebClientResponse, url: String): List<Favicon> {
+    protected open fun extractFavicons(response: WebResponse, url: String): List<Favicon> {
         val document = Jsoup.parse(response.body, url)
 
         return extractFavicons(document, url)
@@ -62,8 +60,8 @@ open class FaviconFinder(protected val webClient : IWebClient, protected val url
         val urlInstance = URL(url)
         val defaultFaviconUrl = urlInstance.protocol + "://" + urlInstance.host + "/favicon.ico"
         if (containsIconWithUrl(extractedFavicons, defaultFaviconUrl) == false) {
-            webClient.get(RequestParameters(defaultFaviconUrl, responseType = ResponseType.Bytes)).let { response ->
-                if (response.isSuccessful) {
+            webClient.get(defaultFaviconUrl).let { response ->
+                if (response.successful && response.receivedData != null) {
                     extractedFavicons.add(Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon))
                 }
             }
