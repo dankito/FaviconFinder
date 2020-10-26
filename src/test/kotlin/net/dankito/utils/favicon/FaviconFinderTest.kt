@@ -1,13 +1,13 @@
 package net.dankito.utils.favicon
 
-import net.dankito.utils.web.client.OkHttpWebClient
+import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 
 class FaviconFinderTest {
 
-    private val underTest : FaviconFinder = FaviconFinder(OkHttpWebClient())
+    private val underTest : FaviconFinder = FaviconFinder(UrlConnectionWebClient())
 
 
     @Test
