@@ -278,4 +278,25 @@ class FaviconComparatorTest {
         assertThat(result).isEqualTo(bestIcon)
     }
 
+
+    @Test
+    fun excludeIco() {
+
+        // given
+        val bestIcon = Favicon("https://www.targobank.de/de/images/favicon/favicon.png", FaviconType.Icon)
+
+        val favicons = listOf(
+                Favicon("https://www.targobank.de/favicon.ico", FaviconType.ShortcutIcon),
+                bestIcon
+        )
+
+
+        // when
+        val result = underTest.getBestIcon(favicons, 32, 32 + 32, true, listOf(".ico"))
+
+
+        // then
+        assertThat(result).isEqualTo(bestIcon)
+    }
+
 }
