@@ -127,10 +127,10 @@ open class FaviconFinder @JvmOverloads constructor(
 
     protected open fun mapMetaElementToFavicon(metaElement: Element, siteUrl: String): Favicon? {
         if (isOpenGraphImageDeclaration(metaElement)) {
-            return Favicon(urlUtil.makeLinkAbsolute(metaElement.attr("content"), siteUrl), FaviconType.OpenGraphImage)
+            return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.OpenGraphImage, null, null)
         }
         else if (isMsTileMetaElement(metaElement)) {
-            return Favicon(urlUtil.makeLinkAbsolute(metaElement.attr("content"), siteUrl), FaviconType.MsTileImage)
+            return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.MsTileImage, null, null)
         }
 
         return null
