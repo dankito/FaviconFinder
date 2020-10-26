@@ -147,7 +147,7 @@ open class FaviconFinder @JvmOverloads constructor(
 
             val favicon = Favicon(urlUtil.makeLinkAbsolute(urlWithoutQuery, siteUrl), iconType, type = type)
 
-            if (sizesString != null) {
+            if (sizesString.isNullOrBlank() == false) {
                 val sizes = extractSizesFromString(sizesString)
 
                 if (sizes.isNotEmpty()) {
