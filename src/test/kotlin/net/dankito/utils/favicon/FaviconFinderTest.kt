@@ -130,6 +130,39 @@ class FaviconFinderTest {
     }
 
 
+    @Test
+    fun extractIconSizeFromUrl() {
+
+        var html = "<html><head>"
+
+        // TODO: also test these?
+        // https://assets.guim.co.uk/images/favicons/023dafadbf5ef53e0865e4baaaa32b3b/windows_tile_144_b.png
+        // https://4.bp.blogspot.com/-46xU6sntzl4/UVHLh1NGfwI/AAAAAAAAUlY/RiARs4-toWk/s800/Logo.jpg
+        // https://www.sparda-b.de/content/dam/f3132-0/webseite/Grafiken/IOS_Appstore_W1024H1024_abgerundet_transparent.png
+        // https://www.test.com/favicon_196px.png
+
+        html += "<link data-rh=\"true\" rel=\"apple-touch-icon-precomposed\" href=\"/vi-assets/static-assets/ios-ipad-144x144-28865b72953380a40aa43318108876cb.png\">" // nytimes.com
+        html += "<link rel=\"apple-touch-icon\" href=\"https://assets.guim.co.uk/images/favicons/fee5e2d638d1c35f6d501fa397e53329/152x152.png\">" // theguardian.com
+        html += "<link rel=\"shortcut icon\" type=\"image/png\" href=\"https://assets.guim.co.uk/images/favicons/46bd2faa1ab438684a6d4528a655a8bd/32x32.ico\">" // theguardian.com
+        html += "<link rel=\"icon\" type=\"image/png\" href=\"/scripts/favicon/favicon-16x16.png?v=ng98AGkzJy\">" // heise.de
+        html += "<link href=\"/icons/ho/touch-icons/apple-touch-icon-180x180.png\" rel=\"apple-touch-icon\">" // heise.de
+        html += "<link rel=\"icon\" type=\"image/png\" href=\"/scripts/favicon/android-chrome-192x192.png?v=ng98AGkzJy\">" // psd-muenchen.de
+        html += "<meta name=\"msapplication-TileImage\" content=\"/scripts/favicon/mstile-144x144.png?v=ng98AGkzJy\">" // psd-muenchen.de
+
+        html += "</head><body></body></html"
+
+        val extractedIcons = getFaviconsForHtml(html)
+
+        testExtractedFavicons(extractedIcons, 7)
+
+        extractedIcons.forEach { favicon ->
+            if (favicon.url != TestSiteUrl + "/favicon.ico") { // FaviconFinder adds default icon for passed siteUrl TestSiteUrl
+                assertThat(favicon.size).isNotNull
+            }
+        }
+    }
+
+
     private fun getFaviconsForUrl(url: String): List<Favicon> {
         return underTest.extractFavicons(url)
     }
