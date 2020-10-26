@@ -105,6 +105,31 @@ class FaviconFinderTest {
     }
 
 
+    @Test
+    fun extractIconSizeFromSizesAttribute() {
+
+        var html = "<html><head>"
+
+        html += "<link data-rh=\"true\" rel=\"apple-touch-icon-precomposed\" sizes=\"144×144\" href=\"/vi-assets/static-assets/ios-ipad-144x144-28865b72953380a40aa43318108876cb.png\">" // nytimes.com
+        html += "<link rel=\"apple-touch-icon\" sizes=\"152x152\" href=\"https://assets.guim.co.uk/images/favicons/fee5e2d638d1c35f6d501fa397e53329/152x152.png\">" // theguardian.com
+        html += "<link rel=\"shortcut icon\" sizes=\"16x16 32x32\" href=\"https://www.zeit.de/favicon.ico\">" // zeit.de
+        html += "<link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"/scripts/favicon/favicon-16x16.png?v=ng98AGkzJy\">" // heise.de
+        html += "<link href=\"/icons/ho/touch-icons/apple-touch-icon-180x180.png\" rel=\"apple-touch-icon\" sizes=\"180x180\">" // heise.de
+        html += "<link rel=\"icon\" type=\"image/png\" sizes=\"192x192\" href=\"/scripts/favicon/android-chrome-192x192.png?v=ng98AGkzJy\">" // psd-muenchen.de
+        html += "<link rel=\"shortcut icon\" sizes=\"16X16\" href=\"$TestSiteUrl/favicon.ico\">" // self created to test 'X' as sizes separator but has also already been seen in the wild
+
+        html += "</head><body></body></html"
+
+        val extractedIcons = getFaviconsForHtml(html)
+
+        testExtractedFavicons(extractedIcons, 1)
+
+        extractedIcons.forEach { favicon ->
+            assertThat(favicon.size).isNotNull
+        }
+    }
+
+
     private fun getFaviconsForUrl(url: String): List<Favicon> {
         return underTest.extractFavicons(url)
     }
