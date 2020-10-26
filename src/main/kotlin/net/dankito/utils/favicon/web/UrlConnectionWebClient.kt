@@ -1,6 +1,7 @@
 package net.dankito.utils.favicon.web
 
 import org.slf4j.LoggerFactory
+import java.io.FileNotFoundException
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -30,7 +31,11 @@ open class UrlConnectionWebClient : IWebClient {
         try {
             val connection = createConnection(url, "HEAD")
 
-            return closeConnectionAndMapResponse(connection, null)
+            try {
+                return closeConnectionAndMapResponse(connection, null)
+            } catch (e: FileNotFoundException) { // couldn't believe it, HEAD throws FileNotFoundException if url doesn't exist
+                return WebResponse(false, 404)
+            }
         } catch (e: Exception) {
             return logAndMapError(url, e)
         }
