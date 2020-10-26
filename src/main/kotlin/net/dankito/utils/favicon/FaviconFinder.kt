@@ -143,7 +143,9 @@ open class FaviconFinder @JvmOverloads constructor(
 
     protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, sizesString: String?, type: String?): Favicon? {
         if (url != null) {
-            val favicon = Favicon(urlUtil.makeLinkAbsolute(url, siteUrl), iconType, type = type)
+            val urlWithoutQuery = removeQueryFromUrl(url)
+
+            val favicon = Favicon(urlUtil.makeLinkAbsolute(urlWithoutQuery, siteUrl), iconType, type = type)
 
             if (sizesString != null) {
                 val sizes = extractSizesFromString(sizesString)
@@ -157,6 +159,19 @@ open class FaviconFinder @JvmOverloads constructor(
         }
 
         return null
+    }
+
+    protected open fun removeQueryFromUrl(url: String): String {
+        try {
+            val indexOfQuestionMark = url.indexOf('?')
+            if (indexOfQuestionMark > 0) {
+                return url.substring(0, indexOfQuestionMark)
+            }
+        } catch (e: Exception) {
+            log.error("Could not remove query from url $url", e)
+        }
+
+        return url
     }
 
     protected open fun extractSizesFromString(sizesString: String): List<Size> {
