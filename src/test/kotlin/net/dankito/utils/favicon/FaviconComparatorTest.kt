@@ -165,10 +165,12 @@ class FaviconComparatorTest {
     fun getBestIconForDieZeit() {
 
         // given
-        val bestIcon = Favicon("http://img.zeit.de/static/img/zo-icon-win8-144x144.png", FaviconType.MsTileImage)
-        val favicons = listOf<Favicon>(Favicon("http://www.zeit.de/favicon.ico", FaviconType.ShortcutIcon, Size(32, 32)),
-                Favicon("http://img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.AppleTouchPrecomposed),
-                bestIcon)
+        val bestIcon = Favicon("https://img.zeit.de/static/img/zo-icon-win8-144x144.png", FaviconType.MsTileImage)
+        val favicons = listOf(
+                Favicon("https://www.zeit.de/favicon.ico", FaviconType.ShortcutIcon, Size(32, 32)),
+                Favicon("https://img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.AppleTouchPrecomposed),
+                bestIcon
+        )
 
 
         // when
@@ -183,11 +185,13 @@ class FaviconComparatorTest {
     fun getBestIconForDieZeitIncludingRssIcon() {
 
         // given
-        val bestIcon = Favicon("http://img.zeit.de/bilder/elemente_01_06/logos/homepage_top.gif", FaviconType.Icon)
-        val favicons = listOf<Favicon>(Favicon("http://img.zeit.de/static/img/zo-icon-win8-144x144.png", FaviconType.MsTileImage),
-                Favicon("http://www.zeit.de/favicon.ico", FaviconType.ShortcutIcon, Size(32, 32)),
-                Favicon("http://img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.AppleTouchPrecomposed),
-                bestIcon)
+        val bestIcon = Favicon("https://img.zeit.de/bilder/elemente_01_06/logos/homepage_top.gif", FaviconType.Icon)
+        val favicons = listOf(
+                Favicon("https://img.zeit.de/static/img/zo-icon-win8-144x144.png", FaviconType.MsTileImage),
+                Favicon("https://www.zeit.de/favicon.ico", FaviconType.ShortcutIcon, Size(32, 32)),
+                Favicon("https://img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.AppleTouchPrecomposed),
+                bestIcon
+        )
 
 
         // when
@@ -202,11 +206,13 @@ class FaviconComparatorTest {
     fun getBestSquareIconForDieZeitIncludingRssIcon() {
 
         // given
-        val bestIcon = Favicon("http://img.zeit.de/static/img/zo-icon-win8-144x144.png", FaviconType.MsTileImage)
-        val favicons = listOf<Favicon>(Favicon("http://img.zeit.de/bilder/elemente_01_06/logos/homepage_top.gif", FaviconType.Icon),
-                Favicon("http://www.zeit.de/favicon.ico", FaviconType.ShortcutIcon, Size(32, 32)),
-                Favicon("http://img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.AppleTouchPrecomposed),
-                bestIcon)
+        val bestIcon = Favicon("https://img.zeit.de/static/img/zo-icon-win8-144x144.png", FaviconType.MsTileImage)
+        val favicons = listOf(
+                Favicon("http:s//img.zeit.de/bilder/elemente_01_06/logos/homepage_top.gif", FaviconType.Icon),
+                Favicon("https://www.zeit.de/favicon.ico", FaviconType.ShortcutIcon, Size(32, 32)),
+                Favicon("http:s//img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.AppleTouchPrecomposed),
+                bestIcon
+        )
 
 
         // when
@@ -221,13 +227,15 @@ class FaviconComparatorTest {
     fun getBestIconForHeise() {
 
         // given
-        val bestIcon = Favicon("http://www.heise.de/icons/ho/heise_online_facebook_social_graph.png", FaviconType.OpenGraphImage)
-        val favicons = listOf<Favicon>(Favicon("http://www.heise.de/icons/ho/apple-touch-icon-152.png", FaviconType.AppleTouchPrecomposed, Size(152, 152)),
-                Favicon("http://www.heise.de/favicon.ico", FaviconType.Icon),
-                Favicon("http://www.heise.de/icons/ho/apple-touch-icon-60.png", FaviconType.AppleTouch, Size(60, 60)),
-                Favicon("http://www.heise.de/icons/ho/apple-touch-icon-120.png", FaviconType.AppleTouch, Size(120, 120)),
-                Favicon("http://www.heise.de/icons/ho/apple-touch-icon-76.png", FaviconType.AppleTouch, Size(76, 76)),
-                bestIcon)
+        val bestIcon = Favicon("https://www.heise.de/icons/ho/heise_online_facebook_social_graph.png", FaviconType.OpenGraphImage)
+        val favicons = listOf(
+                Favicon("https://www.heise.de/icons/ho/apple-touch-icon-152.png", FaviconType.AppleTouchPrecomposed, Size(152, 152)),
+                Favicon("https://www.heise.de/favicon.ico", FaviconType.Icon),
+                Favicon("https://www.heise.de/icons/ho/apple-touch-icon-60.png", FaviconType.AppleTouch, Size(60, 60)),
+                Favicon("https://www.heise.de/icons/ho/apple-touch-icon-120.png", FaviconType.AppleTouch, Size(120, 120)),
+                Favicon("https://www.heise.de/icons/ho/apple-touch-icon-76.png", FaviconType.AppleTouch, Size(76, 76)),
+                bestIcon
+        )
 
 
         // when

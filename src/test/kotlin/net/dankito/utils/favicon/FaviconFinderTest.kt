@@ -36,10 +36,10 @@ class FaviconFinderTest {
 
     @Test
     fun extractZeitFavicons() {
-        val extractedIcons = getFaviconsForUrl("http://www.zeit.de/")
+        val extractedIcons = getFaviconsForUrl("https://www.zeit.de/")
 
 
-        testExtractedFavicons(extractedIcons, 3)
+        testExtractedFavicons(extractedIcons, 2)
     }
 
     @Test
@@ -47,15 +47,15 @@ class FaviconFinderTest {
         val extractedIcons = getFaviconsForUrl("https://www.heise.de")
 
 
-        testExtractedFavicons(extractedIcons, 8)
+        testExtractedFavicons(extractedIcons, 7)
     }
 
     @Test
     fun extractDerPostillonFavicons() {
-        val extractedIcons = getFaviconsForUrl("http://www.der-postillon.com")
+        val extractedIcons = getFaviconsForUrl("https://www.der-postillon.com")
 
 
-        testExtractedFavicons(extractedIcons, 3)
+        testExtractedFavicons(extractedIcons, 2)
     }
 
 
@@ -68,7 +68,7 @@ class FaviconFinderTest {
 
     @Test
     fun deutscheBank() {
-        val extractedIcons = getFaviconsForUrl("https://www.deutsche-bank.de/pfb/content/blz-finden.html?c=6923861946&t=query&bank=...")
+        val extractedIcons = getFaviconsForUrl("https://www.deutsche-bank.de")
 
         testExtractedFavicons(extractedIcons, 2)
     }
