@@ -7,9 +7,9 @@ buildscript {
     ext {
         artifactName = "favicon-finder"
 
-        kotlinVersion = '1.3.72'
+        kotlinVersion = '1.4.10'
 
-        javaUtilsVersion = '1.0.15'
+        javaUtilsVersion = '1.0.16'
 
         jsoupVersion = '1.11.3'
 
