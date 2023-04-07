@@ -8,9 +8,7 @@ import java.net.URL
 
 open class UrlConnectionWebClient : IWebClient {
 
-    companion object {
-        private val log = LoggerFactory.getLogger(UrlConnectionWebClient::class.java)
-    }
+    private val log = LoggerFactory.getLogger(UrlConnectionWebClient::class.java)
 
 
     override fun get(url: String): WebResponse {

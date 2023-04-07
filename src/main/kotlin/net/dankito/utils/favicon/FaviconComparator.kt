@@ -9,9 +9,9 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
 
     companion object {
         const val DEFAULT_MIN_SIZE = 32
-
-        private val log = LoggerFactory.getLogger(FaviconComparator::class.java)
     }
+
+    private val log = LoggerFactory.getLogger(FaviconComparator::class.java)
 
 
     open fun getBestIcon(favicons: List<Favicon>, minSize: Int = DEFAULT_MIN_SIZE, maxSize: Int? = null, returnSquarishOneIfPossible: Boolean = false,

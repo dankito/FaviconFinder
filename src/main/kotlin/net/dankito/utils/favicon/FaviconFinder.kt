@@ -19,9 +19,9 @@ open class FaviconFinder @JvmOverloads constructor(
 
     companion object {
         val IconSizeRegex = Regex("\\d{2,4}[xX×]\\d{2,4}")
-
-        private val log = LoggerFactory.getLogger(FaviconFinder::class.java)
     }
+
+    private val log = LoggerFactory.getLogger(FaviconFinder::class.java)
 
 
     open fun extractFaviconsAsync(url: String, callback: (AsyncResult<List<Favicon>>) -> Unit) {
