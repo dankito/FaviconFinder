@@ -65,6 +65,7 @@ if (commonScriptsFile.exists()) {
 
 test {
     ignoreFailures = true
+    useJUnitPlatform()
 }
 
 
