@@ -25,4 +25,20 @@ open class Size(open val width: Int, open val height: Int) : Comparable<Size> {
     return getDisplayText()
   }
 
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Size) return false
+
+    if (width != other.width) return false
+    if (height != other.height) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = width
+    result = 31 * result + height
+    return result
+  }
+
 }

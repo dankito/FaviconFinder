@@ -15,4 +15,24 @@ open class Favicon(
         return "$iconType $size $url"
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Favicon) return false
+
+        if (url != other.url) return false
+        if (iconType != other.iconType) return false
+        if (size != other.size) return false
+        if (type != other.type) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = url.hashCode()
+        result = 31 * result + iconType.hashCode()
+        result = 31 * result + (size?.hashCode() ?: 0)
+        result = 31 * result + (type?.hashCode() ?: 0)
+        return result
+    }
+
 }
