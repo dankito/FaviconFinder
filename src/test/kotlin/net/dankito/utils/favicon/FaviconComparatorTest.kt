@@ -1,6 +1,5 @@
 package net.dankito.utils.favicon
 
-import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -37,7 +36,7 @@ class FaviconComparatorTest {
                 Favicon("https://assets.guim.co.uk/images/favicons/f438f6041a4c1d0289e6debd112880c2/114x114.png", FaviconType.AppleTouch, Size(114, 114)),
                 Favicon("https://assets.guim.co.uk/images/favicons/b5050517955e7cf1e493ccc53e64ca05/72x72.png", FaviconType.AppleTouch, Size(72, 72)),
                 Favicon("https://assets.guim.co.uk/images/favicons/4fd650035a2cebafea4e210990874c64/57x57.png", FaviconType.AppleTouchPrecomposed),
-                Favicon("https://assets.guim.co.uk/images/favicons/79d7ab5a729562cebca9c6a13c324f0e/32x32.ico", FaviconType.ShortcutIcon, type = "image/png"),
+                Favicon("https://assets.guim.co.uk/images/favicons/79d7ab5a729562cebca9c6a13c324f0e/32x32.ico", FaviconType.ShortcutIcon, imageMimeType = "image/png"),
                 Favicon("https://assets.guim.co.uk/images/favicons/f06f6996e193d1ddcd614ea852322d25/windows_tile_144_b.png", FaviconType.MsTileImage),
                 bestIcon)
 
@@ -62,7 +61,7 @@ class FaviconComparatorTest {
                 Favicon("https://assets.guim.co.uk/images/favicons/f438f6041a4c1d0289e6debd112880c2/114x114.png", FaviconType.AppleTouch, Size(114, 114)),
                 Favicon("https://assets.guim.co.uk/images/favicons/b5050517955e7cf1e493ccc53e64ca05/72x72.png", FaviconType.AppleTouch, Size(72, 72)),
                 Favicon("https://assets.guim.co.uk/images/favicons/4fd650035a2cebafea4e210990874c64/57x57.png", FaviconType.AppleTouchPrecomposed),
-                Favicon("https://assets.guim.co.uk/images/favicons/79d7ab5a729562cebca9c6a13c324f0e/32x32.ico", FaviconType.ShortcutIcon, type = "image/png"),
+                Favicon("https://assets.guim.co.uk/images/favicons/79d7ab5a729562cebca9c6a13c324f0e/32x32.ico", FaviconType.ShortcutIcon, imageMimeType = "image/png"),
                 Favicon("https://assets.guim.co.uk/images/favicons/f06f6996e193d1ddcd614ea852322d25/windows_tile_144_b.png", FaviconType.MsTileImage),
                 bestIcon)
 
@@ -86,7 +85,7 @@ class FaviconComparatorTest {
                 Favicon("https://assets.guim.co.uk/images/favicons/f438f6041a4c1d0289e6debd112880c2/114x114.png", FaviconType.AppleTouch, Size(114, 114)),
                 Favicon("https://assets.guim.co.uk/images/favicons/b5050517955e7cf1e493ccc53e64ca05/72x72.png", FaviconType.AppleTouch, Size(72, 72)),
                 Favicon("https://assets.guim.co.uk/images/favicons/4fd650035a2cebafea4e210990874c64/57x57.png", FaviconType.AppleTouchPrecomposed),
-                Favicon("https://assets.guim.co.uk/images/favicons/79d7ab5a729562cebca9c6a13c324f0e/32x32.ico", FaviconType.ShortcutIcon, type = "image/png"),
+                Favicon("https://assets.guim.co.uk/images/favicons/79d7ab5a729562cebca9c6a13c324f0e/32x32.ico", FaviconType.ShortcutIcon, imageMimeType = "image/png"),
                 Favicon("https://assets.guim.co.uk/images/favicons/f06f6996e193d1ddcd614ea852322d25/windows_tile_144_b.png", FaviconType.MsTileImage),
                 Favicon("https://assets.guim.co.uk/images/2170b16eb045a34f8c79761b203627b4/fallback-logo.png", FaviconType.OpenGraphImage),
                 bestIcon)
@@ -250,7 +249,7 @@ class FaviconComparatorTest {
 
         // given
         val bestIcon = Favicon("http://4.bp.blogspot.com/-46xU6sntzl4/UVHLh1NGfwI/AAAAAAAAUlY/RiARs4-toWk/s800/Logo.jpg", FaviconType.OpenGraphImage)
-        val favicons = listOf<Favicon>(Favicon("http://www.der-postillon.com/favicon.ico", FaviconType.Icon, type = "image/x-icon"), bestIcon)
+        val favicons = listOf<Favicon>(Favicon("http://www.der-postillon.com/favicon.ico", FaviconType.Icon, imageMimeType = "image/x-icon"), bestIcon)
 
 
         // when
@@ -266,7 +265,7 @@ class FaviconComparatorTest {
 
         // given
         val bestIcon = Favicon("http://4.bp.blogspot.com/-46xU6sntzl4/UVHLh1NGfwI/AAAAAAAAUlY/RiARs4-toWk/s800/Logo.jpg", FaviconType.OpenGraphImage)
-        val favicons = listOf<Favicon>(Favicon("http://www.der-postillon.com/favicon.ico", FaviconType.Icon, type = "image/x-icon"), bestIcon)
+        val favicons = listOf<Favicon>(Favicon("http://www.der-postillon.com/favicon.ico", FaviconType.Icon, imageMimeType = "image/x-icon"), bestIcon)
 
 
         // when
