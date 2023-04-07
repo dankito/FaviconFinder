@@ -47,6 +47,8 @@ open class UrlConnectionWebClient : IWebClient {
         connection.requestMethod = method
         connection.instanceFollowRedirects = true
 
+        connection.connectTimeout = 3 * 1000
+
         connection.connect()
 
         return connection
