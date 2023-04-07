@@ -151,7 +151,7 @@ open class FaviconFinder @JvmOverloads constructor(
             if (sizesString.isNullOrBlank() == false) {
                 val sizes = extractSizesFromString(sizesString)
 
-                sizes.max()?.let { size ->
+                sizes.maxOrNull()?.let { size ->
                     favicon.size = size
                 }
             }
