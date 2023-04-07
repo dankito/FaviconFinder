@@ -164,10 +164,10 @@ class FaviconComparatorTest {
     fun getBestIconForDieZeit() {
 
         // given
-        val bestIcon = Favicon("https://img.zeit.de/static/img/zo-icon-win8-144x144.png", FaviconType.MsTileImage)
+        val bestIcon = Favicon("https://img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.MsTileImage)
         val favicons = listOf(
                 Favicon("https://www.zeit.de/favicon.ico", FaviconType.ShortcutIcon, Size(32, 32)),
-                Favicon("https://img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.AppleTouchPrecomposed),
+                Favicon("https://img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.MsTileImage),
                 bestIcon
         )
 
@@ -205,11 +205,11 @@ class FaviconComparatorTest {
     fun getBestSquareIconForDieZeitIncludingRssIcon() {
 
         // given
-        val bestIcon = Favicon("https://img.zeit.de/static/img/zo-icon-win8-144x144.png", FaviconType.MsTileImage)
+        val bestIcon = Favicon("https://img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.MsTileImage)
         val favicons = listOf(
-                Favicon("http:s//img.zeit.de/bilder/elemente_01_06/logos/homepage_top.gif", FaviconType.Icon),
+                Favicon("https://static.zeit.de/p/zeit.web/icons/favicon.svg", FaviconType.Icon),
                 Favicon("https://www.zeit.de/favicon.ico", FaviconType.ShortcutIcon, Size(32, 32)),
-                Favicon("http:s//img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.AppleTouchPrecomposed),
+                Favicon("https://img.zeit.de/static/img/ZO-ipad-114x114.png", FaviconType.MsTileImage),
                 bestIcon
         )
 
