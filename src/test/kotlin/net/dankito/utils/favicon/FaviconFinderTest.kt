@@ -91,6 +91,15 @@ class FaviconFinderTest {
         testExtractedFavicons(extractedIcons, 2)
     }
 
+    @Test
+    fun `Assert slash gets added between host and icon relative url`() {
+        val extractedIcons = getFaviconsForUrl("https://www.codinux.net")
+
+        extractedIcons.forEach { favicon ->
+            assertThat(favicon.url).startsWith("https://www.codinux.net/")
+        }
+    }
+
 
     @Test
     fun removeQuery() {
