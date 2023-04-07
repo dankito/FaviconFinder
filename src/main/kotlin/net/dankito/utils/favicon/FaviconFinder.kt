@@ -1,9 +1,6 @@
 package net.dankito.utils.favicon
 
-import net.dankito.utils.favicon.web.IWebClient
-import net.dankito.utils.favicon.web.UrlConnectionWebClient
-import net.dankito.utils.favicon.web.UrlUtil
-import net.dankito.utils.favicon.web.WebResponse
+import net.dankito.utils.favicon.web.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -22,6 +19,11 @@ open class FaviconFinder @JvmOverloads constructor(
     }
 
     private val log = LoggerFactory.getLogger(FaviconFinder::class.java)
+
+
+    init {
+      AllowAllCertificatsTrustManager.allowAllCertificates() // ignore certificates error
+    }
 
 
     open fun extractFaviconsAsync(url: String, callback: (AsyncResult<List<Favicon>>) -> Unit) {
