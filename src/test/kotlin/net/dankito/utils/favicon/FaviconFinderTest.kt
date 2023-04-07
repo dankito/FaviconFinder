@@ -1,6 +1,5 @@
 package net.dankito.utils.favicon
 
-import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import org.assertj.core.api.Assertions.assertThat
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -14,7 +13,7 @@ class FaviconFinderTest {
     }
 
 
-    private val underTest : FaviconFinder = FaviconFinder(UrlConnectionWebClient())
+    private val underTest : FaviconFinder = FaviconFinder()
 
 
     @Test

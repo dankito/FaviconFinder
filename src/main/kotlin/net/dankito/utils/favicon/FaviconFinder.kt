@@ -14,8 +14,8 @@ import kotlin.concurrent.thread
 
 
 open class FaviconFinder @JvmOverloads constructor(
-        protected val webClient : IWebClient = UrlConnectionWebClient(),
-        protected val urlUtil: UrlUtil = UrlUtil()
+    protected open val webClient : IWebClient = UrlConnectionWebClient(),
+    protected open val urlUtil: UrlUtil = UrlUtil()
 ) {
 
     companion object {

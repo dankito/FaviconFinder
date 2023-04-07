@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 class FaviconComparatorTest {
 
-    private val underTest = FaviconComparator(UrlConnectionWebClient())
+    private val underTest = FaviconComparator()
 
 
     @Test
