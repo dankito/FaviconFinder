@@ -37,9 +37,11 @@ open class FaviconFinder @JvmOverloads constructor(
     }
 
     open fun extractFavicons(url: String) : List<Favicon> {
-        webClient.get(url).let { response ->
+        val absoluteUrl = urlUtil.makeUrlAbsolute(url)
+
+        webClient.get(absoluteUrl).let { response ->
             if (response.successful) {
-                return extractFavicons(response, url)
+                return extractFavicons(response, absoluteUrl)
             }
         }
 
