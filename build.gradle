@@ -13,8 +13,6 @@ buildscript {
 
         kotlinVersion = '1.6.21'
 
-        javaUtilsVersion = '1.0.20'
-
         jsoupVersion = '1.11.3'
 
         slf4jVersion = '1.7.36'
@@ -72,9 +70,9 @@ test {
 
 
 dependencies {
-    implementation "net.dankito.utils:java-utils:$javaUtilsVersion"
-
     implementation "org.jsoup:jsoup:$jsoupVersion"
+
+    implementation "org.slf4j:slf4j-api:$slf4jVersion"
 
 
     testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion"
