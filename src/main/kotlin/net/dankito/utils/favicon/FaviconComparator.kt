@@ -118,11 +118,13 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
 
     protected open fun retrieveIconSize(iconUrl: String) : Size? {
         try {
-            val response = webClient.get(iconUrl)
-            if (response.successful) {
-                response.receivedData?.let { receivedData ->
-                    val imageInfo = SimpleImageInfo(receivedData)
-                    return Size(imageInfo.width, imageInfo.height)
+            if (iconUrl.endsWith(".svg", true) == false) { // for .svg size cannot be determined
+                val response = webClient.get(iconUrl)
+                if (response.successful) {
+                    response.receivedData?.let { receivedData ->
+                        val imageInfo = SimpleImageInfo(receivedData)
+                        return Size(imageInfo.width, imageInfo.height)
+                    }
                 }
             }
         } catch(e: Exception) { log.error("Could not retrieve icon size for url $iconUrl", e) }
