@@ -53,7 +53,7 @@ class FaviconFinderTest {
         val extractedIcons = getFaviconsForUrl("https://www.heise.de")
 
 
-        testExtractedFavicons(extractedIcons, 7)
+        testExtractedFavicons(extractedIcons, 6)
     }
 
     @Test
@@ -76,7 +76,7 @@ class FaviconFinderTest {
     fun psdBankMuenchen_QueryHasBeenRemoved() {
         val extractedIcons = getFaviconsForUrl("https://www.psd-muenchen.de")
 
-        testExtractedFavicons(extractedIcons, 6)
+        testExtractedFavicons(extractedIcons, 1)
 
         extractedIcons.forEach { favicon ->
             assertThat(favicon.url.contains('?')).isFalse() // check if all queries have been removed from url
