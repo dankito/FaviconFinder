@@ -1,7 +1,5 @@
 package net.dankito.utils.favicon
 
-import net.dankito.utils.Size
-
 
 open class Favicon(
     open val url : String,

@@ -1,6 +1,5 @@
 package net.dankito.utils.favicon
 
-import net.dankito.utils.Size
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

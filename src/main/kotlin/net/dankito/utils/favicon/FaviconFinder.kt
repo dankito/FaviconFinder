@@ -1,7 +1,6 @@
 package net.dankito.utils.favicon
 
 import net.dankito.utils.AsyncResult
-import net.dankito.utils.Size
 import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import net.dankito.utils.favicon.web.WebResponse
