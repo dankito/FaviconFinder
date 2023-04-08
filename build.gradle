@@ -2,7 +2,7 @@
 buildscript {
 
     rootProject.group = "net.dankito.utils"
-    rootProject.version = "1.0.2-SNAPSHOT"
+    rootProject.version = "1.0.2"
 
     ext {
         artifactName = "favicon-finder"
