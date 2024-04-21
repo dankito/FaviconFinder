@@ -5,6 +5,9 @@ import java.net.URI
 
 open class UrlUtil {
 
+    open fun isRelativeUrl(url: String): Boolean =
+        url.startsWith("http", true) == false
+
     open fun makeUrlAbsolute(url: String, appendWwwDot: Boolean = false): String {
         if (url.startsWith("http")) {
             return url

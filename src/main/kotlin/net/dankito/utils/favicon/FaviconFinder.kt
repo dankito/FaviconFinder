@@ -46,19 +46,25 @@ open class FaviconFinder @JvmOverloads constructor(
         extractFavicons(url, false) // try relative URLs without "www." first
 
     protected open fun extractFavicons(url: String, appendWwwDot: Boolean, requestDesktopWebsite: Boolean = false) : List<Favicon> {
+        val isRelativeUrl = urlUtil.isRelativeUrl(url)
         val absoluteUrl = urlUtil.makeUrlAbsolute(url, appendWwwDot)
 
         webClient.get(absoluteUrl, requestDesktopWebsite).let { response ->
             if (response.successful) {
                 val favicons = extractFavicons(response, absoluteUrl)
-                if (favicons.isNotEmpty() && (favicons.size != 1 || favicons[0].iconType != FaviconType.ShortcutIcon)) { // if only default favicon has been added try one of the options below
+                if (favicons.isNotEmpty() && ((isRelativeUrl == false || appendWwwDot == true) && requestDesktopWebsite == true || // appendWwwDot == true && requestDesktopWebsite == true is the last possible check
+                            (favicons.size != 1 || favicons[0].iconType != FaviconType.ShortcutIcon))) { // if only default favicon has been added try one of the options below
                     return favicons
                 }
 
                 if (requestDesktopWebsite == false) {
                     return extractFavicons(url, appendWwwDot, true)
                 }
-            } else if (appendWwwDot == false && url.startsWith("http", true) == false && url.contains("www.", true) == false) {
+
+                if (appendWwwDot == false && isRelativeUrl) {
+                    return extractFavicons(url, true)
+                }
+            } else if (appendWwwDot == false && isRelativeUrl && url.contains("www.", true) == false) {
                 return extractFavicons(url, true) // then, if it does not succeed, append "www."
             }
         }
