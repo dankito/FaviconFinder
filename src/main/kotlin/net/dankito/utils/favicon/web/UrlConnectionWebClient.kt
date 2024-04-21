@@ -49,7 +49,9 @@ open class UrlConnectionWebClient : IWebClient {
         connection.requestMethod = method
         connection.instanceFollowRedirects = true
 
-        connection.connectTimeout = 3 * 1000
+        connection.connectTimeout = 5 * 1000
+
+        connection.setRequestProperty("User-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
 
         connection.connect()
 

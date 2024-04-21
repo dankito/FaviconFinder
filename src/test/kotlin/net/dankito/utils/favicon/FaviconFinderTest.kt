@@ -138,6 +138,13 @@ class FaviconFinderTest {
     }
 
     @Test
+    fun `Request desktop web site`() {
+        val extractedIcons = getFaviconsForUrl("baidu.com") // on mobile only one favicon gets returned
+
+        testExtractedFavicons(extractedIcons, 4)
+    }
+
+    @Test
     fun `Non breaking space at start of web manifest gets ignored`() {
         val extractedIcons = getFaviconsForUrl("kicker.de") // don't know why but when requested with URLConnection then web manifest string starts with ﻿ leading to that Jackson deserialization fails
 
