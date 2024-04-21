@@ -109,7 +109,7 @@ open class FaviconFinder @JvmOverloads constructor(
                     val manifest = JsonSerializer.default.readValue<WebManifest>(manifestJson)
                     return manifest.icons.mapNotNull {
                         val type = if (it.src.contains("apple-touch", true)) FaviconType.AppleTouch else FaviconType.Icon
-                        createFavicon(it.src, siteUrl, type, it.type, it.sizes)
+                        createFaviconFromSizesString(it.src, siteUrl, type, it.type, it.sizes)
                     }
                 } catch (e: Throwable) {
                     log.error("Could not read icons from web manifest of site $siteUrl", e)
@@ -150,10 +150,10 @@ open class FaviconFinder @JvmOverloads constructor(
             getFaviconTypeForLinkElements(linkElement)?.let { faviconType ->
                 val href = linkElement.attr("href")
                 val sizes = linkElement.attr("sizes")
-                val type = linkElement.attr("type")
+                val imageMimeType = linkElement.attr("type")
 
                 if (href.startsWith("data:;base64") == false) {
-                    return createFavicon(href, siteUrl, faviconType, sizes, type)
+                    return createFaviconFromSizesString(href, siteUrl, faviconType, imageMimeType, sizes)
                 }
             }
         }
@@ -182,7 +182,7 @@ open class FaviconFinder @JvmOverloads constructor(
             return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.OpenGraphImage, imageMimeType, imageWidth, imageHeight)
         }
         else if (isMsTileMetaElement(metaElement)) {
-            return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.MsTileImage, null)
+            return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.MsTileImage, null, null)
         }
 
         return null
@@ -193,20 +193,20 @@ open class FaviconFinder @JvmOverloads constructor(
     protected open fun isMsTileMetaElement(metaElement: Element) = metaElement.hasAttr("name") && metaElement.attr("name") == "msapplication-TileImage" && metaElement.hasAttr("content")
 
 
-    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, sizesString: String?): Favicon? =
+    protected open fun createFaviconFromSizesString(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, sizesString: String?): Favicon? =
         if (sizesString.isNullOrBlank() == false) {
             val sizes = extractSizesFromString(sizesString)
 
             createFavicon(url, siteUrl, iconType, iconMimeType, sizes.maxOrNull())
         } else {
-            createFavicon(url, siteUrl, iconType, iconMimeType)
+            createFavicon(url, siteUrl, iconType, iconMimeType, null)
         }
 
-    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, imageWidth: Int? = null, imageHeight: Int? = null): Favicon? =
+    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, imageWidth: Int?, imageHeight: Int?): Favicon? =
         if (imageWidth != null && imageHeight != null) {
             createFavicon(url, siteUrl, iconType, iconMimeType, Size(imageWidth, imageHeight))
         } else {
-            createFavicon(url, siteUrl, iconType, iconMimeType)
+            createFavicon(url, siteUrl, iconType, iconMimeType, null)
         }
 
     protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, size: Size?): Favicon? {
