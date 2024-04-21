@@ -139,7 +139,7 @@ class FaviconFinderTest {
 
     @Test
     fun `Request desktop web site`() {
-        val extractedIcons = getFaviconsForUrl("baidu.com") // on mobile only one favicon gets returned
+        val extractedIcons = getFaviconsForUrl("baidu.com") // by default only default favicon gets returned, but in desktop site there are four
 
         testExtractedFavicons(extractedIcons, 4)
     }

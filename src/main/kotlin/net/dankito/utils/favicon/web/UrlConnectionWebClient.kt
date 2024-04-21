@@ -11,9 +11,9 @@ open class UrlConnectionWebClient : IWebClient {
     private val log = LoggerFactory.getLogger(UrlConnectionWebClient::class.java)
 
 
-    override fun get(url: String): WebResponse {
+    override fun get(url: String, requestDesktopWebsite: Boolean): WebResponse {
         try {
-            val connection = createConnection(url, "GET")
+            val connection = createConnection(url, "GET", requestDesktopWebsite)
 
             val inputStream = connection.getInputStream().buffered()
             val receivedData = inputStream.readBytes()
@@ -27,9 +27,9 @@ open class UrlConnectionWebClient : IWebClient {
     }
 
 
-    override fun head(url: String): WebResponse {
+    override fun head(url: String, requestDesktopWebsite: Boolean): WebResponse {
         try {
-            val connection = createConnection(url, "HEAD")
+            val connection = createConnection(url, "HEAD", requestDesktopWebsite)
 
             try {
                 return closeConnectionAndMapResponse(connection, null) { redirectUrl ->
@@ -43,7 +43,7 @@ open class UrlConnectionWebClient : IWebClient {
         }
     }
 
-    private fun createConnection(url: String, method: String): HttpURLConnection {
+    private fun createConnection(url: String, method: String, requestDesktopWebsite: Boolean): HttpURLConnection {
         val connection = URL(url).openConnection() as HttpURLConnection
 
         connection.requestMethod = method
@@ -51,7 +51,9 @@ open class UrlConnectionWebClient : IWebClient {
 
         connection.connectTimeout = 5 * 1000
 
-        connection.setRequestProperty("User-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+        if (requestDesktopWebsite) {
+            connection.setRequestProperty("User-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+        }
 
         connection.connect()
 
