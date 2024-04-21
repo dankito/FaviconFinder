@@ -1,6 +1,9 @@
 package net.dankito.utils.favicon
 
+import com.fasterxml.jackson.module.kotlin.readValue
+import net.dankito.utils.favicon.json.JsonSerializer
 import net.dankito.utils.favicon.web.*
+import net.dankito.utils.favicon.webmanifest.WebManifest
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -69,25 +72,55 @@ open class FaviconFinder @JvmOverloads constructor(
             .mapNotNull { mapElementToFavicon(it, url, linkAndMetaElements) }
             .toMutableList()
 
-        tryToFindDefaultFavicon(url, extractedFavicons)
+        extractIconsFromWebManifest(linkAndMetaElements, url).forEach { favicon ->
+            if (containsIconWithUrl(extractedFavicons, favicon.url) == false) {
+                extractedFavicons.add(favicon)
+            }
+        }
+
+        tryToFindDefaultFavicon(url, extractedFavicons)?.let { defaultFavicon ->
+            extractedFavicons.add(defaultFavicon)
+        }
 
         return extractedFavicons
     }
 
-    protected open fun tryToFindDefaultFavicon(url: String, extractedFavicons: MutableList<Favicon>) {
+    protected open fun tryToFindDefaultFavicon(url: String, extractedFavicons: List<Favicon>): Favicon? {
         val urlInstance = URL(url)
         val defaultFaviconUrl = urlInstance.protocol + "://" + urlInstance.host + "/favicon.ico"
         if (containsIconWithUrl(extractedFavicons, defaultFaviconUrl) == false) {
             webClient.head(defaultFaviconUrl).let { response ->
                 if (response.successful &&
                     (response.contentType == null || response.contentType?.startsWith("text/") == false)) { // filter out e.g. error pages
-                    extractedFavicons.add(Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon))
+                    return Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon)
                 }
             }
         }
+
+        return null
     }
 
-    protected open fun containsIconWithUrl(extractedFavicons: MutableList<Favicon>, faviconUrl: String): Boolean {
+    protected open fun extractIconsFromWebManifest(linkAndMetaElements: Elements, siteUrl: String): List<Favicon> {
+        linkAndMetaElements.firstOrNull { it.attr("rel") == "manifest" }?.attr("href")?.takeIf { it.isNotBlank() }?.let { manifestUrl ->
+            val manifestResponse = webClient.get(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl))
+            if (manifestResponse.successful && manifestResponse.body != null) {
+                try {
+                    val manifestJson = manifestResponse.body!!
+                    val manifest = JsonSerializer.default.readValue<WebManifest>(manifestJson)
+                    return manifest.icons.mapNotNull {
+                        val type = if (it.src.contains("apple-touch", true)) FaviconType.AppleTouch else FaviconType.Icon
+                        createFavicon(it.src, siteUrl, type, it.type, it.sizes)
+                    }
+                } catch (e: Throwable) {
+                    log.error("Could not read icons from web manifest of site $siteUrl", e)
+                }
+            }
+        }
+
+        return emptyList()
+    }
+
+    protected open fun containsIconWithUrl(extractedFavicons: List<Favicon>, faviconUrl: String): Boolean {
         extractedFavicons.forEach { favicon ->
             if (favicon.url == faviconUrl) {
                 return true

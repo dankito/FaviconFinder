@@ -12,10 +12,11 @@ open class WebResponse(
 ) {
 
 
-    open val body: String?
-        get() = receivedData?.let {
-                String(it)
-            }
+    open val body: String? by lazy {
+        receivedData?.let {
+            String(it)
+        }
+    }
 
 
     override fun toString(): String {

@@ -151,6 +151,14 @@ class FaviconFinderTest {
 
 
     @Test
+    fun `Extract favicons from web manifest`() {
+        val extractedIcons = getFaviconsForUrl("github.com")
+
+        testExtractedFavicons(extractedIcons, 10) // without the icons from web manifest for github only 3 favicons would be returned
+    }
+
+
+    @Test
     fun extractIconSizeFromSizesAttribute() {
 
         var html = "<html><head>"
