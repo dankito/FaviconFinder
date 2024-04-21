@@ -138,6 +138,13 @@ class FaviconFinderTest {
     }
 
     @Test
+    fun `Non breaking space at start of web manifest gets ignored`() {
+        val extractedIcons = getFaviconsForUrl("kicker.de") // don't know why but when requested with URLConnection then web manifest string starts with ﻿ leading to that Jackson deserialization fails
+
+        testExtractedFavicons(extractedIcons, 17)
+    }
+
+    @Test
     fun removeQuery() {
         val relativeUrlWithoutQuery = "/favicon_196px.png"
         val relativeUrlWithQuery = "$relativeUrlWithoutQuery?v=1603434540317"

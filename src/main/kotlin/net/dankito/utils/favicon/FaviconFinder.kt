@@ -102,26 +102,23 @@ open class FaviconFinder @JvmOverloads constructor(
 
     protected open fun extractIconsFromWebManifest(linkAndMetaElements: Elements, siteUrl: String): List<Favicon> {
         linkAndMetaElements.firstOrNull { it.attr("rel") == "manifest" }?.attr("href")?.takeIf { it.isNotBlank() }?.let { manifestUrl ->
-            val manifestResponse = webClient.get(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl))
-            if (manifestResponse.successful && manifestResponse.body != null) {
-                try {
-                    val manifestJson = manifestResponse.body!!
-                    val manifest = JsonSerializer.default.readValue<WebManifest>(manifestJson)
-                    return manifest.icons.mapNotNull {
-                        val type = if (it.src.contains("apple-touch", true)) FaviconType.AppleTouch else FaviconType.Icon
-                        // some web manifests contain relative icon urls, e.g. spiegel.de:
-                        // Manifest URL:
-                        //  https://www.spiegel.de/public/spon/json/manifest.json
-                        // Icons URLs:
-                        // - "./../images/icons/icon-512.png"
-                        // - ./../images/icons/icon-192.png -> (https://www.spiegel.de/public/spon/images/icons/icon-192.png)
-                        // -> use manifest's url to create absolute favicon url
-                        val baseUrl = if (it.src.startsWith(".")) manifestUrl else siteUrl
-                        createFaviconFromSizesString(it.src, baseUrl, type, it.type, it.sizes)
-                    }
-                } catch (e: Throwable) {
-                    log.error("Could not read icons from web manifest of site $siteUrl", e)
+            try {
+                // don't know why but when requested with URLConnection then web manifest string starts with ﻿ leading to that Jackson deserialization fails
+                val manifest = JsonSerializer.default.readValue<WebManifest>(URL(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl)))
+                return manifest.icons.mapNotNull {
+                    val type = if (it.src.contains("apple-touch", true)) FaviconType.AppleTouch else FaviconType.Icon
+                    // some web manifests contain relative icon urls, e.g. spiegel.de:
+                    // Manifest URL:
+                    //  https://www.spiegel.de/public/spon/json/manifest.json
+                    // Icons URLs:
+                    // - "./../images/icons/icon-512.png"
+                    // - ./../images/icons/icon-192.png -> (https://www.spiegel.de/public/spon/images/icons/icon-192.png)
+                    // -> use manifest's url to create absolute favicon url
+                    val baseUrl = if (it.src.startsWith(".")) manifestUrl else siteUrl
+                    createFaviconFromSizesString(it.src, baseUrl, type, it.type, it.sizes)
                 }
+            } catch (e: Throwable) {
+                log.error("Could not read icons from web manifest of site $siteUrl", e)
             }
         }
 
