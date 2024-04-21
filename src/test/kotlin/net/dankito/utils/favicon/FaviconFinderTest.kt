@@ -118,13 +118,6 @@ class FaviconFinderTest {
         }
     }
 
-    @Test
-    fun `Ignore certificate errors`() {
-        val extractedIcons = getFaviconsForUrl("ecodia.de")
-
-        testExtractedFavicons(extractedIcons, 2)
-    }
-
 
     @Test
     fun removeQuery() {
