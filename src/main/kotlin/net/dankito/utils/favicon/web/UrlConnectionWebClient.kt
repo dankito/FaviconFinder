@@ -18,7 +18,9 @@ open class UrlConnectionWebClient : IWebClient {
             val inputStream = connection.getInputStream().buffered()
             val receivedData = inputStream.readBytes()
 
-            return closeConnectionAndMapResponse(connection, receivedData)
+            return closeConnectionAndMapResponse(connection, receivedData) { redirectUrl ->
+                get(redirectUrl)
+            }
         } catch (e: Exception) {
             return logAndMapError(url, e)
         }
@@ -30,7 +32,9 @@ open class UrlConnectionWebClient : IWebClient {
             val connection = createConnection(url, "HEAD")
 
             try {
-                return closeConnectionAndMapResponse(connection, null)
+                return closeConnectionAndMapResponse(connection, null) { redirectUrl ->
+                    get(redirectUrl)
+                }
             } catch (e: FileNotFoundException) { // couldn't believe it, HEAD throws FileNotFoundException if url doesn't exist
                 return WebResponse(false, 404)
             }
@@ -53,13 +57,19 @@ open class UrlConnectionWebClient : IWebClient {
     }
 
 
-    protected open fun closeConnectionAndMapResponse(connection: HttpURLConnection, receivedData: ByteArray?): WebResponse {
+    protected open fun closeConnectionAndMapResponse(connection: HttpURLConnection, receivedData: ByteArray?, redirectUrlRetrieved: ((String) -> WebResponse)? = null): WebResponse {
         val status = connection.responseCode
         val contentType = connection.contentType
         val contentLength = connection.contentLength
         val headers = connection.headerFields
 
         connection.inputStream.close()
+
+        if (status in 300..399 && headers.containsKey("Location") && redirectUrlRetrieved != null) {
+            headers["Location"]?.firstOrNull()?.let { redirectUrl ->
+                return redirectUrlRetrieved(redirectUrl)
+            }
+        }
 
         return WebResponse(status in 200..299, status, contentType, contentLength, headers, receivedData)
     }

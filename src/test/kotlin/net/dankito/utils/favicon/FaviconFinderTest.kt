@@ -131,6 +131,13 @@ class FaviconFinderTest {
 
 
     @Test
+    fun `Follow redirect location`() {
+        val extractedIcons = getFaviconsForUrl("tagesschau.de") // tagesschau.de returns a redirect to www.tagesschau.de
+
+        testExtractedFavicons(extractedIcons, 19)
+    }
+
+    @Test
     fun removeQuery() {
         val relativeUrlWithoutQuery = "/favicon_196px.png"
         val relativeUrlWithQuery = "$relativeUrlWithoutQuery?v=1603434540317"
