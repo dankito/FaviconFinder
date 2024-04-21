@@ -142,6 +142,13 @@ class FaviconFinderTest {
         assertThat(extractedIcons.first().url).isEqualTo(TestSiteUrl + relativeUrlWithoutQuery)
     }
 
+    @Test
+    fun `Default favicon URL does not return an icon (but e g an error page)`() {
+        val extractedIcons = getFaviconsForUrl("coroot.com")
+
+        extractedIcons.map { it.url }.none { it.endsWith("coroot.com/favicon.ico") }
+    }
+
 
     @Test
     fun extractIconSizeFromSizesAttribute() {

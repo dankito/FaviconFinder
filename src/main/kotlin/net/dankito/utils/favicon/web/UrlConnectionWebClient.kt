@@ -55,10 +55,13 @@ open class UrlConnectionWebClient : IWebClient {
 
     protected open fun closeConnectionAndMapResponse(connection: HttpURLConnection, receivedData: ByteArray?): WebResponse {
         val status = connection.responseCode
+        val contentType = connection.contentType
+        val contentLength = connection.contentLength
+        val headers = connection.headerFields
 
         connection.inputStream.close()
 
-        return WebResponse(status in 200..299, status, receivedData)
+        return WebResponse(status in 200..299, status, contentType, contentLength, headers, receivedData)
     }
 
     protected open fun logAndMapError(url: String, e: Exception): WebResponse {

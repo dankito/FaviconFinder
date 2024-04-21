@@ -74,7 +74,8 @@ open class FaviconFinder @JvmOverloads constructor(
         val defaultFaviconUrl = urlInstance.protocol + "://" + urlInstance.host + "/favicon.ico"
         if (containsIconWithUrl(extractedFavicons, defaultFaviconUrl) == false) {
             webClient.head(defaultFaviconUrl).let { response ->
-                if (response.successful) {
+                if (response.successful &&
+                    (response.contentType == null || response.contentType?.startsWith("text/") == false)) { // filter out e.g. error pages
                     extractedFavicons.add(Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon))
                 }
             }
