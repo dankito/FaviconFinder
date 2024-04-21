@@ -30,7 +30,7 @@ open class UrlUtil {
                 absoluteUrl = "http:" + url
             }
         }
-        else if(url.startsWith("/")) {
+        else if(url.startsWith("/") || url.startsWith("./") || url.startsWith("../")) {
             tryToMakeUrlAbsolute(url, siteUrl)?.let { absoluteUrl = it }
         }
         else if(url.startsWith("http") == false) {

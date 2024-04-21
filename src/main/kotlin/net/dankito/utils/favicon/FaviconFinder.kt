@@ -109,7 +109,14 @@ open class FaviconFinder @JvmOverloads constructor(
                     val manifest = JsonSerializer.default.readValue<WebManifest>(manifestJson)
                     return manifest.icons.mapNotNull {
                         val type = if (it.src.contains("apple-touch", true)) FaviconType.AppleTouch else FaviconType.Icon
-                        createFaviconFromSizesString(it.src, siteUrl, type, it.type, it.sizes)
+                        // some web manifests contain relative icon urls, e.g. spiegel.de:
+                        // Manifest URL:
+                        //  https://www.spiegel.de/public/spon/json/manifest.json
+                        // Icons URLs:
+                        // - "./../images/icons/icon-512.png"
+                        // - ./../images/icons/icon-192.png -> (https://www.spiegel.de/public/spon/images/icons/icon-192.png)
+                        // -> use manifest's url to create absolute favicon url
+                        createFaviconFromSizesString(it.src, manifestUrl, type, it.type, it.sizes)
                     }
                 } catch (e: Throwable) {
                     log.error("Could not read icons from web manifest of site $siteUrl", e)

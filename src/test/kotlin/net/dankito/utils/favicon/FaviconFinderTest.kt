@@ -157,6 +157,17 @@ class FaviconFinderTest {
         testExtractedFavicons(extractedIcons, 10) // without the icons from web manifest for github only 3 favicons would be returned
     }
 
+    @Test
+    fun `Extract favicons with relative URLs from web manifest`() {
+        val extractedIcons = getFaviconsForUrl("spiegel.de")
+
+        testExtractedFavicons(extractedIcons, 12) // without the icons from web manifest for github only 11 favicons would be returned
+
+        extractedIcons.forEach { favicon ->
+            assertThat(favicon.url).doesNotContain("./")
+        }
+    }
+
 
     @Test
     fun extractIconSizeFromSizesAttribute() {
