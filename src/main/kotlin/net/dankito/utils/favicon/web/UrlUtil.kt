@@ -5,14 +5,14 @@ import java.net.URI
 
 open class UrlUtil {
 
-    open fun makeUrlAbsolute(url: String): String {
+    open fun makeUrlAbsolute(url: String, appendWwwDot: Boolean = false): String {
         if (url.startsWith("http")) {
             return url
         }
 
         var absoluteUrl = url
 
-        if (absoluteUrl.startsWith("www.", true) == false) {
+        if (appendWwwDot && absoluteUrl.startsWith("www.", true) == false) {
             absoluteUrl = "www." + absoluteUrl
         }
 

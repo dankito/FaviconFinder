@@ -39,11 +39,20 @@ open class FaviconFinder @JvmOverloads constructor(
     }
 
     open fun extractFavicons(url: String) : List<Favicon> {
-        val absoluteUrl = urlUtil.makeUrlAbsolute(url)
+        val absoluteUrl = urlUtil.makeUrlAbsolute(url) // try relative URLs without "www." first
 
         webClient.get(absoluteUrl).let { response ->
             if (response.successful) {
                 return extractFavicons(response, absoluteUrl)
+            } else if (url.startsWith("http", true) == false) {
+                val absoluteUrlWithWwwDot = urlUtil.makeUrlAbsolute(url, true) // then, if it does not succeed, append "www."
+                if (absoluteUrlWithWwwDot != absoluteUrl) {
+                    webClient.get(absoluteUrlWithWwwDot).let { secondResponse ->
+                        if (secondResponse.successful) {
+                            return extractFavicons(response, absoluteUrlWithWwwDot)
+                        }
+                    }
+                }
             }
         }
 

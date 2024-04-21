@@ -95,14 +95,18 @@ class FaviconFinderTest {
     fun `Relative url`() {
         val extractedIcons = getFaviconsForUrl("codinux.net")
 
+        testExtractedFavicons(extractedIcons, 2)
+
         extractedIcons.forEach { favicon ->
-            assertThat(favicon.url).startsWith("https://www.codinux.net/")
+            assertThat(favicon.url).startsWith("https://codinux.net/")
         }
     }
 
     @Test
     fun `Relative url with www`() {
         val extractedIcons = getFaviconsForUrl("www.codinux.net")
+
+        testExtractedFavicons(extractedIcons, 2)
 
         extractedIcons.forEach { favicon ->
             assertThat(favicon.url).startsWith("https://www.codinux.net/")
