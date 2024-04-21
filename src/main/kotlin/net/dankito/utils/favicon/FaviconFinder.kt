@@ -4,6 +4,7 @@ import net.dankito.utils.favicon.web.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 import org.slf4j.LoggerFactory
 import java.net.URL
 import kotlin.concurrent.thread
@@ -62,7 +63,11 @@ open class FaviconFinder @JvmOverloads constructor(
     }
 
     open fun extractFavicons(document: Document, url: String): List<Favicon> {
-        val extractedFavicons = document.head().select("link, meta").mapNotNull { mapElementToFavicon(it, url) }.toMutableList()
+        val linkAndMetaElements = document.head().select("link, meta")
+
+        val extractedFavicons = linkAndMetaElements
+            .mapNotNull { mapElementToFavicon(it, url, linkAndMetaElements) }
+            .toMutableList()
 
         tryToFindDefaultFavicon(url, extractedFavicons)
 
@@ -96,12 +101,12 @@ open class FaviconFinder @JvmOverloads constructor(
      * Possible formats are documented here https://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url#answer-22007642
      * and here https://en.wikipedia.org/wiki/Favicon
      */
-    protected open fun mapElementToFavicon(linkOrMetaElement: Element, siteUrl: String): Favicon? {
+    protected open fun mapElementToFavicon(linkOrMetaElement: Element, siteUrl: String, linkAndMetaElements: Elements): Favicon? {
         if (linkOrMetaElement.nodeName() == "link") {
             return mapLinkElementToFavicon(linkOrMetaElement, siteUrl)
         }
         else if (linkOrMetaElement.nodeName() == "meta") {
-            return mapMetaElementToFavicon(linkOrMetaElement, siteUrl)
+            return mapMetaElementToFavicon(linkOrMetaElement, siteUrl, linkAndMetaElements)
         }
 
         return null
@@ -135,12 +140,16 @@ open class FaviconFinder @JvmOverloads constructor(
         }
     }
 
-    protected open fun mapMetaElementToFavicon(metaElement: Element, siteUrl: String): Favicon? {
+    protected open fun mapMetaElementToFavicon(metaElement: Element, siteUrl: String, linkAndMetaElements: Elements): Favicon? {
         if (isOpenGraphImageDeclaration(metaElement)) {
-            return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.OpenGraphImage, null, null)
+            val imageMimeType = linkAndMetaElements.firstOrNull { it.attr("property") == "og:image:type" }?.attr("content")
+            val imageWidth = linkAndMetaElements.firstOrNull { it.attr("property") == "og:image:width" }?.attr("content")?.toIntOrNull()
+            val imageHeight = linkAndMetaElements.firstOrNull { it.attr("property") == "og:image:height" }?.attr("content")?.toIntOrNull()
+
+            return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.OpenGraphImage, imageMimeType, imageWidth, imageHeight)
         }
         else if (isMsTileMetaElement(metaElement)) {
-            return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.MsTileImage, null, null)
+            return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.MsTileImage, null)
         }
 
         return null
@@ -151,26 +160,27 @@ open class FaviconFinder @JvmOverloads constructor(
     protected open fun isMsTileMetaElement(metaElement: Element) = metaElement.hasAttr("name") && metaElement.attr("name") == "msapplication-TileImage" && metaElement.hasAttr("content")
 
 
-    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, sizesString: String?, type: String?): Favicon? {
+    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, sizesString: String?): Favicon? =
+        if (sizesString.isNullOrBlank() == false) {
+            val sizes = extractSizesFromString(sizesString)
+
+            createFavicon(url, siteUrl, iconType, iconMimeType, sizes.maxOrNull())
+        } else {
+            createFavicon(url, siteUrl, iconType, iconMimeType)
+        }
+
+    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, imageWidth: Int? = null, imageHeight: Int? = null): Favicon? =
+        if (imageWidth != null && imageHeight != null) {
+            createFavicon(url, siteUrl, iconType, iconMimeType, Size(imageWidth, imageHeight))
+        } else {
+            createFavicon(url, siteUrl, iconType, iconMimeType)
+        }
+
+    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, size: Size?): Favicon? {
         if (url != null) {
             val urlWithoutQuery = removeQueryFromUrl(url)
 
-            val favicon = Favicon(urlUtil.makeLinkAbsolute(urlWithoutQuery, siteUrl), iconType, imageMimeType = type)
-
-            if (sizesString.isNullOrBlank() == false) {
-                val sizes = extractSizesFromString(sizesString)
-
-                sizes.maxOrNull()?.let { size ->
-                    favicon.size = size
-                }
-            }
-            else {
-                extractSizeFromUrl(url)?.let { size ->
-                    favicon.size = size
-                }
-            }
-
-            return favicon
+            return Favicon(urlUtil.makeLinkAbsolute(urlWithoutQuery, siteUrl), iconType, size ?: extractSizeFromUrl(url), iconMimeType)
         }
 
         return null

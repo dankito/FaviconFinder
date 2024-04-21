@@ -207,6 +207,19 @@ class FaviconFinderTest {
         }
     }
 
+    @Test
+    fun `Extract OpenGraph Image Size attributes`() {
+        val extractedIcons = getFaviconsForUrl("github.com")
+
+        val openGraphImage = extractedIcons.firstOrNull { it.iconType == FaviconType.OpenGraphImage }
+
+        assertThat(openGraphImage).isNotNull()
+        assertThat(openGraphImage!!.imageMimeType).isEqualTo("image/png")
+        assertThat(openGraphImage.size).isNotNull()
+        assertThat(openGraphImage.size!!.width).isEqualTo(1200)
+        assertThat(openGraphImage.size!!.height).isEqualTo(630)
+    }
+
 
     private fun getFaviconsForUrl(url: String): List<Favicon> {
         return underTest.extractFavicons(url)
