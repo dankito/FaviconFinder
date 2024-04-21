@@ -116,7 +116,8 @@ open class FaviconFinder @JvmOverloads constructor(
                         // - "./../images/icons/icon-512.png"
                         // - ./../images/icons/icon-192.png -> (https://www.spiegel.de/public/spon/images/icons/icon-192.png)
                         // -> use manifest's url to create absolute favicon url
-                        createFaviconFromSizesString(it.src, manifestUrl, type, it.type, it.sizes)
+                        val baseUrl = if (it.src.startsWith(".")) manifestUrl else siteUrl
+                        createFaviconFromSizesString(it.src, baseUrl, type, it.type, it.sizes)
                     }
                 } catch (e: Throwable) {
                     log.error("Could not read icons from web manifest of site $siteUrl", e)
