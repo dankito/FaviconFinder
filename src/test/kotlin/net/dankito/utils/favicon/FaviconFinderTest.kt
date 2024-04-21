@@ -170,6 +170,13 @@ class FaviconFinderTest {
         extractedIcons.map { it.url }.none { it.endsWith("coroot.com/favicon.ico") }
     }
 
+    @Test
+    fun `Check rel value case insensitive`() {
+        val extractedIcons = getFaviconsForUrl("https://www.live.com") // live.com specifies rel value in upper case: <link rel="SHORTCUT ICON" href="/favicon.ico?v2" type="image/x-icon">
+
+        testExtractedFavicons(extractedIcons, 1)
+    }
+
 
     @Test
     fun `Extract favicons from web manifest`() {

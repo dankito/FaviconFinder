@@ -174,7 +174,7 @@ open class FaviconFinder @JvmOverloads constructor(
     }
 
     protected open fun getFaviconTypeForLinkElements(linkElement: Element): FaviconType? {
-        val relValue = linkElement.attr("rel")
+        val relValue = linkElement.attr("rel").lowercase()
 
         return when (relValue) {
             "icon" -> FaviconType.Icon
