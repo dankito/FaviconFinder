@@ -12,13 +12,6 @@ buildscript {
 }
 
 
-group = "net.dankito.utils"
-version = "1.1.0"
-
-ext["sourceCodeRepositoryBaseUrl"] = "github.com/dankito/FaviconFinder"
-ext["projectDescription"] = "Extracts the favicons from a web site"
-
-
 plugins {
     kotlin("jvm")
 }
@@ -34,9 +27,11 @@ repositories {
 }
 
 
-if (File(projectDir, "./gradle/scripts/publish-dankito.gradle.kts").exists()) {
-    apply(from = "./gradle/scripts/publish-dankito.gradle.kts")
-}
+group = "net.dankito.utils"
+version = "1.1.0"
+
+ext["sourceCodeRepositoryBaseUrl"] = "github.com/dankito/FaviconFinder"
+ext["projectDescription"] = "Extracts the favicons from a web site"
 
 
 val jsoupVersion: String by project
@@ -58,4 +53,9 @@ dependencies {
     testImplementation("com.willowtreeapps.assertk:assertk:$assertKVersion")
 
     testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
+}
+
+
+if (File(projectDir, "./gradle/scripts/publish-dankito.gradle.kts").exists()) {
+    apply(from = "./gradle/scripts/publish-dankito.gradle.kts")
 }
