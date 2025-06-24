@@ -1,15 +1,10 @@
 
 buildscript {
-    group = "net.dankito.utils"
-    version = "1.0.5-SNAPSHOT"
-
-    ext["sourceCodeRepositoryBaseUrl"] = "github.com/dankito/FaviconFinder"
-    ext["projectDescription"] = "Extracts the favicons from a web site"
-
-
     repositories {
-        google()
+        mavenCentral()
     }
+
+    val kotlinVersion: String by extra
 
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
@@ -17,17 +12,24 @@ buildscript {
 }
 
 
+group = "net.dankito.utils"
+version = "1.0.5-SNAPSHOT"
+
+ext["sourceCodeRepositoryBaseUrl"] = "github.com/dankito/FaviconFinder"
+ext["projectDescription"] = "Extracts the favicons from a web site"
+
+
 plugins {
+    kotlin("jvm")
+
     // So after executing publish staged repository can be closed and released by executing closeAndReleaseRepository
     id("io.codearte.nexus-staging") version "0.21.2"
 }
 
 
-apply(plugin: "kotlin")
-
-
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
+kotlin {
+    jvmToolchain(8)
+}
 
 
 repositories {
@@ -35,17 +37,24 @@ repositories {
 }
 
 
-def commonScriptsFile = new File(new File(project.gradle.gradleUserHomeDir, "scripts"), "publish-dankito.gradle.kts")
+val commonScriptsFile = File(File(project.gradle.gradleUserHomeDir, "scripts"), "publish-dankito.gradle.kts")
 if (commonScriptsFile.exists()) {
-    apply(from: commonScriptsFile)
+    apply(from = commonScriptsFile)
 }
 
 
-test {
+tasks.test {
     ignoreFailures = true
     useJUnitPlatform()
 }
 
+
+val jsoupVersion: String by project
+val jacksonVersion: String by project
+val slf4jVersion: String by project
+
+val junitVersion: String by project
+val assertJVersion: String by project
 
 dependencies {
     implementation("org.jsoup:jsoup:$jsoupVersion")
