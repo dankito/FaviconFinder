@@ -1,7 +1,7 @@
 package net.dankito.utils.favicon
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
 
 class FaviconComparatorTest {

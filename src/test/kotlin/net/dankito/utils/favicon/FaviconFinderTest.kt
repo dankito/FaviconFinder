@@ -3,7 +3,7 @@ package net.dankito.utils.favicon
 import org.assertj.core.api.Assertions.assertThat
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
 
 class FaviconFinderTest {
@@ -194,6 +194,21 @@ class FaviconFinderTest {
         extractedIcons.forEach { favicon ->
             assertThat(favicon.url).doesNotContain("./")
         }
+    }
+
+
+    @Test
+    fun `No icons`() {
+        val extractedIcons = getFaviconsForUrl("live.com")
+
+        testExtractedFavicons(extractedIcons, 3)
+    }
+
+    @Test
+    fun `No icons 2`() {
+        val extractedIcons = getFaviconsForUrl("microsoft.com")
+
+        testExtractedFavicons(extractedIcons, 3)
     }
 
 

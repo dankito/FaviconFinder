@@ -43,17 +43,10 @@ if (commonScriptsFile.exists()) {
 }
 
 
-tasks.test {
-    ignoreFailures = true
-    useJUnitPlatform()
-}
-
-
 val jsoupVersion: String by project
 val jacksonVersion: String by project
 val slf4jVersion: String by project
 
-val junitVersion: String by project
 val assertJVersion: String by project
 
 dependencies {
@@ -63,8 +56,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:$slf4jVersion")
 
 
-    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation(kotlin("test"))
 
     testImplementation("org.assertj:assertj-core:$assertJVersion")
 
