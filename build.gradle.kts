@@ -37,9 +37,8 @@ repositories {
 }
 
 
-val commonScriptsFile = File(File(project.gradle.gradleUserHomeDir, "scripts"), "publish-dankito.gradle.kts")
-if (commonScriptsFile.exists()) {
-    apply(from = commonScriptsFile)
+if (File(projectDir, "./gradle/scripts/publish-dankito.gradle.kts").exists()) {
+    apply(from = "./gradle/scripts/publish-dankito.gradle.kts")
 }
 
 
