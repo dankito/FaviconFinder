@@ -9,21 +9,6 @@ buildscript {
 
         sourceCodeRepositoryBaseUrl = "github.com/dankito/FaviconFinder"
         projectDescription = "Extracts the favicons from a web site"
-
-
-        kotlinVersion = '1.6.21'
-
-        jsoupVersion = '1.17.2'
-
-        jacksonVersion = "2.17.0"
-
-        slf4jVersion = '1.7.36'
-
-
-        junitVersion = '5.5.2'
-//        junitVersion = '5.10.2'
-
-        assertJVersion = '3.25.3'
     }
 
 
