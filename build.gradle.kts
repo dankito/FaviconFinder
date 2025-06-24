@@ -21,9 +21,6 @@ ext["projectDescription"] = "Extracts the favicons from a web site"
 
 plugins {
     kotlin("jvm")
-
-    // So after executing publish staged repository can be closed and released by executing closeAndReleaseRepository
-    id("io.codearte.nexus-staging") version "0.21.2"
 }
 
 
