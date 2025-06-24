@@ -2,7 +2,6 @@ package net.dankito.utils.favicon.fetcher
 
 import assertk.assertThat
 import assertk.assertions.hasSize
-import assertk.assertions.isGreaterThan
 import assertk.assertions.isNotNull
 import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
@@ -23,7 +22,7 @@ abstract class FaviconFetcherTestBase {
         if (underTest.supportsPreferredSizeParameter) {
             assertThat(result!!).hasSize(725)
         } else {
-            assertThat(result!!.size).isGreaterThan(500)
+            assertThat(result!!).hasSize(540)
         }
     }
 
@@ -35,7 +34,7 @@ abstract class FaviconFetcherTestBase {
         if (underTest.supportsPreferredSizeParameter) {
             assertThat(result!!).hasSize(725)
         } else {
-            assertThat(result!!.size).isGreaterThan(500)
+            assertThat(result!!).hasSize(540)
         }
     }
 

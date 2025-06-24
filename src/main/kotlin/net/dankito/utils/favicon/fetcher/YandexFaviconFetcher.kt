@@ -15,6 +15,6 @@ open class YandexFaviconFetcher(webClient: IWebClient) : FaviconFetcherBase(webC
 
     override fun getFaviconFetcherUrl(url: String, preferredSize: Int?): String =
         // don't know why by when [url] starts with "https://" then returned icon has a large gray background
-        "https://favicon.yandex.net/favicon/$url"
+        "https://favicon.yandex.net/favicon/${removeProtocolAndWww(url)}"
 
 }
