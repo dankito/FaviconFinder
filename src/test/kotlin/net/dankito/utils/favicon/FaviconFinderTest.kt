@@ -1,6 +1,7 @@
 package net.dankito.utils.favicon
 
-import org.assertj.core.api.Assertions.assertThat
+import assertk.assertThat
+import assertk.assertions.*
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import kotlin.test.Test
@@ -232,7 +233,7 @@ class FaviconFinderTest {
         testExtractedFavicons(extractedIcons, 1)
 
         extractedIcons.forEach { favicon ->
-            assertThat(favicon.size).isNotNull
+            assertThat(favicon.size).isNotNull()
         }
     }
 
@@ -264,7 +265,7 @@ class FaviconFinderTest {
 
         extractedIcons.forEach { favicon ->
             if (favicon.url != TestSiteUrl + "/favicon.ico") { // FaviconFinder adds default icon for passed siteUrl TestSiteUrl
-                assertThat(favicon.size).isNotNull
+                assertThat(favicon.size).isNotNull()
             }
         }
     }

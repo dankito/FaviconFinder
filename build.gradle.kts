@@ -47,7 +47,8 @@ val jsoupVersion: String by project
 val jacksonVersion: String by project
 val slf4jVersion: String by project
 
-val assertJVersion: String by project
+val assertKVersion: String by project
+val logbackVersion: String by project
 
 dependencies {
     implementation("org.jsoup:jsoup:$jsoupVersion")
@@ -58,7 +59,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
 
-    testImplementation("org.assertj:assertj-core:$assertJVersion")
+    testImplementation("com.willowtreeapps.assertk:assertk:$assertKVersion")
 
-    testImplementation("org.slf4j:slf4j-simple:$slf4jVersion")
+    testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
 }
