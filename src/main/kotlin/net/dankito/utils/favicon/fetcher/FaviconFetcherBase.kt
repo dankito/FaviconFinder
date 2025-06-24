@@ -9,7 +9,7 @@ abstract class FaviconFetcherBase(protected val webClient: IWebClient) : Favicon
 
     override fun fetch(url: String, preferredSize: Int?): ByteArray? {
         val fetcherUrl = getFaviconFetcherUrl(url, preferredSize)
-        val response = webClient.get(fetcherUrl)
+        val response = webClient.get(fetcherUrl, true) // actually only required for FaviconExtractor to set the User-Agent (requestDesktopWebsite=true)
 
         return if (response.successful) {
             response.receivedData
