@@ -35,7 +35,7 @@ repositories {
 }
 
 
-def commonScriptsFile = new File(new File(project.gradle.gradleUserHomeDir, "scripts"), "commonScripts.gradle")
+def commonScriptsFile = new File(new File(project.gradle.gradleUserHomeDir, "scripts"), "publish-dankito.gradle.kts")
 if (commonScriptsFile.exists()) {
     apply(from: commonScriptsFile)
 }
