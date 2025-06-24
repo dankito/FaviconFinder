@@ -1,8 +1,9 @@
 package net.dankito.utils.favicon.fetcher
 
 import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.utils.favicon.web.UrlUtil
 
-abstract class FaviconFetcherBase(protected val webClient: IWebClient) : FaviconFetcher {
+abstract class FaviconFetcherBase(protected val webClient: IWebClient, protected val urlUtil: UrlUtil = UrlUtil()) : FaviconFetcher {
 
     protected abstract fun getFaviconFetcherUrl(url: String, preferredSize: Int?): String
 
@@ -19,25 +20,9 @@ abstract class FaviconFetcherBase(protected val webClient: IWebClient) : Favicon
     }
 
     protected open fun ensureStartsWithHttpOrHttps(url: String): String =
-        if (url.startsWith("http://", true) || url.startsWith("https://")) {
-            url
-        } else {
-            "https://$url"
-        }
+        urlUtil.ensureStartsWithHttpOrHttps(url)
 
-    protected open fun removeProtocolAndWww(url: String): String {
-        var result = url
-
-        val protocolSeparatorIndex = result.indexOf("://")
-        if (protocolSeparatorIndex != -1) {
-            result = result.substring(protocolSeparatorIndex + "://".length)
-        }
-
-        if (result.startsWith("www.", true)) {
-            result = result.substring(4)
-        }
-
-        return result
-    }
+    protected open fun removeProtocolAndWww(url: String): String =
+        urlUtil.removeProtocolAndWww(url)
 
 }
