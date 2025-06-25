@@ -101,6 +101,7 @@ open class JsoupWebsiteFaviconsExtractor(
         "shortcut icon" -> FaviconType.ShortcutIcon
         "apple-touch-icon" -> FaviconType.AppleTouch
         "apple-touch-icon-precomposed" -> FaviconType.AppleTouchPrecomposed
+        "mask-icon" -> FaviconType.SafariMaskIcon
         else -> null
     }
 

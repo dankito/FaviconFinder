@@ -123,6 +123,22 @@ class JsoupWebsiteFaviconsExtractorTest {
     }
 
     @Test
+    fun link_safariMaskIcon() {
+        val imageUrl = "https://codinux.net/images/favicons/safari-pinned-tab.svg"
+
+        val html = """<html>
+            <head>
+                <link rel="mask-icon" color="#1d354d" href="$imageUrl">
+            </head>
+        </html>""".trimMargin()
+
+
+        val result = underTest.extractFavicons("", html)
+
+        assertIcon(result, imageUrl, FaviconType.SafariMaskIcon)
+    }
+
+    @Test
     fun link_webManifest() {
         // TODO: mock retrieving WebManifest
         val html = """<html>
