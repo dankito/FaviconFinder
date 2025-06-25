@@ -110,16 +110,12 @@ open class JsoupWebsiteFaviconsExtractor(
      * Possible formats are documented here https://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url#answer-22007642
      * and here https://en.wikipedia.org/wiki/Favicon
      */
-    protected open fun mapElementToFavicon(linkOrMetaElement: Element, siteUrl: String, linkAndMetaElements: Elements): Favicon? {
-        if (linkOrMetaElement.nodeName() == "link") {
-            return mapLinkElementToFavicon(linkOrMetaElement, siteUrl)
+    protected open fun mapElementToFavicon(linkOrMetaElement: Element, siteUrl: String, linkAndMetaElements: Elements): Favicon? =
+        when (linkOrMetaElement.nodeName().lowercase()) {
+            "link" -> mapLinkElementToFavicon(linkOrMetaElement, siteUrl)
+            "meta" -> mapMetaElementToFavicon(linkOrMetaElement, siteUrl, linkAndMetaElements)
+            else -> null
         }
-        else if (linkOrMetaElement.nodeName() == "meta") {
-            return mapMetaElementToFavicon(linkOrMetaElement, siteUrl, linkAndMetaElements)
-        }
-
-        return null
-    }
 
     protected open fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? {
         if (linkElement.hasAttr("rel")) {
