@@ -23,8 +23,9 @@ open class JacksonWebManifestFaviconsExtractor(
 
 
     override fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon> = try {
+        val absoluteManifestUrl = urlUtil.makeLinkAbsolute(manifestUrl, siteUrl)
         // don't know why but when requested with URLConnection then web manifest string starts with ﻿ leading to that Jackson deserialization fails
-        val manifest = JsonSerializer.default.readValue<WebManifest>(URL(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl)))
+        val manifest = JsonSerializer.default.readValue<WebManifest>(URL(absoluteManifestUrl))
         manifest.icons.mapNotNull {
             val type = if (it.src.contains("apple-touch", true)) FaviconType.AppleTouch else FaviconType.Icon
             // some web manifests contain relative icon urls, e.g. spiegel.de:
@@ -34,7 +35,7 @@ open class JacksonWebManifestFaviconsExtractor(
             // - "./../images/icons/icon-512.png"
             // - ./../images/icons/icon-192.png -> (https://www.spiegel.de/public/spon/images/icons/icon-192.png)
             // -> use manifest's url to create absolute favicon url
-            val baseUrl = if (it.src.startsWith(".")) manifestUrl else siteUrl
+            val baseUrl = if (it.src.startsWith('.')) absoluteManifestUrl else siteUrl
             creator.createFaviconFromSizesString(it.src, baseUrl, type, it.type, it.sizes)
         }
     } catch (e: Throwable) {
