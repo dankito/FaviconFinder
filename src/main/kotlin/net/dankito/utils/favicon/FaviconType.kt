@@ -4,17 +4,6 @@ package net.dankito.utils.favicon
 enum class FaviconType {
 
     /**
-     * Originally for Internet Explorer 5–11. Legacy but still common.
-     * Used by IE and Edge. Ignored by modern browsers unless it's the only icon.
-     *
-     * File is expected to be a `.ico`.
-     *
-     * Example:
-     * `<link rel="shortcut icon" href="/favicon.ico">`
-     */
-    ShortcutIcon,
-
-    /**
      * Primary favicon for browsers (tab icon, bookmarks, etc.).
      *
      * Can be multiple types: .ico, .png, .svg, .gif, etc.
@@ -25,6 +14,17 @@ enum class FaviconType {
      * `<link rel="icon" href="/favicon.ico" type="image/x-icon">`
      */
     Icon,
+
+    /**
+     * Originally for Internet Explorer 5–11. Legacy but still common.
+     * Used by IE and Edge. Ignored by modern browsers unless it's the only icon.
+     *
+     * File is expected to be a `.ico`.
+     *
+     * Example:
+     * `<link rel="shortcut icon" href="/favicon.ico">`
+     */
+    ShortcutIcon,
 
     /**
      * Shown on the home screen when a user installs a Progressive Web App (PWA) or the
@@ -64,12 +64,6 @@ enum class FaviconType {
      * `{ "src": "/android-chrome-maskable-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" }`
      */
     AndroidChromeMaskable,
-
-    /**
-     * Social media preview image.
-     */
-    OpenGraphImage,
-
     /**
      * Used by Safari on iOS/iPadOS home screen when "Add to Home Screen" is used.
      *
@@ -95,13 +89,6 @@ enum class FaviconType {
     AppleTouchPrecomposed,
 
     /**
-     * Used by Windows 8+ pinned sites on Start screen (Edge/IE).
-     *
-     * Niche use.
-     */
-    MsTileImage,
-
-    /**
      * Monochrome SVG icon for Safari's pinned tabs feature (introduced in macOS El Capitan).
      * Safari can then color it using the color attribute.
      *
@@ -111,6 +98,18 @@ enum class FaviconType {
      * `<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">`
      */
     SafariMaskIcon,
+
+    /**
+     * Used by Windows 8+ pinned sites on Start screen (Edge/IE).
+     *
+     * Niche use.
+     */
+    MsTileImage,
+
+    /**
+     * Social media preview image.
+     */
+    OpenGraphImage,
 
     /**
      * This is not a standardized usage — it's a custom class used for JavaScript-based favicon switching.
