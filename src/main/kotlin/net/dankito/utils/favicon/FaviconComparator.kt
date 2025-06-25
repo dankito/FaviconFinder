@@ -110,19 +110,25 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
 
     protected open fun retrieveIconSize(favicon: Favicon) {
         if (favicon.triedToRetrieveSize == false) {
-            favicon.size = retrieveIconSize(favicon.url)
+            val imageInfo = retrieveIconSize(favicon.url)
             favicon.triedToRetrieveSize = true
+
+            if (imageInfo != null) {
+                favicon.size = Size(imageInfo.width, imageInfo.height)
+                if (favicon.imageMimeType == null) {
+                    favicon.imageMimeType = imageInfo.mimeType
+                }
+            }
         }
     }
 
-    protected open fun retrieveIconSize(iconUrl: String): Size? {
+    protected open fun retrieveIconSize(iconUrl: String): SimpleImageInfo? {
         try {
             if (iconUrl.endsWith(".svg", true) == false) { // for .svg size cannot be determined
                 val response = webClient.get(iconUrl)
                 if (response.successful) {
                     response.receivedData?.let { receivedData ->
-                        val imageInfo = SimpleImageInfo(receivedData)
-                        return Size(imageInfo.width, imageInfo.height)
+                        return SimpleImageInfo(receivedData)
                     }
                 }
             }

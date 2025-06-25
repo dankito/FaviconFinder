@@ -7,11 +7,14 @@ open class Favicon(
     open val url : String,
     open val iconType : FaviconType,
     open var size : Size? = null,
-    open val imageMimeType : String? = null
+    imageMimeType : String? = null,
 ) {
 
     constructor() : this("", FaviconType.Icon, null, null) // for object deserializers
 
+
+    open var imageMimeType : String? = imageMimeType
+        internal set
 
     /**
      * Temporary value to indicate if tried to determine image size so that we don't
