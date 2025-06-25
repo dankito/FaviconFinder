@@ -105,6 +105,21 @@ class JsoupWebsiteFaviconsExtractorTest {
         assertIcon(result, imageUrl, FaviconType.AppleTouch, null, size)
     }
 
+    @Test
+    fun link_webManifest() {
+        // TODO: mock retrieving WebManifest
+        val html = """<html>
+            <head>
+                <link rel="manifest" href="https://codinux.net/images/favicons/site.webmanifest">
+            </head>
+        </html>""".trimMargin()
+
+
+        val result = underTest.extractFavicons("", html)
+
+        assertThat(result).hasSize(8)
+    }
+
 
     private fun assertIcon(result: List<Favicon>, imageUrl: String, iconType: FaviconType, mimeType: String? = null, size: Int? = null) {
         assertThat(result).hasSize(1)

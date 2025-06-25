@@ -30,17 +30,18 @@ open class JsoupWebsiteFaviconsExtractor(
 
     open fun extractFavicons(document: Document, url: String): List<Favicon> {
         val head = document.head()
+        val linkElements = head.select("link")
         val metaElements = head.select("meta")
 
         /**
          * Possible formats are documented here https://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url#answer-22007642
          * and here https://en.wikipedia.org/wiki/Favicon
          */
-        val extractedFavicons = (head.select("link").mapNotNull { mapLinkElementToFavicon(it, url) } +
+        val extractedFavicons = (linkElements.mapNotNull { mapLinkElementToFavicon(it, url) } +
                 metaElements.mapNotNull { mapMetaElementToFavicon(it, url, metaElements) })
             .toMutableList()
 
-        val faviconsInWebManifest = extractIconsFromWebManifest(metaElements, url)
+        val faviconsInWebManifest = extractIconsFromWebManifest(linkElements, url)
         addIfNotAlreadyAdded(extractedFavicons, faviconsInWebManifest)
 
         tryToFindDefaultFavicon(url, extractedFavicons)?.let { defaultFavicon ->
