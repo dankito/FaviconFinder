@@ -80,6 +80,7 @@ open class JsoupWebsiteFaviconsExtractor(
     protected open fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon> =
         webManifestFaviconsExtractor.extractIconsFromWebManifest(manifestUrl, siteUrl)
 
+
     protected open fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? =
         linkElement.attr("rel").takeUnless { it.isBlank() }?.let { linkRelation ->
             getFaviconTypeForLinkElements(linkRelation)?.let { faviconType ->
@@ -97,9 +98,9 @@ open class JsoupWebsiteFaviconsExtractor(
 
     protected open fun getFaviconTypeForLinkElements(linkRelation: String): FaviconType? = when (linkRelation.lowercase()) {
         "icon" -> FaviconType.Icon
-        "apple-touch-icon-precomposed" -> FaviconType.AppleTouchPrecomposed
-        "apple-touch-icon" -> FaviconType.AppleTouch
         "shortcut icon" -> FaviconType.ShortcutIcon
+        "apple-touch-icon" -> FaviconType.AppleTouch
+        "apple-touch-icon-precomposed" -> FaviconType.AppleTouchPrecomposed
         else -> null
     }
 
