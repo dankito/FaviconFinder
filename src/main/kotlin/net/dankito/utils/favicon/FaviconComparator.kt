@@ -14,8 +14,9 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
     private val log = LoggerFactory.getLogger(FaviconComparator::class.java)
 
 
+    // we have to set ignoreParametersAsLastResort to true for now as otherwise this would be a breaking change
     open fun getBestIcon(favicons: List<Favicon>, minSize: Int = DEFAULT_MIN_SIZE, maxSize: Int? = null, returnSquarishOneIfPossible: Boolean = false,
-                         fileTypesToExclude: List<String> = listOf()) : Favicon? {
+                         fileTypesToExclude: List<String> = listOf(), ignoreParametersAsLastResort: Boolean = true) : Favicon? {
         // retrieve sizes of icons which's size isn't known yet
         favicons.filter { it.size == null }.forEach {
             it.size = retrieveIconSize(it)
@@ -26,20 +27,20 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
             return it
         }
 
-        if (returnSquarishOneIfPossible) { // then try without returnSquarishOneIfPossible
+        if (returnSquarishOneIfPossible && ignoreParametersAsLastResort) { // then try without returnSquarishOneIfPossible
             favicons.filter { doesFitSize(it, minSize, maxSize, false, fileTypesToExclude) }.sortedByDescending { it.size }.firstOrNull()?.let {
                 return it
             }
         }
 
-        if (maxSize != null) { // if maxSize is set, try next without maxSize
+        if (maxSize != null && ignoreParametersAsLastResort) { // if maxSize is set, try next without maxSize
             favicons.filter { doesFitSize(it, minSize, null, false, fileTypesToExclude) }.sortedBy { it.size }.firstOrNull()?.let {
                 return it
             }
         }
 
-        if (fileTypesToExclude.isNotEmpty()) { // then try to find any icon that matches other parameters
-            return getBestIcon(favicons, minSize, maxSize, returnSquarishOneIfPossible, listOf())
+        if (fileTypesToExclude.isNotEmpty() && ignoreParametersAsLastResort) { // then try to find any icon that matches other parameters
+            return getBestIcon(favicons, minSize, maxSize, returnSquarishOneIfPossible, listOf(), ignoreParametersAsLastResort)
         }
 
         return favicons.firstOrNull { it.size == null }
