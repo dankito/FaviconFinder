@@ -2,7 +2,6 @@ package net.dankito.utils.favicon.extractor
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import net.dankito.utils.favicon.Favicon
-import net.dankito.utils.favicon.FaviconFinder.Companion.IconSizeRegex
 import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.Size
 import net.dankito.utils.favicon.json.JsonSerializer
@@ -52,7 +51,7 @@ open class JsoupWebsiteFaviconsExtractor(
     protected open fun tryToFindDefaultFavicon(url: String, extractedFavicons: List<Favicon>): Favicon? {
         val urlInstance = URL(url)
         val defaultFaviconUrl = urlInstance.protocol + "://" + urlInstance.host + "/favicon.ico"
-        if (containsIconWithUrl(extractedFavicons, defaultFaviconUrl) == false) {
+        if (doesNotContainIconWithUrl(extractedFavicons, defaultFaviconUrl)) {
             webClient.head(defaultFaviconUrl).let { response ->
                 if (response.successful &&
                     (response.contentType == null || response.contentType?.startsWith("text/") == false)) { // filter out e.g. error pages
@@ -159,19 +158,19 @@ open class JsoupWebsiteFaviconsExtractor(
     }
 
     protected open fun addIfNotAlreadyAdded(extractedFavicons: MutableList<Favicon>, candidate: Favicon) {
-        if (containsIconWithUrl(extractedFavicons, candidate.url) == false) {
+        if (doesNotContainIconWithUrl(extractedFavicons, candidate.url)) {
             extractedFavicons.add(candidate)
         }
     }
 
-    protected open fun containsIconWithUrl(extractedFavicons: List<Favicon>, faviconUrl: String): Boolean {
+    protected open fun doesNotContainIconWithUrl(extractedFavicons: List<Favicon>, faviconUrl: String): Boolean {
         extractedFavicons.forEach { favicon ->
             if (favicon.url == faviconUrl) {
-                return true
+                return false
             }
         }
 
-        return false
+        return true
     }
 
 
