@@ -1,5 +1,26 @@
 # Favicon Finder
 
+## Setup
+
+### Gradle
+
+```
+implementation("net.dankito.utils:favicon-finder:1.5.0")
+```
+
+### Maven
+
+```xml
+<dependency>
+   <groupId>net.dankito.utils</groupId>
+   <artifactId>favicon-finder</artifactId>
+   <version>1.5.0</version>
+</dependency>
+```
+
+
+## Favicon formats and sources
+
 Getting a site's favicon can be cumbersome.
 
 It can contain multiple favicons for different purposes, sizes and formats:
