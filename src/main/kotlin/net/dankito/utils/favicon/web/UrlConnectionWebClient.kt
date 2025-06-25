@@ -56,6 +56,7 @@ open class UrlConnectionWebClient : IWebClient {
         connection.instanceFollowRedirects = true
 
         connection.connectTimeout = 5 * 1000
+        connection.readTimeout = 5 * 1000
 
         if (requestDesktopWebsite) {
             connection.setRequestProperty("User-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
