@@ -39,11 +39,8 @@ open class JsoupWebsiteFaviconsExtractor(
             .mapNotNull { mapElementToFavicon(it, url, linkAndMetaElements) }
             .toMutableList()
 
-        extractIconsFromWebManifest(linkAndMetaElements, url).forEach { favicon ->
-            if (containsIconWithUrl(extractedFavicons, favicon.url) == false) {
-                extractedFavicons.add(favicon)
-            }
-        }
+        val faviconsInWebManifest = extractIconsFromWebManifest(linkAndMetaElements, url)
+        addIfNotAlreadyAdded(extractedFavicons, faviconsInWebManifest)
 
         tryToFindDefaultFavicon(url, extractedFavicons)?.let { defaultFavicon ->
             extractedFavicons.add(defaultFavicon)
@@ -95,16 +92,6 @@ open class JsoupWebsiteFaviconsExtractor(
             log.error("Could not read icons from web manifest of site $siteUrl", e)
             emptyList()
         }
-
-    protected open fun containsIconWithUrl(extractedFavicons: List<Favicon>, faviconUrl: String): Boolean {
-        extractedFavicons.forEach { favicon ->
-            if (favicon.url == faviconUrl) {
-                return true
-            }
-        }
-
-        return false
-    }
 
     /**
      * Possible formats are documented here https://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url#answer-22007642
@@ -163,6 +150,29 @@ open class JsoupWebsiteFaviconsExtractor(
     protected open fun isOpenGraphImageDeclaration(metaElement: Element) = metaElement.hasAttr("property") && metaElement.attr("property") == "og:image" && metaElement.hasAttr("content")
 
     protected open fun isMsTileMetaElement(metaElement: Element) = metaElement.hasAttr("name") && metaElement.attr("name") == "msapplication-TileImage" && metaElement.hasAttr("content")
+
+
+    protected open fun addIfNotAlreadyAdded(extractedFavicons: MutableList<Favicon>, additionalCandidates: List<Favicon>) {
+        additionalCandidates.forEach { favicon ->
+            addIfNotAlreadyAdded(extractedFavicons, favicon)
+        }
+    }
+
+    protected open fun addIfNotAlreadyAdded(extractedFavicons: MutableList<Favicon>, candidate: Favicon) {
+        if (containsIconWithUrl(extractedFavicons, candidate.url) == false) {
+            extractedFavicons.add(candidate)
+        }
+    }
+
+    protected open fun containsIconWithUrl(extractedFavicons: List<Favicon>, faviconUrl: String): Boolean {
+        extractedFavicons.forEach { favicon ->
+            if (favicon.url == faviconUrl) {
+                return true
+            }
+        }
+
+        return false
+    }
 
 
     protected open fun createFaviconFromSizesString(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, sizesString: String?): Favicon? =
