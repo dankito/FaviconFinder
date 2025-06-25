@@ -54,6 +54,23 @@ class JsoupWebsiteFaviconsExtractorTest {
 
 
     @Test
+    fun link_shortcutIcon() {
+        val imageUrl = "https://codinux.net/favicon.ico"
+        val mimeType = "image/x-icon"
+
+        val html = """<html>
+            <head>
+                <link rel="shortcut icon" href="$imageUrl" type="$mimeType">
+            </head>
+        </html>""".trimMargin()
+
+
+        val result = underTest.extractFavicons("", html)
+
+        assertIcon(result, imageUrl, FaviconType.ShortcutIcon, mimeType)
+    }
+
+    @Test
     fun link_icon_typeSet() {
         val size = 96
         val mimeType = "image/png"
