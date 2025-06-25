@@ -3,6 +3,7 @@ package net.dankito.utils.favicon.web
 import org.slf4j.LoggerFactory
 import java.io.FileNotFoundException
 import java.net.HttpURLConnection
+import java.net.URI
 import java.net.URL
 
 
@@ -49,7 +50,7 @@ open class UrlConnectionWebClient : IWebClient {
     }
 
     private fun createConnection(url: String, method: String, requestDesktopWebsite: Boolean): HttpURLConnection {
-        val connection = URL(url).openConnection() as HttpURLConnection
+        val connection = encodeUrl(url).openConnection() as HttpURLConnection
 
         connection.requestMethod = method
         connection.instanceFollowRedirects = true
@@ -63,6 +64,18 @@ open class UrlConnectionWebClient : IWebClient {
         connection.connect()
 
         return connection
+    }
+
+    protected open fun encodeUrl(urlString: String): URL {
+        // how, Java, you're so clever! If url contains a character like an unencoded white space,
+        // URL(url).openConnection() fails. Also URI(url) and URI.create(url). And URLEncoder.encode(url, "<any>") just ruins the whole url.
+        // But when you first create an URL, use its single components to create an URI, and then
+        // convert it back to URL, then it works.
+        val url = URL(urlString)
+
+        val uri = URI(url.protocol, url.userInfo, url.host, url.port, url.path, url.query, url.ref)
+
+        return uri.toURL()
     }
 
 
