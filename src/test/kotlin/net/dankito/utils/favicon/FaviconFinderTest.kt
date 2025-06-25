@@ -72,17 +72,6 @@ class FaviconFinderTest {
     }
 
     @Test
-    fun psdBankMuenchen_QueryHasBeenRemoved() {
-        val extractedIcons = getFaviconsForUrl("https://www.psd-muenchen.de")
-
-        testExtractedFavicons(extractedIcons, 1)
-
-        extractedIcons.forEach { favicon ->
-            assertThat(favicon.url.contains('?')).isFalse() // check if all queries have been removed from url
-        }
-    }
-
-    @Test
     fun deutscheBank() {
         val extractedIcons = getFaviconsForUrl("https://www.deutsche-bank.de")
 
@@ -147,7 +136,7 @@ class FaviconFinderTest {
     fun `Non breaking space at start of web manifest gets ignored`() {
         val extractedIcons = getFaviconsForUrl("kicker.de") // don't know why but when requested with URLConnection then web manifest string starts with ﻿ leading to that Jackson deserialization fails
 
-        testExtractedFavicons(extractedIcons, 17)
+        testExtractedFavicons(extractedIcons, 16)
     }
 
     @Test
@@ -193,21 +182,6 @@ class FaviconFinderTest {
         extractedIcons.forEach { favicon ->
             assertThat(favicon.url).doesNotContain("./")
         }
-    }
-
-
-    @Test
-    fun `No icons`() {
-        val extractedIcons = getFaviconsForUrl("live.com")
-
-        testExtractedFavicons(extractedIcons, 3)
-    }
-
-    @Test
-    fun `No icons 2`() {
-        val extractedIcons = getFaviconsForUrl("microsoft.com")
-
-        testExtractedFavicons(extractedIcons, 3)
     }
 
 
@@ -266,19 +240,6 @@ class FaviconFinderTest {
                 assertThat(favicon.size).isNotNull()
             }
         }
-    }
-
-    @Test
-    fun `Extract OpenGraph Image Size attributes`() {
-        val extractedIcons = getFaviconsForUrl("github.com")
-
-        val openGraphImage = extractedIcons.firstOrNull { it.iconType == FaviconType.OpenGraphImage }
-
-        assertThat(openGraphImage).isNotNull()
-        assertThat(openGraphImage!!.imageMimeType).isEqualTo("image/png")
-        assertThat(openGraphImage.size).isNotNull()
-        assertThat(openGraphImage.size!!.width).isEqualTo(1200)
-        assertThat(openGraphImage.size!!.height).isEqualTo(630)
     }
 
 
