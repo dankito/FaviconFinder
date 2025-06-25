@@ -31,20 +31,23 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
             retrieveIconSize(it)
         }
 
+        val faviconsToCheck = favicons.filter { it.size != null } // we cannot check if favicon matches size if its size is not known
+            .filter { it.iconType != FaviconType.SafariMaskIcon } // we ignore Safari mask icons for finding a good favicon
+
         // return icon with largest size
-        favicons.filter { doesFitSize(it, minSize, maxSize, returnSquarishOneIfPossible, fileTypesToExclude) }.sortedByDescending { it.size }.firstOrNull()?.let {
+        faviconsToCheck.filter { doesFitSize(it, minSize, maxSize, returnSquarishOneIfPossible, fileTypesToExclude) }.sortedByDescending { it.size }.firstOrNull()?.let {
             return it
         }
 
         if (returnSquarishOneIfPossible && ignoreParametersAsLastResort) { // then try without returnSquarishOneIfPossible
-            favicons.filter { doesFitSize(it, minSize, maxSize, false, fileTypesToExclude) }.sortedByDescending { it.size }.firstOrNull()?.let {
+            faviconsToCheck.filter { doesFitSize(it, minSize, maxSize, false, fileTypesToExclude) }.sortedByDescending { it.size }.firstOrNull()?.let {
                 return it
             }
         }
 
         if (maxSize != null && ignoreParametersAsLastResort) { // if maxSize is set, try next without maxSize
             // find the size that has the closest distance to maxSize
-            val distances = favicons.filter { it.size != null }.associateWith { abs(max(it.size!!.width, it.size!!.height) - maxSize) }
+            val distances = faviconsToCheck.associateWith { abs(max(it.size!!.width, it.size!!.height) - maxSize) }
             return distances.minBy { it.value }.key
         }
 
@@ -53,7 +56,7 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
         }
 
         return if (ignoreParametersAsLastResort) {
-            favicons.firstOrNull { it.size == null }
+            favicons.firstOrNull { it.size == null && it.iconType != FaviconType.SafariMaskIcon }
         } else {
             null
         }
