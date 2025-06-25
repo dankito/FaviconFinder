@@ -2,6 +2,8 @@ package net.dankito.utils.favicon
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import assertk.assertions.isNotNull
+import assertk.assertions.isNull
 import kotlin.test.Test
 
 
@@ -31,7 +33,7 @@ class FaviconComparatorTest {
 
         // given
         val bestIcon = Favicon("https://assets.guim.co.uk/images/2170b16eb045a34f8c79761b203627b4/fallback-logo.png", FaviconType.OpenGraphImage)
-        val favicons = listOf<Favicon>(Favicon("https://assets.guim.co.uk/images/favicons/451963ac2e23633472bf48e2856d3f04/152x152.png", FaviconType.AppleTouch, Size(152, 152)),
+        val favicons = listOf(Favicon("https://assets.guim.co.uk/images/favicons/451963ac2e23633472bf48e2856d3f04/152x152.png", FaviconType.AppleTouch, Size(152, 152)),
                 Favicon("https://assets.guim.co.uk/images/favicons/1a3f98d8491f8cfdc224089b785da86b/144x144.png", FaviconType.AppleTouch, Size(144, 144)),
                 Favicon("https://assets.guim.co.uk/images/favicons/cf23080600002e50f5869c72f5a904bd/120x120.png", FaviconType.AppleTouch, Size(120, 120)),
                 Favicon("https://assets.guim.co.uk/images/favicons/f438f6041a4c1d0289e6debd112880c2/114x114.png", FaviconType.AppleTouch, Size(114, 114)),
@@ -55,7 +57,7 @@ class FaviconComparatorTest {
 
         // given
         val bestIcon = Favicon("https://assets.guim.co.uk/images/2170b16eb045a34f8c79761b203627b4/fallback-logo.png", FaviconType.OpenGraphImage)
-        val favicons = listOf<Favicon>(Favicon("https://assets.guim.co.uk/images/guardian-logo-rss.c45beb1bafa34b347ac333af2e6fe23f.png", FaviconType.Icon, Size(250, 40)),
+        val favicons = listOf(Favicon("https://assets.guim.co.uk/images/guardian-logo-rss.c45beb1bafa34b347ac333af2e6fe23f.png", FaviconType.Icon, Size(250, 40)),
                 Favicon("https://assets.guim.co.uk/images/favicons/451963ac2e23633472bf48e2856d3f04/152x152.png", FaviconType.AppleTouch, Size(152, 152)),
                 Favicon("https://assets.guim.co.uk/images/favicons/1a3f98d8491f8cfdc224089b785da86b/144x144.png", FaviconType.AppleTouch, Size(144, 144)),
                 Favicon("https://assets.guim.co.uk/images/favicons/cf23080600002e50f5869c72f5a904bd/120x120.png", FaviconType.AppleTouch, Size(120, 120)),
@@ -80,7 +82,7 @@ class FaviconComparatorTest {
 
         // given
         val bestIcon = Favicon("https://assets.guim.co.uk/images/favicons/451963ac2e23633472bf48e2856d3f04/152x152.png", FaviconType.AppleTouch, Size(152, 152))
-        val favicons = listOf<Favicon>(Favicon("https://assets.guim.co.uk/images/guardian-logo-rss.c45beb1bafa34b347ac333af2e6fe23f.png", FaviconType.Icon, Size(250, 40)),
+        val favicons = listOf(Favicon("https://assets.guim.co.uk/images/guardian-logo-rss.c45beb1bafa34b347ac333af2e6fe23f.png", FaviconType.Icon, Size(250, 40)),
                 Favicon("https://assets.guim.co.uk/images/favicons/1a3f98d8491f8cfdc224089b785da86b/144x144.png", FaviconType.AppleTouch, Size(144, 144)),
                 Favicon("https://assets.guim.co.uk/images/favicons/cf23080600002e50f5869c72f5a904bd/120x120.png", FaviconType.AppleTouch, Size(120, 120)),
                 Favicon("https://assets.guim.co.uk/images/favicons/f438f6041a4c1d0289e6debd112880c2/114x114.png", FaviconType.AppleTouch, Size(114, 114)),
@@ -105,7 +107,7 @@ class FaviconComparatorTest {
 
         // given
         val bestIcon = Favicon("https://static01.nyt.com/images/icons/t_logo_291_black.png", FaviconType.OpenGraphImage)
-        val favicons = listOf<Favicon>(Favicon("https://static01.nyt.com/favicon.ico", FaviconType.ShortcutIcon),
+        val favicons = listOf(Favicon("https://static01.nyt.com/favicon.ico", FaviconType.ShortcutIcon),
                                         Favicon("https://static01.nyt.com/images/icons/ios-ipad-144x144.png", FaviconType.AppleTouchPrecomposed, Size(144, 144)),
                                         Favicon("https://static01.nyt.com/images/icons/ios-iphone-114x144.png", FaviconType.AppleTouchPrecomposed, Size(114, 114)),
                                         Favicon("https://static01.nyt.com/images/icons/ios-default-homescreen-57x57.png", FaviconType.AppleTouchPrecomposed),
@@ -125,7 +127,7 @@ class FaviconComparatorTest {
 
         // given
         val bestIcon = Favicon("https://static01.nyt.com/images/icons/ios-ipad-144x144.png", FaviconType.AppleTouchPrecomposed, Size(144, 144))
-        val favicons = listOf<Favicon>(Favicon("https://static01.nyt.com/favicon.ico", FaviconType.ShortcutIcon),
+        val favicons = listOf(Favicon("https://static01.nyt.com/favicon.ico", FaviconType.ShortcutIcon),
                 Favicon("https://static01.nyt.com/images/icons/t_logo_291_black.png", FaviconType.OpenGraphImage),
                 Favicon("https://static01.nyt.com/images/icons/ios-iphone-114x144.png", FaviconType.AppleTouchPrecomposed, Size(114, 114)),
                 Favicon("https://static01.nyt.com/images/icons/ios-default-homescreen-57x57.png", FaviconType.AppleTouchPrecomposed),
@@ -145,7 +147,7 @@ class FaviconComparatorTest {
 
         // given
         val bestIcon = Favicon("https://static01.nyt.com/images/icons/ios-default-homescreen-57x57.png", FaviconType.AppleTouchPrecomposed)
-        val favicons = listOf<Favicon>(Favicon("https://static01.nyt.com/favicon.ico", FaviconType.ShortcutIcon),
+        val favicons = listOf(Favicon("https://static01.nyt.com/favicon.ico", FaviconType.ShortcutIcon),
                 Favicon("https://static01.nyt.com/images/icons/t_logo_291_black.png", FaviconType.OpenGraphImage),
                 Favicon("https://static01.nyt.com/images/icons/ios-ipad-144x144.png", FaviconType.AppleTouchPrecomposed, Size(144, 144)),
                 Favicon("https://static01.nyt.com/images/icons/ios-iphone-114x144.png", FaviconType.AppleTouchPrecomposed, Size(114, 114)),
@@ -250,7 +252,7 @@ class FaviconComparatorTest {
 
         // given
         val bestIcon = Favicon("http://4.bp.blogspot.com/-46xU6sntzl4/UVHLh1NGfwI/AAAAAAAAUlY/RiARs4-toWk/s800/Logo.jpg", FaviconType.OpenGraphImage)
-        val favicons = listOf<Favicon>(Favicon("http://www.der-postillon.com/favicon.ico", FaviconType.Icon, imageMimeType = "image/x-icon"), bestIcon)
+        val favicons = listOf(Favicon("http://www.der-postillon.com/favicon.ico", FaviconType.Icon, imageMimeType = "image/x-icon"), bestIcon)
 
 
         // when
@@ -266,7 +268,7 @@ class FaviconComparatorTest {
 
         // given
         val bestIcon = Favicon("http://4.bp.blogspot.com/-46xU6sntzl4/UVHLh1NGfwI/AAAAAAAAUlY/RiARs4-toWk/s800/Logo.jpg", FaviconType.OpenGraphImage)
-        val favicons = listOf<Favicon>(Favicon("http://www.der-postillon.com/favicon.ico", FaviconType.Icon, imageMimeType = "image/x-icon"), bestIcon)
+        val favicons = listOf(Favicon("http://www.der-postillon.com/favicon.ico", FaviconType.Icon, imageMimeType = "image/x-icon"), bestIcon)
 
 
         // when
@@ -296,6 +298,69 @@ class FaviconComparatorTest {
 
         // then
         assertThat(result).isEqualTo(bestIcon)
+    }
+
+
+    @Test
+    fun getBestIconForSize() {
+
+        // given
+        val bestIcon = Favicon("https://www.heise.de/icons/ho/apple-touch-icon-152.png", FaviconType.AppleTouchPrecomposed, Size(152, 152))
+        val favicons = listOf(
+            Favicon("https://www.heise.de/icons/ho/apple-touch-icon-120.png", FaviconType.AppleTouch, Size(120, 120)),
+            Favicon("https://www.heise.de/icons/ho/apple-touch-icon-76.png", FaviconType.AppleTouch, Size(76, 76)),
+            bestIcon,
+            Favicon("https://www.heise.de/icons/ho/heise_online_facebook_social_graph.png", FaviconType.OpenGraphImage, Size(500, 500))
+        )
+
+
+        // when
+        val result = underTest.getBestIconForSize(favicons, listOf(16, 32, 64, 128, 152))
+
+
+        // then
+        assertThat(result).isEqualTo(bestIcon)
+    }
+
+    @Test
+    fun getBestIconForSize_NoMatch() {
+
+        // given
+        val favicons = listOf(
+            Favicon("https://www.heise.de/icons/ho/apple-touch-icon-120.png", FaviconType.AppleTouch, Size(120, 120)),
+            Favicon("https://www.heise.de/icons/ho/apple-touch-icon-76.png", FaviconType.AppleTouch, Size(76, 76)),
+            Favicon("https://www.heise.de/icons/ho/apple-touch-icon-152.png", FaviconType.AppleTouchPrecomposed, Size(152, 152)),
+            Favicon("https://www.heise.de/icons/ho/heise_online_facebook_social_graph.png", FaviconType.OpenGraphImage, Size(500, 500))
+        )
+
+
+        // when
+        val result = underTest.getBestIconForSize(favicons, listOf(16, 32, 64, 128))
+
+
+        // then
+        assertThat(result).isNull()
+    }
+
+    @Test
+    fun getBestIconForSize_NoMatch_ignoreParametersAsLastResort() {
+
+        // given
+        val bestIcon = Favicon("https://www.heise.de/icons/ho/heise_online_facebook_social_graph.png", FaviconType.OpenGraphImage, Size(500, 500))
+        val favicons = listOf(
+            Favicon("https://www.heise.de/icons/ho/apple-touch-icon-120.png", FaviconType.AppleTouch, Size(120, 120)),
+            Favicon("https://www.heise.de/icons/ho/apple-touch-icon-76.png", FaviconType.AppleTouch, Size(76, 76)),
+            Favicon("https://www.heise.de/icons/ho/apple-touch-icon-152.png", FaviconType.AppleTouchPrecomposed, Size(152, 152)),
+            bestIcon
+        )
+
+
+        // when
+        val result = underTest.getBestIconForSize(favicons, listOf(16, 32, 64, 128), ignoreParametersAsLastResort = true)
+
+
+        // then
+        assertThat(result).isEqualTo(bestIcon) // it then selects the largest icon - which is bad. It should select the closest to the first preferredSized value
     }
 
 }
