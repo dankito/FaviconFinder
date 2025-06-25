@@ -87,9 +87,10 @@ open class JsoupWebsiteFaviconsExtractor(
                 val href = linkElement.attr("href")
                 val sizes = linkElement.attrOrNull("sizes")
                 val imageMimeType = linkElement.attrOrNull("type")
+                val color = linkElement.attrOrNull("color")
 
                 if (href.startsWith("data:;base64") == false) {
-                    createFaviconFromSizesString(href, siteUrl, faviconType, imageMimeType, sizes)
+                    createFaviconFromSizesString(href, siteUrl, faviconType, imageMimeType, sizes, color)
                 } else {
                     null // TODO: handle data favicons
                 }
@@ -115,7 +116,8 @@ open class JsoupWebsiteFaviconsExtractor(
             return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.OpenGraphImage, imageMimeType, imageWidth, imageHeight)
         }
         else if (isMsTileMetaElement(metaElement)) {
-            return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.MsTileImage, null, null)
+            val color = metaElements.firstOrNull { it.attr("name") == "msapplication-TileColor" }?.attrOrNull("content")
+            return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.MsTileImage, null, null, color)
         }
 
         return null
@@ -149,13 +151,13 @@ open class JsoupWebsiteFaviconsExtractor(
     }
 
 
-    protected open fun createFaviconFromSizesString(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, sizesString: String?): Favicon? =
-        faviconCreator.createFaviconFromSizesString(url, siteUrl, iconType, iconMimeType, sizesString)
+    protected open fun createFaviconFromSizesString(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, sizesString: String?, color: String? = null): Favicon? =
+        faviconCreator.createFaviconFromSizesString(url, siteUrl, iconType, iconMimeType, sizesString, color)
 
-    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, imageWidth: Int?, imageHeight: Int?): Favicon? =
-        faviconCreator.createFavicon(url, siteUrl, iconType, iconMimeType, imageWidth, imageHeight)
+    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, imageWidth: Int?, imageHeight: Int?, color: String? = null): Favicon? =
+        faviconCreator.createFavicon(url, siteUrl, iconType, iconMimeType, imageWidth, imageHeight, color)
 
-    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, size: Size?): Favicon? =
-        faviconCreator.createFavicon(url, siteUrl, iconType, iconMimeType, size)
+    protected open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, size: Size?, color: String? = null): Favicon? =
+        faviconCreator.createFavicon(url, siteUrl, iconType, iconMimeType, size, color)
 
 }

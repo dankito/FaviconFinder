@@ -8,6 +8,13 @@ open class Favicon(
     open val iconType : FaviconType,
     open var size : Size? = null,
     imageMimeType : String? = null,
+
+    /**
+     * Only relevant for [FaviconType.MsTileImage] and [FaviconType.SafariMaskIcon]:
+     * The background color for the live tile (MsTileImage) or
+     * color of the Safari mask icon if pinned tab is selected.
+     */
+    open val color: String? = null,
 ) {
 
     constructor() : this("", FaviconType.Icon, null, null) // for object deserializers

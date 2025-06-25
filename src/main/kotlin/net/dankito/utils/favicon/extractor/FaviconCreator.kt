@@ -19,27 +19,27 @@ open class FaviconCreator(
     private val log = LoggerFactory.getLogger(FaviconCreator::class.java)
 
 
-    open fun createFaviconFromSizesString(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, sizesString: String?): Favicon? =
+    open fun createFaviconFromSizesString(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, sizesString: String?, color: String? = null): Favicon? =
         if (sizesString.isNullOrBlank() == false) {
             val sizes = extractSizesFromString(sizesString)
 
-            createFavicon(url, siteUrl, iconType, iconMimeType, sizes.maxOrNull())
+            createFavicon(url, siteUrl, iconType, iconMimeType, sizes.maxOrNull(), color)
         } else {
-            createFavicon(url, siteUrl, iconType, iconMimeType, null)
+            createFavicon(url, siteUrl, iconType, iconMimeType, null, color)
         }
 
-    open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, imageWidth: Int?, imageHeight: Int?): Favicon? =
+    open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, imageWidth: Int?, imageHeight: Int?, color: String? = null): Favicon? =
         if (imageWidth != null && imageHeight != null) {
-            createFavicon(url, siteUrl, iconType, iconMimeType, Size(imageWidth, imageHeight))
+            createFavicon(url, siteUrl, iconType, iconMimeType, Size(imageWidth, imageHeight), color)
         } else {
-            createFavicon(url, siteUrl, iconType, iconMimeType, null)
+            createFavicon(url, siteUrl, iconType, iconMimeType, null, color)
         }
 
-    open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, size: Size?): Favicon? {
+    open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, size: Size?, color: String? = null): Favicon? {
         if (url != null) {
             val urlWithoutQuery = removeQueryFromUrl(url)
 
-            return Favicon(urlUtil.makeLinkAbsolute(urlWithoutQuery, siteUrl), iconType, size ?: extractSizeFromUrl(url), iconMimeType)
+            return Favicon(urlUtil.makeLinkAbsolute(urlWithoutQuery, siteUrl), iconType, size ?: extractSizeFromUrl(url), iconMimeType, color)
         }
 
         return null

@@ -39,17 +39,19 @@ class JsoupWebsiteFaviconsExtractorTest {
     fun extractMsTileImage() {
         val size = 144
         val imageUrl = "https://codinux.net/images/favicons/mstile-${sizeString(size)}.png"
+        val color = "#FBBB21"
 
         val html = """<html>
             <head>
                 <meta name="msapplication-TileImage" content="$imageUrl">
+                <meta name="msapplication-TileColor" content="$color">
             </head>
         </html>""".trimMargin()
 
 
         val result = underTest.extractFavicons("", html)
 
-        assertIcon(result, imageUrl, FaviconType.MsTileImage, null, size)
+        assertIcon(result, imageUrl, FaviconType.MsTileImage, null, size, color)
     }
 
 
@@ -125,17 +127,18 @@ class JsoupWebsiteFaviconsExtractorTest {
     @Test
     fun link_safariMaskIcon() {
         val imageUrl = "https://codinux.net/images/favicons/safari-pinned-tab.svg"
+        val color = "#FBBB21"
 
         val html = """<html>
             <head>
-                <link rel="mask-icon" color="#1d354d" href="$imageUrl">
+                <link rel="mask-icon" color="$color" href="$imageUrl">
             </head>
         </html>""".trimMargin()
 
 
         val result = underTest.extractFavicons("", html)
 
-        assertIcon(result, imageUrl, FaviconType.SafariMaskIcon)
+        assertIcon(result, imageUrl, FaviconType.SafariMaskIcon, color = color)
     }
 
     @Test
@@ -154,7 +157,7 @@ class JsoupWebsiteFaviconsExtractorTest {
     }
 
 
-    private fun assertIcon(result: List<Favicon>, imageUrl: String, iconType: FaviconType, mimeType: String? = null, size: Int? = null) {
+    private fun assertIcon(result: List<Favicon>, imageUrl: String, iconType: FaviconType, mimeType: String? = null, size: Int? = null, color: String? = null) {
         assertThat(result).hasSize(1)
 
         val favicon = result.first()
@@ -168,6 +171,10 @@ class JsoupWebsiteFaviconsExtractorTest {
             assertThat(favicon::size).isNotNull()
             assertThat(favicon.size!!::width).isEqualTo(size)
             assertThat(favicon.size!!::height).isEqualTo(size)
+        }
+
+        if (color != null) {
+            assertThat(favicon::color).isEqualTo(color)
         }
     }
 
