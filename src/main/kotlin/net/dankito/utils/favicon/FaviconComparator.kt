@@ -45,7 +45,7 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
         if (maxSize != null && ignoreParametersAsLastResort) { // if maxSize is set, try next without maxSize
             // find the size that has the closest distance to maxSize
             val distances = favicons.filter { it.size != null }.associateWith { abs(max(it.size!!.width, it.size!!.height) - maxSize) }
-            distances.minBy { it.value }.key
+            return distances.minBy { it.value }.key
         }
 
         if (fileTypesToExclude.isNotEmpty() && ignoreParametersAsLastResort) { // then try to find any icon that matches other parameters
