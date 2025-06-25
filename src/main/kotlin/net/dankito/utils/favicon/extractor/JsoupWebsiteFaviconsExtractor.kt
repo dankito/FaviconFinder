@@ -77,32 +77,27 @@ open class JsoupWebsiteFaviconsExtractor(
             else -> null
         }
 
-    protected open fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? {
-        if (linkElement.hasAttr("rel")) {
-            getFaviconTypeForLinkElements(linkElement)?.let { faviconType ->
+    protected open fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? =
+        linkElement.attr("rel").takeUnless { it.isBlank() }?.let { linkRelation ->
+            getFaviconTypeForLinkElements(linkRelation)?.let { faviconType ->
                 val href = linkElement.attr("href")
                 val sizes = linkElement.attr("sizes")
                 val imageMimeType = linkElement.attr("type")
 
                 if (href.startsWith("data:;base64") == false) {
-                    return createFaviconFromSizesString(href, siteUrl, faviconType, imageMimeType, sizes)
+                    createFaviconFromSizesString(href, siteUrl, faviconType, imageMimeType, sizes)
+                } else {
+                    null // TODO: handle data favicons
                 }
             }
         }
 
-        return null
-    }
-
-    protected open fun getFaviconTypeForLinkElements(linkElement: Element): FaviconType? {
-        val relValue = linkElement.attr("rel").lowercase()
-
-        return when (relValue) {
-            "icon" -> FaviconType.Icon
-            "apple-touch-icon-precomposed" -> FaviconType.AppleTouchPrecomposed
-            "apple-touch-icon" -> FaviconType.AppleTouch
-            "shortcut icon" -> FaviconType.ShortcutIcon
-            else -> return null
-        }
+    protected open fun getFaviconTypeForLinkElements(linkRelation: String): FaviconType? = when (linkRelation.lowercase()) {
+        "icon" -> FaviconType.Icon
+        "apple-touch-icon-precomposed" -> FaviconType.AppleTouchPrecomposed
+        "apple-touch-icon" -> FaviconType.AppleTouch
+        "shortcut icon" -> FaviconType.ShortcutIcon
+        else -> null
     }
 
     protected open fun mapMetaElementToFavicon(metaElement: Element, siteUrl: String, linkAndMetaElements: Elements): Favicon? {
