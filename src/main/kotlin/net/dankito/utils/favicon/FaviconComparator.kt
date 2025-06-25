@@ -52,7 +52,11 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
             return getBestIcon(favicons, minSize, maxSize, returnSquarishOneIfPossible, listOf(), ignoreParametersAsLastResort)
         }
 
-        return favicons.firstOrNull { it.size == null }
+        return if (ignoreParametersAsLastResort) {
+            favicons.firstOrNull { it.size == null }
+        } else {
+            null
+        }
     }
 
 
