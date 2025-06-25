@@ -9,6 +9,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
+import org.slf4j.LoggerFactory
 import java.net.URL
 
 open class JsoupWebsiteFaviconsExtractor(
@@ -16,6 +17,9 @@ open class JsoupWebsiteFaviconsExtractor(
     protected val faviconCreator: FaviconCreator = FaviconCreator.Default,
     protected val webManifestFaviconsExtractor: WebManifestFaviconsExtractor = JacksonWebManifestFaviconsExtractor.Default,
 ) : WebsiteFaviconsExtractor {
+
+    private val log = LoggerFactory.getLogger(JsoupWebsiteFaviconsExtractor::class.java)
+
 
     override fun extractFavicons(url: String, webSiteHtml: String): List<Favicon> {
         val document = Jsoup.parse(webSiteHtml, url)
@@ -40,7 +44,7 @@ open class JsoupWebsiteFaviconsExtractor(
         return extractedFavicons
     }
 
-    protected open fun tryToFindDefaultFavicon(url: String, extractedFavicons: List<Favicon>): Favicon? {
+    protected open fun tryToFindDefaultFavicon(url: String, extractedFavicons: List<Favicon>): Favicon? = try {
         val urlInstance = URL(url)
         val defaultFaviconUrl = urlInstance.protocol + "://" + urlInstance.host + "/favicon.ico"
         if (doesNotContainIconWithUrl(extractedFavicons, defaultFaviconUrl)) {
@@ -52,7 +56,10 @@ open class JsoupWebsiteFaviconsExtractor(
             }
         }
 
-        return null
+        null
+    } catch (e: Throwable) {
+        log.error("Could not extract default favicon for url '$url'", e)
+        null
     }
 
     protected open fun extractIconsFromWebManifest(linkAndMetaElements: Elements, siteUrl: String): List<Favicon> =
