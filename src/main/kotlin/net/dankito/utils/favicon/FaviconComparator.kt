@@ -28,7 +28,7 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
                          fileTypesToExclude: List<String> = listOf(), ignoreParametersAsLastResort: Boolean = true) : Favicon? {
         // retrieve sizes of icons which's size isn't known yet
         favicons.filter { it.size == null }.forEach {
-            it.size = retrieveIconSize(it)
+            retrieveIconSize(it)
         }
 
         // return icon with largest size
@@ -108,11 +108,14 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
     }
 
 
-    protected open fun retrieveIconSize(favicon: Favicon) : Size? {
-        return retrieveIconSize(favicon.url)
+    protected open fun retrieveIconSize(favicon: Favicon) {
+        if (favicon.triedToRetrieveSize == false) {
+            favicon.size = retrieveIconSize(favicon.url)
+            favicon.triedToRetrieveSize = true
+        }
     }
 
-    protected open fun retrieveIconSize(iconUrl: String) : Size? {
+    protected open fun retrieveIconSize(iconUrl: String): Size? {
         try {
             if (iconUrl.endsWith(".svg", true) == false) { // for .svg size cannot be determined
                 val response = webClient.get(iconUrl)

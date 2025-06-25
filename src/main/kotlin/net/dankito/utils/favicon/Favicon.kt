@@ -1,5 +1,7 @@
 package net.dankito.utils.favicon
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 
 open class Favicon(
     open val url : String,
@@ -9,6 +11,14 @@ open class Favicon(
 ) {
 
     constructor() : this("", FaviconType.Icon, null, null) // for object deserializers
+
+
+    /**
+     * Temporary value to indicate if tried to determine image size so that we don't
+     * fetch image data multiple times.
+     */
+    @JsonIgnore
+    open var triedToRetrieveSize: Boolean = false
 
 
     override fun toString(): String {
