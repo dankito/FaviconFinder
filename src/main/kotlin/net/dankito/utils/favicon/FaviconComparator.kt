@@ -5,7 +5,7 @@ import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import org.slf4j.LoggerFactory
 
 
-open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebClient()) {
+open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebClient.Default) {
 
     companion object {
         const val DEFAULT_MIN_SIZE = 32

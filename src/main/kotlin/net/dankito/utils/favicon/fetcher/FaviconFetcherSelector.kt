@@ -4,7 +4,7 @@ import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
 
 open class FaviconFetcherSelector(
-    protected val fetchers: Collection<FaviconFetcher> = createDefaultFetchers(UrlConnectionWebClient())
+    protected val fetchers: Collection<FaviconFetcher> = createDefaultFetchers(UrlConnectionWebClient.Default)
 ) {
 
     companion object {

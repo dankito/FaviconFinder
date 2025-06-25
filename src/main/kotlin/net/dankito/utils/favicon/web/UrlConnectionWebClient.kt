@@ -8,6 +8,11 @@ import java.net.URL
 
 open class UrlConnectionWebClient : IWebClient {
 
+    companion object {
+        val Default = UrlConnectionWebClient()
+    }
+
+
     private val log = LoggerFactory.getLogger(UrlConnectionWebClient::class.java)
 
 

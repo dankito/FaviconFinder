@@ -11,7 +11,7 @@ abstract class FaviconFetcherTestBase {
 
     protected abstract fun getFaviconFetcher(webClient: IWebClient): FaviconFetcher
 
-    protected val underTest = getFaviconFetcher(UrlConnectionWebClient())
+    protected val underTest = getFaviconFetcher(UrlConnectionWebClient.Default)
 
 
     @Test

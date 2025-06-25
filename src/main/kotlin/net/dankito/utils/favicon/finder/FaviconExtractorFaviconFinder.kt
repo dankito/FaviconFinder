@@ -7,6 +7,7 @@ import net.dankito.utils.favicon.Size
 import net.dankito.utils.favicon.finder.dto.FaviconExtractorResponse
 import net.dankito.utils.favicon.json.JsonSerializer
 import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import net.dankito.utils.favicon.web.UrlUtil
 
 /**
@@ -17,7 +18,10 @@ import net.dankito.utils.favicon.web.UrlUtil
  *
  * For documentation see: [https://github.com/seadfeng/favicon-downloader](https://github.com/seadfeng/favicon-downloader).
  */
-open class FaviconExtractorFaviconFinder(protected val webClient: IWebClient, protected val urlUtil: UrlUtil = UrlUtil()) {
+open class FaviconExtractorFaviconFinder(
+    protected val webClient: IWebClient = UrlConnectionWebClient.Default,
+    protected val urlUtil: UrlUtil = UrlUtil()
+) {
 
     open fun findFavicons(url: String): List<Favicon> {
         val finderUrl = "https://www.faviconextractor.com/api/favicon/${urlUtil.removeProtocolAndWww(url)}"

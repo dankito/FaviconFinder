@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory
 import java.net.URL
 
 open class JsoupWebsiteFaviconsExtractor(
-    protected val webClient: IWebClient = UrlConnectionWebClient(),
+    protected val webClient: IWebClient = UrlConnectionWebClient.Default,
     protected val urlUtil: UrlUtil = UrlUtil()
 ) : WebsiteFaviconsExtractor {
 
