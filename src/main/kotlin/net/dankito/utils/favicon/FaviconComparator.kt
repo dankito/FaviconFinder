@@ -3,6 +3,9 @@ package net.dankito.utils.favicon
 import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import org.slf4j.LoggerFactory
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 
 open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebClient.Default) {
@@ -40,9 +43,9 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
         }
 
         if (maxSize != null && ignoreParametersAsLastResort) { // if maxSize is set, try next without maxSize
-            favicons.filter { doesFitSize(it, minSize, null, false, fileTypesToExclude) }.sortedBy { it.size }.firstOrNull()?.let {
-                return it
-            }
+            // find the size that has the closest distance to maxSize
+            val distances = favicons.filter { it.size != null }.associateWith { abs(max(it.size!!.width, it.size!!.height) - maxSize) }
+            distances.minBy { it.value }.key
         }
 
         if (fileTypesToExclude.isNotEmpty() && ignoreParametersAsLastResort) { // then try to find any icon that matches other parameters

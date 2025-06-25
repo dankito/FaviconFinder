@@ -346,21 +346,21 @@ class FaviconComparatorTest {
     fun getBestIconForSize_NoMatch_ignoreParametersAsLastResort() {
 
         // given
-        val bestIcon = Favicon("https://www.heise.de/icons/ho/heise_online_facebook_social_graph.png", FaviconType.OpenGraphImage, Size(500, 500))
+        val bestIcon = Favicon("https://www.heise.de/icons/ho/apple-touch-icon-120.png", FaviconType.AppleTouch, Size(120, 120)) // matches closest 128
         val favicons = listOf(
-            Favicon("https://www.heise.de/icons/ho/apple-touch-icon-120.png", FaviconType.AppleTouch, Size(120, 120)),
+            bestIcon,
             Favicon("https://www.heise.de/icons/ho/apple-touch-icon-76.png", FaviconType.AppleTouch, Size(76, 76)),
             Favicon("https://www.heise.de/icons/ho/apple-touch-icon-152.png", FaviconType.AppleTouchPrecomposed, Size(152, 152)),
-            bestIcon
+            Favicon("https://www.heise.de/icons/ho/heise_online_facebook_social_graph.png", FaviconType.OpenGraphImage, Size(500, 500))
         )
 
 
         // when
-        val result = underTest.getBestIconForSize(favicons, listOf(16, 32, 64, 128), ignoreParametersAsLastResort = true)
+        val result = underTest.getBestIconForSize(favicons, listOf(128, 256), ignoreParametersAsLastResort = true)
 
 
         // then
-        assertThat(result).isEqualTo(bestIcon) // it then selects the largest icon - which is bad. It should select the closest to the first preferredSized value
+        assertThat(result).isEqualTo(bestIcon)
     }
 
 }
