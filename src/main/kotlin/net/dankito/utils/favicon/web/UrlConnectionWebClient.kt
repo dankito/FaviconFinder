@@ -24,7 +24,7 @@ open class UrlConnectionWebClient : IWebClient {
             val receivedData = inputStream.readBytes()
 
             return closeConnectionAndMapResponse(connection, receivedData) { redirectUrl ->
-                get(redirectUrl)
+                get(redirectUrl, requestDesktopWebsite)
             }
         } catch (e: Exception) {
             return logAndMapError(url, e)
@@ -38,7 +38,7 @@ open class UrlConnectionWebClient : IWebClient {
 
             try {
                 return closeConnectionAndMapResponse(connection, null) { redirectUrl ->
-                    get(redirectUrl)
+                    head(redirectUrl, requestDesktopWebsite)
                 }
             } catch (e: FileNotFoundException) { // couldn't believe it, HEAD throws FileNotFoundException if url doesn't exist
                 return WebResponse(false, 404)
