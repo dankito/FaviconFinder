@@ -1,5 +1,14 @@
 # Favicon Finder
 
+Getting a site's favicon can be cumbersome.
+There are multiple favicon sources and formats (see [Favicon sources and formats](#favicon-sources-and-formats)),
+icons may are specified but do not exist (return a 404),
+it may is hard to determine a favicon's size and type, and and and.
+
+This library helps to easily get a website's favicons, 
+either by returning the best matching favicon or a list of available favicons.
+
+
 ## Setup
 
 ### Gradle
@@ -18,10 +27,36 @@ implementation("net.dankito.utils:favicon-finder:1.5.0")
 </dependency>
 ```
 
+## Usage
 
-## Favicon formats and sources
+### Get list of site's favicons
 
-Getting a site's favicon can be cumbersome.
+```kotlin
+List<Favicon> = FaviconFinder().getFaviconsForUrl("wikipedia.org")
+```
+
+This returns a list of `Favicon` containing its `url`, `type` and if available `size` amd `mimeType`.
+
+
+### Get best matching favicon for a site
+
+If you want to get the image bytes of the best matching favicon directly,
+you can use one of our many `FaviconFetcher` implementations like `GoogleFaviconFetcher`, `DuckDuckGoFaviconFetcher`, ...:
+
+```kotlin
+ByteArray? imageBytes = GoogleFaviconFetcher().fetch("wikipedia.org", 32)
+```
+
+Or use `FaviconFetcherSelector` that selects best fitting `FaviconFetcher`:
+
+```kotlin
+ByteArray? imageBytes = FaviconFetcherSelector().firstMatching("wikipedia.org", 32)
+```
+
+For all `FaviconFetcher` implementations see folder [src/main/kotlin/net/dankito/utils/favicon/fetcher](./src/main/kotlin/net/dankito/utils/favicon/fetcher).
+
+
+## Favicon sources and formats
 
 It can contain multiple favicons for different purposes, sizes and formats:
 
