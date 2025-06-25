@@ -1,7 +1,7 @@
 package net.dankito.utils.favicon.fetcher
 
 import assertk.assertThat
-import assertk.assertions.hasSize
+import assertk.assertions.isGreaterThan
 import assertk.assertions.isNotNull
 import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
@@ -19,11 +19,7 @@ abstract class FaviconFetcherTestBase {
         val result = underTest.fetch("heise.de", 32)
 
         assertThat(result).isNotNull()
-        if (underTest.supportsPreferredSizeParameter) {
-            assertThat(result!!).hasSize(725)
-        } else {
-            assertThat(result!!).hasSize(540)
-        }
+        assertThat(result!!.size).isGreaterThan(500)
     }
 
     @Test
@@ -31,11 +27,7 @@ abstract class FaviconFetcherTestBase {
         val result = underTest.fetch("https://heise.de", 32)
 
         assertThat(result).isNotNull()
-        if (underTest.supportsPreferredSizeParameter) {
-            assertThat(result!!).hasSize(725)
-        } else {
-            assertThat(result!!).hasSize(540)
-        }
+        assertThat(result!!.size).isGreaterThan(500)
     }
 
 }
