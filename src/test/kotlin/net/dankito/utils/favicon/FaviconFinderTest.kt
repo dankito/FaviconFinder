@@ -2,8 +2,6 @@ package net.dankito.utils.favicon
 
 import assertk.assertThat
 import assertk.assertions.*
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import kotlin.test.Test
 
 

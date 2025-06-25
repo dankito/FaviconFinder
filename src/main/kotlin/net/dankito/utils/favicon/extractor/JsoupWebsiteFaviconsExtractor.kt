@@ -28,13 +28,18 @@ open class JsoupWebsiteFaviconsExtractor(
     }
 
     open fun extractFavicons(document: Document, url: String): List<Favicon> {
-        val linkAndMetaElements = document.head().select("link, meta")
+        val head = document.head()
+        val metaElements = head.select("meta")
 
-        val extractedFavicons = linkAndMetaElements
-            .mapNotNull { mapElementToFavicon(it, url, linkAndMetaElements) }
+        /**
+         * Possible formats are documented here https://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url#answer-22007642
+         * and here https://en.wikipedia.org/wiki/Favicon
+         */
+        val extractedFavicons = (head.select("link").mapNotNull { mapLinkElementToFavicon(it, url) } +
+                metaElements.mapNotNull { mapMetaElementToFavicon(it, url, metaElements) })
             .toMutableList()
 
-        val faviconsInWebManifest = extractIconsFromWebManifest(linkAndMetaElements, url)
+        val faviconsInWebManifest = extractIconsFromWebManifest(metaElements, url)
         addIfNotAlreadyAdded(extractedFavicons, faviconsInWebManifest)
 
         tryToFindDefaultFavicon(url, extractedFavicons)?.let { defaultFavicon ->
@@ -73,17 +78,6 @@ open class JsoupWebsiteFaviconsExtractor(
     protected open fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon> =
         webManifestFaviconsExtractor.extractIconsFromWebManifest(manifestUrl, siteUrl)
 
-    /**
-     * Possible formats are documented here https://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url#answer-22007642
-     * and here https://en.wikipedia.org/wiki/Favicon
-     */
-    protected open fun mapElementToFavicon(linkOrMetaElement: Element, siteUrl: String, linkAndMetaElements: Elements): Favicon? =
-        when (linkOrMetaElement.nodeName().lowercase()) {
-            "link" -> mapLinkElementToFavicon(linkOrMetaElement, siteUrl)
-            "meta" -> mapMetaElementToFavicon(linkOrMetaElement, siteUrl, linkAndMetaElements)
-            else -> null
-        }
-
     protected open fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? =
         linkElement.attr("rel").takeUnless { it.isBlank() }?.let { linkRelation ->
             getFaviconTypeForLinkElements(linkRelation)?.let { faviconType ->
@@ -107,11 +101,12 @@ open class JsoupWebsiteFaviconsExtractor(
         else -> null
     }
 
-    protected open fun mapMetaElementToFavicon(metaElement: Element, siteUrl: String, linkAndMetaElements: Elements): Favicon? {
-        if (isOpenGraphImageDeclaration(metaElement)) {
-            val imageMimeType = linkAndMetaElements.firstOrNull { it.attr("property") == "og:image:type" }?.attr("content")
-            val imageWidth = linkAndMetaElements.firstOrNull { it.attr("property") == "og:image:width" }?.attr("content")?.toIntOrNull()
-            val imageHeight = linkAndMetaElements.firstOrNull { it.attr("property") == "og:image:height" }?.attr("content")?.toIntOrNull()
+
+    protected open fun mapMetaElementToFavicon(metaElement: Element, siteUrl: String, metaElements: Elements): Favicon? {
+        if (isOpenGraphImageDeclaration(metaElement)) { // for open graph image url, image type, width and height are all on different <meta> elements
+            val imageMimeType = metaElements.firstOrNull { it.attr("property") == "og:image:type" }?.attr("content")
+            val imageWidth = metaElements.firstOrNull { it.attr("property") == "og:image:width" }?.attr("content")?.toIntOrNull()
+            val imageHeight = metaElements.firstOrNull { it.attr("property") == "og:image:height" }?.attr("content")?.toIntOrNull()
 
             return createFavicon(metaElement.attr("content"), siteUrl, FaviconType.OpenGraphImage, imageMimeType, imageWidth, imageHeight)
         }
