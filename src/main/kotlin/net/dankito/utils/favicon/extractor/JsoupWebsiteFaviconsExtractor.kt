@@ -3,6 +3,7 @@ package net.dankito.utils.favicon.extractor
 import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.Size
+import net.dankito.utils.favicon.extensions.attrOrNull
 import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import org.jsoup.Jsoup
@@ -82,8 +83,8 @@ open class JsoupWebsiteFaviconsExtractor(
         linkElement.attr("rel").takeUnless { it.isBlank() }?.let { linkRelation ->
             getFaviconTypeForLinkElements(linkRelation)?.let { faviconType ->
                 val href = linkElement.attr("href")
-                val sizes = linkElement.attr("sizes")
-                val imageMimeType = linkElement.attr("type")
+                val sizes = linkElement.attrOrNull("sizes")
+                val imageMimeType = linkElement.attrOrNull("type")
 
                 if (href.startsWith("data:;base64") == false) {
                     createFaviconFromSizesString(href, siteUrl, faviconType, imageMimeType, sizes)

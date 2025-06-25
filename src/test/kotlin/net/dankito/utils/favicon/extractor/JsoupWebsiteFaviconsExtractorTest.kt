@@ -38,7 +38,7 @@ class JsoupWebsiteFaviconsExtractorTest {
     @Test
     fun extractMsTileImage() {
         val size = 144
-        val imageUrl = "https://codinux.net/images/favicons/mstile-${size}x$size.png"
+        val imageUrl = "https://codinux.net/images/favicons/mstile-${sizeString(size)}.png"
 
         val html = """<html>
             <head>
@@ -53,21 +53,77 @@ class JsoupWebsiteFaviconsExtractorTest {
     }
 
 
+    @Test
+    fun link_icon_typeSet() {
+        val size = 96
+        val mimeType = "image/png"
+        val imageUrl = "https://codinux.net/images/favicons/favicon-${sizeString(size)}.png"
+
+        val html = """<html>
+            <head>
+                <link rel="icon" type="$mimeType" sizes="${sizeString(size)}" href="$imageUrl">
+            </head>
+        </html>""".trimMargin()
+
+
+        val result = underTest.extractFavicons("", html)
+
+        assertIcon(result, imageUrl, FaviconType.Icon, mimeType, size)
+    }
+
+    @Test
+    fun link_icon_typeNotSet() {
+        val size = 48
+        val imageUrl = "https://codinux.net/images/favicons/favicon.ico"
+
+        val html = """<html>
+            <head>
+                <link rel="icon" sizes="${sizeString(size)}" href="$imageUrl">
+            </head>
+        </html>""".trimMargin()
+
+
+        val result = underTest.extractFavicons("", html)
+
+        assertIcon(result, imageUrl, FaviconType.Icon, null, size)
+    }
+
+    @Test
+    fun link_appleTouchIcon() {
+        val size = 32
+        val imageUrl = "https://codinux.net/images/favicons/apple-touch-icon-${sizeString(size)}.png"
+
+        val html = """<html>
+            <head>
+                <link rel="apple-touch-icon" sizes="${sizeString(size)}" href="$imageUrl">
+            </head>
+        </html>""".trimMargin()
+
+
+        val result = underTest.extractFavicons("", html)
+
+        assertIcon(result, imageUrl, FaviconType.AppleTouch, null, size)
+    }
+
+
     private fun assertIcon(result: List<Favicon>, imageUrl: String, iconType: FaviconType, mimeType: String? = null, size: Int? = null) {
         assertThat(result).hasSize(1)
 
         val favicon = result.first()
-        assertThat(favicon.url).isEqualTo(imageUrl)
-        assertThat(favicon.iconType).isEqualTo(iconType)
-        assertThat(favicon.imageMimeType).isEqualTo(mimeType)
+        assertThat(favicon::url).isEqualTo(imageUrl)
+        assertThat(favicon::iconType).isEqualTo(iconType)
+        assertThat(favicon::imageMimeType).isEqualTo(mimeType)
 
         if (size == null) {
-            assertThat(favicon.size).isNull()
+            assertThat(favicon::size).isNull()
         } else {
-            assertThat(favicon.size).isNotNull()
-            assertThat(favicon.size!!.width).isEqualTo(size)
-            assertThat(favicon.size!!.height).isEqualTo(size)
+            assertThat(favicon::size).isNotNull()
+            assertThat(favicon.size!!::width).isEqualTo(size)
+            assertThat(favicon.size!!::height).isEqualTo(size)
         }
     }
+
+    private fun sizeString(size: Int): String =
+        "${size}x$size"
 
 }
