@@ -51,26 +51,26 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
             return it
         }
 
-        if (returnSquarishOneIfPossible && ignoreParametersAsLastResort) { // then try without returnSquarishOneIfPossible
-            faviconsToCheck.filter { doesFitSize(it, minSize, maxSize, false, fileTypesToExclude) }.sortedByDescending { it.size }.firstOrNull()?.let {
-                return it
+        if (ignoreParametersAsLastResort) {
+            if (returnSquarishOneIfPossible) { // then try without returnSquarishOneIfPossible
+                faviconsToCheck.filter { doesFitSize(it, minSize, maxSize, false, fileTypesToExclude) }.sortedByDescending { it.size }.firstOrNull()?.let {
+                    return it
+                }
             }
-        }
 
-        if (maxSize != null && ignoreParametersAsLastResort) { // if maxSize is set, try next without maxSize
-            // find the size that has the closest distance to maxSize
-            val distances = faviconsToCheck.associateWith { abs(max(it.size!!.width, it.size!!.height) - maxSize) }
-            return distances.minBy { it.value }.key
-        }
+            if (maxSize != null) { // if maxSize is set, try next without maxSize
+                // find the size that has the closest distance to maxSize
+                val distances = faviconsToCheck.associateWith { abs(max(it.size!!.width, it.size!!.height) - maxSize) }
+                return distances.minBy { it.value }.key
+            }
 
-        if (fileTypesToExclude.isNotEmpty() && ignoreParametersAsLastResort) { // then try to find any icon that matches other parameters
-            return getBestIcon(favicons, minSize, maxSize, returnSquarishOneIfPossible, listOf(), ignoreParametersAsLastResort)
-        }
+            if (fileTypesToExclude.isNotEmpty()) { // then try to find any icon that matches other parameters
+                return getBestIcon(favicons, minSize, maxSize, returnSquarishOneIfPossible, listOf(), ignoreParametersAsLastResort)
+            }
 
-        return if (ignoreParametersAsLastResort) {
-            favicons.firstOrNull { it.size == null && it.iconType != FaviconType.SafariMaskIcon }
+            return favicons.firstOrNull { it.size == null && it.iconType != FaviconType.SafariMaskIcon }
         } else {
-            null
+            return null
         }
     }
 
