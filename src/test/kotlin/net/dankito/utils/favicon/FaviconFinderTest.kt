@@ -28,7 +28,7 @@ class FaviconFinderTest {
         val extractedIcons = getFaviconsForUrl("https://www.theguardian.com")
 
 
-        testExtractedFavicons(extractedIcons, 10)
+        testExtractedFavicons(extractedIcons, 7)
     }
 
     @Test

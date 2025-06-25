@@ -39,6 +39,7 @@ open class FaviconFinder @JvmOverloads constructor(
 
     open fun extractFavicons(url: String) : List<Favicon> =
         extractFavicons(url, false) // try relative URLs without "www." first
+            .filter { exists(it) }
 
     protected open fun extractFavicons(url: String, appendWwwDot: Boolean, requestDesktopWebsite: Boolean = false) : List<Favicon> {
         val isRelativeUrl = urlUtil.isRelativeUrl(url)
@@ -69,5 +70,9 @@ open class FaviconFinder @JvmOverloads constructor(
 
     open fun extractFavicons(url: String, html: String): List<Favicon> =
         faviconsExtractor.extractFavicons(url, html)
+
+
+    protected open fun exists(favicon: Favicon): Boolean =
+        favicon.imageBytes != null || webClient.head(favicon.url).successful
 
 }

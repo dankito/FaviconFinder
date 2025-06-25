@@ -110,8 +110,9 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
 
     protected open fun retrieveIconSize(favicon: Favicon) {
         if (favicon.triedToRetrieveSize == false) {
-            val imageInfo = retrieveIconSize(favicon.url)
+            val (imageBytes, imageInfo) = retrieveIconSize(favicon.url)
             favicon.triedToRetrieveSize = true
+            favicon.imageBytes = imageBytes
 
             if (imageInfo != null) {
                 favicon.size = Size(imageInfo.width, imageInfo.height)
@@ -122,19 +123,19 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
         }
     }
 
-    protected open fun retrieveIconSize(iconUrl: String): SimpleImageInfo? {
+    protected open fun retrieveIconSize(iconUrl: String): Pair<ByteArray?, SimpleImageInfo?> {
         try {
             if (iconUrl.endsWith(".svg", true) == false) { // for .svg size cannot be determined
                 val response = webClient.get(iconUrl)
                 if (response.successful) {
                     response.receivedData?.let { receivedData ->
-                        return SimpleImageInfo(receivedData)
+                        return receivedData to SimpleImageInfo(receivedData)
                     }
                 }
             }
         } catch(e: Exception) { log.error("Could not retrieve icon size for url $iconUrl", e) }
 
-        return null
+        return null to null
     }
 
 }

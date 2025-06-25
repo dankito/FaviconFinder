@@ -23,6 +23,12 @@ open class Favicon(
     @JsonIgnore
     open var triedToRetrieveSize: Boolean = false
 
+    /**
+     * Temporary value that holds image's data if we retrieved it e.g. to determine its size.
+     */
+    @JsonIgnore
+    open var imageBytes: ByteArray? = null
+
 
     override fun toString(): String {
         return "$iconType $size $url"
