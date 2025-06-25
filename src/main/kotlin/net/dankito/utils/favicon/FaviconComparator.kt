@@ -56,20 +56,6 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
     }
 
 
-    open fun doesFitSize(iconUrl: String, minSize: Int = DEFAULT_MIN_SIZE, maxSize: Int? = null, mustBeSquarish: Boolean = false,
-                         fileTypesToExclude: List<String> = listOf()): Boolean {
-
-        if (isExcludedFileType(iconUrl, fileTypesToExclude)) {
-            return false
-        }
-
-        retrieveIconSize(iconUrl)?.let {
-            return doesFitSize(it, minSize, maxSize, mustBeSquarish)
-        }
-
-        return false
-    }
-
     protected open fun doesFitSize(favicon: Favicon, minSize: Int, maxSize: Int? = null, mustBeSquarish: Boolean,
                                    fileTypesToExclude: List<String> = listOf()) : Boolean {
 
