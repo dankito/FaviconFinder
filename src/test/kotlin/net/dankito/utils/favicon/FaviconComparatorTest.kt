@@ -2,7 +2,6 @@ package net.dankito.utils.favicon
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
 import assertk.assertions.isNull
 import kotlin.test.Test
 
@@ -302,7 +301,7 @@ class FaviconComparatorTest {
 
 
     @Test
-    fun getBestIconForSize() {
+    fun getBestIconForPreferredSizes() {
 
         // given
         val bestIcon = Favicon("https://www.heise.de/icons/ho/apple-touch-icon-152.png", FaviconType.AppleTouchPrecomposed, Size(152, 152))
@@ -315,7 +314,7 @@ class FaviconComparatorTest {
 
 
         // when
-        val result = underTest.getBestIconForSize(favicons, listOf(16, 32, 64, 128, 152))
+        val result = underTest.getBestIcon(favicons, listOf(16, 32, 64, 128, 152))
 
 
         // then
@@ -323,7 +322,7 @@ class FaviconComparatorTest {
     }
 
     @Test
-    fun getBestIconForSize_NoMatch() {
+    fun getBestIconForPreferredSizes_NoMatch() {
 
         // given
         val favicons = listOf(
@@ -335,7 +334,7 @@ class FaviconComparatorTest {
 
 
         // when
-        val result = underTest.getBestIconForSize(favicons, listOf(16, 32, 64, 128))
+        val result = underTest.getBestIcon(favicons, listOf(16, 32, 64, 128))
 
 
         // then
@@ -343,7 +342,7 @@ class FaviconComparatorTest {
     }
 
     @Test
-    fun getBestIconForSize_NoMatch_ignoreParametersAsLastResort() {
+    fun getBestIconForPreferredSizes_NoMatch_ignoreParametersAsLastResort() {
 
         // given
         val bestIcon = Favicon("https://www.heise.de/icons/ho/apple-touch-icon-120.png", FaviconType.AppleTouch, Size(120, 120)) // matches closest 128
@@ -356,7 +355,7 @@ class FaviconComparatorTest {
 
 
         // when
-        val result = underTest.getBestIconForSize(favicons, listOf(128, 256), ignoreParametersAsLastResort = true)
+        val result = underTest.getBestIcon(favicons, listOf(128, 256), ignoreParametersAsLastResort = true)
 
 
         // then

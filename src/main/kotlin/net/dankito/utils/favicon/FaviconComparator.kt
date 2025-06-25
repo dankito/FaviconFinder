@@ -17,8 +17,8 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
     private val log = LoggerFactory.getLogger(FaviconComparator::class.java)
 
 
-    open fun getBestIconForSize(favicons: List<Favicon>, preferredSizes: Collection<Int>, returnSquarishOneIfPossible: Boolean = false,
-                                fileTypesToExclude: List<String> = listOf(), ignoreParametersAsLastResort: Boolean = false) : Favicon? =
+    open fun getBestIcon(favicons: List<Favicon>, preferredSizes: Collection<Int>, returnSquarishOneIfPossible: Boolean = false,
+                         fileTypesToExclude: List<String> = listOf(), ignoreParametersAsLastResort: Boolean = false) : Favicon? =
         preferredSizes.firstNotNullOfOrNull { getBestIcon(favicons, it, it, returnSquarishOneIfPossible, fileTypesToExclude, false) }
             ?: if (ignoreParametersAsLastResort) getBestIcon(favicons, min(DEFAULT_MIN_SIZE, preferredSizes.firstOrNull() ?: DEFAULT_MIN_SIZE), preferredSizes.firstOrNull(), returnSquarishOneIfPossible, fileTypesToExclude, ignoreParametersAsLastResort)
                 else null
