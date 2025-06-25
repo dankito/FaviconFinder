@@ -1,29 +1,21 @@
 package net.dankito.utils.favicon.extractor
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.Size
-import net.dankito.utils.favicon.json.JsonSerializer
 import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
-import net.dankito.utils.favicon.web.UrlUtil
-import net.dankito.utils.favicon.webmanifest.WebManifest
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import org.slf4j.LoggerFactory
 import java.net.URL
 
 open class JsoupWebsiteFaviconsExtractor(
     protected val webClient: IWebClient = UrlConnectionWebClient.Default,
-    protected val urlUtil: UrlUtil = UrlUtil.Default,
     protected val faviconCreator: FaviconCreator = FaviconCreator.Default,
+    protected val webManifestFaviconsExtractor: WebManifestFaviconsExtractor = JacksonWebManifestFaviconsExtractor.Default,
 ) : WebsiteFaviconsExtractor {
-
-    private val log = LoggerFactory.getLogger(JsoupWebsiteFaviconsExtractor::class.java)
-
 
     override fun extractFavicons(url: String, webSiteHtml: String): List<Favicon> {
         val document = Jsoup.parse(webSiteHtml, url)
@@ -72,25 +64,7 @@ open class JsoupWebsiteFaviconsExtractor(
             ?: emptyList()
 
     protected open fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon> =
-        try {
-            // don't know why but when requested with URLConnection then web manifest string starts with ﻿ leading to that Jackson deserialization fails
-            val manifest = JsonSerializer.default.readValue<WebManifest>(URL(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl)))
-            manifest.icons.mapNotNull {
-                val type = if (it.src.contains("apple-touch", true)) FaviconType.AppleTouch else FaviconType.Icon
-                // some web manifests contain relative icon urls, e.g. spiegel.de:
-                // Manifest URL:
-                //  https://www.spiegel.de/public/spon/json/manifest.json
-                // Icons URLs:
-                // - "./../images/icons/icon-512.png"
-                // - ./../images/icons/icon-192.png -> (https://www.spiegel.de/public/spon/images/icons/icon-192.png)
-                // -> use manifest's url to create absolute favicon url
-                val baseUrl = if (it.src.startsWith(".")) manifestUrl else siteUrl
-                createFaviconFromSizesString(it.src, baseUrl, type, it.type, it.sizes)
-            }
-        } catch (e: Throwable) {
-            log.error("Could not read icons from web manifest of site $siteUrl", e)
-            emptyList()
-        }
+        webManifestFaviconsExtractor.extractIconsFromWebManifest(manifestUrl, siteUrl)
 
     /**
      * Possible formats are documented here https://stackoverflow.com/questions/21991044/how-to-get-high-resolution-website-logo-favicon-for-a-given-url#answer-22007642
