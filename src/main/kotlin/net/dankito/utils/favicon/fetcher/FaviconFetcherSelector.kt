@@ -11,7 +11,7 @@ open class FaviconFetcherSelector(
         fun createDefaultFetchers(webClient: IWebClient): List<FaviconFetcher> = listOf(
             GoogleFaviconFetcher(webClient),
             DuckDuckGoFaviconFetcher(webClient),
-            IconHorseFaviconFetcher(webClient),
+//            IconHorseFaviconFetcher(webClient), // returns often 503
             FaviconExtractorFaviconFetcher(webClient),
             TwentyIconsFaviconFetcher(webClient),
             FaviconeFaviconFetcher(webClient),

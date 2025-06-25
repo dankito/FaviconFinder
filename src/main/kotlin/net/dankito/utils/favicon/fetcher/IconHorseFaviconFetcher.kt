@@ -9,6 +9,8 @@ import net.dankito.utils.favicon.web.IWebClient
  * Support the `preferredSize` parameter only in paid version if apiKey is specified.
  *
  * For documentation see: [https://icon.horse/usage](https://icon.horse/usage).
+ *
+ * Warning: Returns often HTTP status 503!
  */
 open class IconHorseFaviconFetcher(webClient: IWebClient, protected val apiKey: String? = null) : FaviconFetcherBase(webClient) {
 
