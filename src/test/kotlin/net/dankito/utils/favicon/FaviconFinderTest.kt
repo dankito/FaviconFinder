@@ -289,11 +289,7 @@ class FaviconFinderTest {
     }
 
     private fun getFaviconsForHtml(html: String): List<Favicon> {
-        return getFaviconsForDocument(Jsoup.parse(html))
-    }
-
-    private fun getFaviconsForDocument(document: Document): List<Favicon> {
-        return underTest.extractFavicons(document, TestSiteUrl)
+        return underTest.extractFavicons(TestSiteUrl, html)
     }
 
 
