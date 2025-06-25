@@ -19,7 +19,7 @@ import java.net.URL
 
 open class JsoupWebsiteFaviconsExtractor(
     protected val webClient: IWebClient = UrlConnectionWebClient.Default,
-    protected val urlUtil: UrlUtil = UrlUtil()
+    protected val urlUtil: UrlUtil = UrlUtil.Default
 ) : WebsiteFaviconsExtractor {
 
     private val log = LoggerFactory.getLogger(JsoupWebsiteFaviconsExtractor::class.java)

@@ -5,6 +5,11 @@ import java.net.URI
 
 open class UrlUtil {
 
+    companion object {
+        val Default = UrlUtil()
+    }
+
+
     open fun isRelativeUrl(url: String): Boolean =
         url.startsWith("http", true) == false
 

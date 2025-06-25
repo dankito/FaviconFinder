@@ -20,7 +20,7 @@ import net.dankito.utils.favicon.web.UrlUtil
  */
 open class FaviconExtractorFaviconFinder(
     protected val webClient: IWebClient = UrlConnectionWebClient.Default,
-    protected val urlUtil: UrlUtil = UrlUtil()
+    protected val urlUtil: UrlUtil = UrlUtil.Default
 ) {
 
     open fun findFavicons(url: String): List<Favicon> {

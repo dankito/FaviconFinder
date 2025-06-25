@@ -10,7 +10,7 @@ import kotlin.concurrent.thread
 open class FaviconFinder @JvmOverloads constructor(
     protected open val faviconsExtractor: WebsiteFaviconsExtractor = JsoupWebsiteFaviconsExtractor(),
     protected open val webClient : IWebClient = UrlConnectionWebClient.Default,
-    protected open val urlUtil: UrlUtil = UrlUtil()
+    protected open val urlUtil: UrlUtil = UrlUtil.Default
 ) {
 
     companion object {

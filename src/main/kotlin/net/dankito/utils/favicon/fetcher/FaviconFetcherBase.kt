@@ -3,7 +3,7 @@ package net.dankito.utils.favicon.fetcher
 import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlUtil
 
-abstract class FaviconFetcherBase(protected val webClient: IWebClient, protected val urlUtil: UrlUtil = UrlUtil()) : FaviconFetcher {
+abstract class FaviconFetcherBase(protected val webClient: IWebClient, protected val urlUtil: UrlUtil = UrlUtil.Default) : FaviconFetcher {
 
     protected abstract fun getFaviconFetcherUrl(url: String, preferredSize: Int?): String
 
