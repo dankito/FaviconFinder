@@ -38,9 +38,11 @@ open class FaviconCreator(
     open fun createFavicon(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, size: Size?, color: String? = null): Favicon? {
         if (url != null) {
             val urlWithoutQuery = removeQueryFromUrl(url)
+            val (mimeType, isDerivedFromFilename) = if (iconMimeType != null) iconMimeType to false
+                                                    else getMimeTypeFromUrl(urlWithoutQuery) to true
 
             return Favicon(urlUtil.makeLinkAbsolute(urlWithoutQuery, siteUrl), iconType, size ?: extractSizeFromUrl(url),
-                iconMimeType ?: getMimeTypeFromUrl(url), color)
+                mimeType, isDerivedFromFilename, color)
         }
 
         return null

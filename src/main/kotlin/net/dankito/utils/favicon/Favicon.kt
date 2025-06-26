@@ -8,6 +8,11 @@ open class Favicon(
     open val iconType : FaviconType,
     open var size : Size? = null,
     imageMimeType : String? = null,
+    /**
+     * If set to `true`, than [imageMimeType] has been derived from image's file name.
+     * Otherwise it has been explicitly stated in HTML or Web Manifest
+     */
+    open val isMimeTypeDerivedFromFilename: Boolean = false,
 
     /**
      * Only relevant for [FaviconType.MsTileImage] and [FaviconType.SafariMaskIcon]:
