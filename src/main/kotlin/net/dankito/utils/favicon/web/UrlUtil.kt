@@ -14,7 +14,7 @@ open class UrlUtil {
         url.startsWith("http", true) == false
 
     open fun makeUrlAbsolute(url: String, appendWwwDot: Boolean = false): String {
-        if (url.startsWith("http")) {
+        if (url.startsWith("http", true) || url.contains("://")) {
             return url
         }
 
