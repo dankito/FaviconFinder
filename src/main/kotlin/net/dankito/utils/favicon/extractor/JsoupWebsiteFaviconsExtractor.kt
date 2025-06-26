@@ -5,29 +5,28 @@ import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.Size
 import net.dankito.utils.favicon.extensions.attrOrNull
 import net.dankito.utils.favicon.location.StandardLocationFaviconFinder
-import net.dankito.utils.favicon.web.IWebClient
-import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import net.dankito.utils.favicon.web.UrlUtil
+import net.dankito.web.client.WebClient
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
 open class JsoupWebsiteFaviconsExtractor(
-    protected val webClient: IWebClient = UrlConnectionWebClient.Default,
+    protected val webClient: WebClient,
     protected val faviconCreator: FaviconCreator = FaviconCreator.Default,
     protected val webManifestFaviconsExtractor: WebManifestFaviconsExtractor = JacksonWebManifestFaviconsExtractor.Default,
-    protected val standardLocationFaviconFinder: StandardLocationFaviconFinder = StandardLocationFaviconFinder.Default,
+    protected val standardLocationFaviconFinder: StandardLocationFaviconFinder = StandardLocationFaviconFinder(webClient),
     protected val urlUtil: UrlUtil = UrlUtil.Default,
 ) : WebsiteFaviconsExtractor {
 
-    override fun extractFavicons(url: String, webSiteHtml: String): List<Favicon> {
+    override suspend fun extractFavicons(url: String, webSiteHtml: String): List<Favicon> {
         val document = Jsoup.parse(webSiteHtml, url)
 
         return extractFavicons(document, url)
     }
 
-    open fun extractFavicons(document: Document, url: String): List<Favicon> {
+    open suspend fun extractFavicons(document: Document, url: String): List<Favicon> {
         val head = document.head()
         val linkElements = head.select("link")
         val metaElements = head.select("meta")
@@ -108,7 +107,7 @@ open class JsoupWebsiteFaviconsExtractor(
         webManifestFaviconsExtractor.extractIconsFromWebManifest(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl))
 
 
-    protected open fun findFaviconsInStandardLocations(url: String, extractedFavicons: MutableList<Favicon>) {
+    protected open suspend fun findFaviconsInStandardLocations(url: String, extractedFavicons: MutableList<Favicon>) {
         addIfNotAlreadyAdded(extractedFavicons, standardLocationFaviconFinder.tryToFindStandardFavicon(url, extractedFavicons))
 
         addIfNotAlreadyAdded(extractedFavicons, standardLocationFaviconFinder.tryToFindStandardAndroidChromeIcon(url, extractedFavicons))

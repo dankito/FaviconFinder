@@ -14,6 +14,7 @@ buildscript {
 
 plugins {
     kotlin("jvm")
+    kotlin("plugin.serialization")
 }
 
 
@@ -34,6 +35,7 @@ ext["sourceCodeRepositoryBaseUrl"] = "github.com/dankito/FaviconFinder"
 ext["projectDescription"] = "Extracts the favicons from a web site"
 
 
+val kotlinxSerializationVersion: String by project
 val jsoupVersion: String by project
 val jacksonVersion: String by project
 val webClientVersion: String by project
@@ -44,6 +46,8 @@ val assertKVersion: String by project
 val logbackVersion: String by project
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
+
     implementation("org.jsoup:jsoup:$jsoupVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 

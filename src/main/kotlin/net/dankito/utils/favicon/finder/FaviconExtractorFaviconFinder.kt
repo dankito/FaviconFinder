@@ -5,10 +5,9 @@ import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.Size
 import net.dankito.utils.favicon.finder.dto.FaviconExtractorResponse
-import net.dankito.utils.favicon.json.JsonSerializer
-import net.dankito.utils.favicon.web.IWebClient
-import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import net.dankito.utils.favicon.web.UrlUtil
+import net.dankito.web.client.WebClient
+import net.dankito.web.client.get
 
 /**
  * Fetches the best matching favicon for an url with Favicon Extractor's
@@ -19,20 +18,17 @@ import net.dankito.utils.favicon.web.UrlUtil
  * For documentation see: [https://github.com/seadfeng/favicon-downloader](https://github.com/seadfeng/favicon-downloader).
  */
 open class FaviconExtractorFaviconFinder(
-    protected val webClient: IWebClient = UrlConnectionWebClient.Default,
+    protected val webClient: WebClient,
     protected val urlUtil: UrlUtil = UrlUtil.Default
 ) {
 
-    open fun findFavicons(url: String): List<Favicon> {
+    open suspend fun findFavicons(url: String): List<Favicon> {
         val finderUrl = "https://www.faviconextractor.com/api/favicon/${urlUtil.removeProtocolAndWww(url)}"
 
-        val result = webClient.get(finderUrl, requestDesktopWebsite = true) // FaviconExtractor requires that User-Agent header is set (requestDesktopWebsite=true)
+        val result = webClient.get<FaviconExtractorResponse>(finderUrl) // FaviconExtractor requires that User-Agent header is set (requestDesktopWebsite=true)
 
         if (result.successful && result.body != null) {
-            val json = result.body!!
-            val responseBody = JsonSerializer.default.readValue<FaviconExtractorResponse>(json)
-
-            return responseBody.icons.map { Favicon(it.href, FaviconType.Icon, mapSize(it.sizes)) } // TODO: actually we cannot know the FaviconType
+            return result.body!!.icons.map { Favicon(it.href, FaviconType.Icon, mapSize(it.sizes)) } // TODO: actually we cannot know the FaviconType
         }
 
         return emptyList()

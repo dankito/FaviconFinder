@@ -1,14 +1,14 @@
 package net.dankito.utils.favicon
 
 import net.codinux.log.logger
-import net.dankito.utils.favicon.web.IWebClient
-import net.dankito.utils.favicon.web.UrlConnectionWebClient
+import net.dankito.web.client.WebClient
+import net.dankito.web.client.get
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
 
-open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebClient.Default) {
+open class FaviconComparator(open val webClient: WebClient) {
 
     companion object {
         const val DEFAULT_MIN_SIZE = 32
@@ -23,7 +23,7 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
      * If no favicon matches any of the [preferredSizes] and [ignoreParametersAsLastResort] is set to `true`,
      * returns the favicon which's size is closest to first element of [preferredSizes].
      */
-    open fun getBestIcon(favicons: List<Favicon>, preferredSizes: Collection<Int>, returnSquarishOneIfPossible: Boolean = false,
+    open suspend fun getBestIcon(favicons: List<Favicon>, preferredSizes: Collection<Int>, returnSquarishOneIfPossible: Boolean = false,
                          fileTypesToExclude: List<String> = listOf(), ignoreParametersAsLastResort: Boolean = false) : Favicon? =
         preferredSizes.firstNotNullOfOrNull { getBestIcon(favicons, it, it, returnSquarishOneIfPossible, fileTypesToExclude, false) }
             ?: if (ignoreParametersAsLastResort) getBestIcon(favicons, min(DEFAULT_MIN_SIZE, preferredSizes.firstOrNull() ?: DEFAULT_MIN_SIZE), preferredSizes.firstOrNull(), returnSquarishOneIfPossible, fileTypesToExclude, ignoreParametersAsLastResort)
@@ -36,7 +36,7 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
      * then [maxSize] and [fileTypesToExclude] parameter.
      */
     // we have to set ignoreParametersAsLastResort to true for now as otherwise this would be a breaking change
-    open fun getBestIcon(favicons: List<Favicon>, minSize: Int = DEFAULT_MIN_SIZE, maxSize: Int? = null, returnSquarishOneIfPossible: Boolean = false,
+    open suspend fun getBestIcon(favicons: List<Favicon>, minSize: Int = DEFAULT_MIN_SIZE, maxSize: Int? = null, returnSquarishOneIfPossible: Boolean = false,
                          fileTypesToExclude: List<String> = listOf(), ignoreParametersAsLastResort: Boolean = true) : Favicon? {
         // retrieve sizes of icons which's size isn't known yet
         favicons.filter { it.size == null }.forEach {
@@ -127,7 +127,7 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
     }
 
 
-    protected open fun retrieveIconSize(favicon: Favicon) {
+    protected open suspend fun retrieveIconSize(favicon: Favicon) {
         if (favicon.triedToRetrieveSize == false) {
             val (imageBytes, imageInfo) = retrieveIconSize(favicon.url)
             favicon.triedToRetrieveSize = true
@@ -142,12 +142,12 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
         }
     }
 
-    protected open fun retrieveIconSize(iconUrl: String): Pair<ByteArray?, SimpleImageInfo?> {
+    protected open suspend fun retrieveIconSize(iconUrl: String): Pair<ByteArray?, SimpleImageInfo?> {
         try {
             if (iconUrl.endsWith(".svg", true) == false) { // for .svg size cannot be determined
-                val response = webClient.get(iconUrl)
+                val response = webClient.get<ByteArray>(iconUrl)
                 if (response.successful) {
-                    response.receivedData?.let { receivedData ->
+                    response.body?.let { receivedData ->
                         return receivedData to SimpleImageInfo(receivedData)
                     }
                 }

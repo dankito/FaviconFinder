@@ -4,16 +4,18 @@ import assertk.assertThat
 import assertk.assertions.hasSize
 import assertk.assertions.isEqualByComparingTo
 import assertk.assertions.isEqualTo
+import kotlinx.coroutines.test.runTest
 import net.dankito.utils.favicon.FaviconType
+import net.dankito.web.client.KtorWebClient
 import kotlin.test.Test
 
 class StandardLocationFaviconFinderTest {
 
-    private val underTest = StandardLocationFaviconFinder()
+    private val underTest = StandardLocationFaviconFinder(KtorWebClient())
 
 
     @Test
-    fun tryToFindStandardFavicon_nonFoundForSubdomain_TriesDomain() {
+    fun tryToFindStandardFavicon_nonFoundForSubdomain_TriesDomain() = runTest {
         val result = underTest.tryToFindStandardFavicon("https://staging.codinux.net", emptyList())
 
         assertThat(result).hasSize(1)

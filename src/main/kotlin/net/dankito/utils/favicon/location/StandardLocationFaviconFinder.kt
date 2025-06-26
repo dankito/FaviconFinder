@@ -3,20 +3,16 @@ package net.dankito.utils.favicon.location
 import net.codinux.log.logger
 import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
-import net.dankito.utils.favicon.web.IWebClient
-import net.dankito.utils.favicon.web.UrlConnectionWebClient
+import net.dankito.web.client.WebClient
+import net.dankito.web.client.head
 import java.net.URL
 
 /**
  * Tries to find favicons in standard locations like `domaain/favicon.ico`.
  */
 open class StandardLocationFaviconFinder(
-    protected val webClient: IWebClient = UrlConnectionWebClient.Default,
+    protected val webClient: WebClient,
 ) {
-
-    companion object {
-        val Default: StandardLocationFaviconFinder = StandardLocationFaviconFinder()
-    }
 
 
     protected val log by logger()
@@ -27,7 +23,7 @@ open class StandardLocationFaviconFinder(
      *
      * If location does not exist and [siteUrl] is a subdomain, also checks <domain>/favicon.ico.
      */
-    open fun tryToFindStandardFavicon(siteUrl: String, extractedFavicons: List<Favicon>): List<Favicon> = setOf(
+    open suspend fun tryToFindStandardFavicon(siteUrl: String, extractedFavicons: List<Favicon>): List<Favicon> = setOf(
         tryToFindStandardFaviconWithName(siteUrl, "favicon.ico", FaviconType.ShortcutIcon, extractedFavicons),
         tryToFindStandardFaviconWithName(siteUrl, "favicon-16x16.png", FaviconType.Icon, extractedFavicons),
         tryToFindStandardFaviconWithName(siteUrl, "favicon-32x32.png", FaviconType.Icon, extractedFavicons),
@@ -41,7 +37,7 @@ open class StandardLocationFaviconFinder(
      * If location does not exist and [siteUrl] is a subdomain, also checks <domain>/android-chrome-192x192.png
      * and /android-chrome-512x512.png.
      */
-    open fun tryToFindStandardAndroidChromeIcon(siteUrl: String, extractedFavicons: List<Favicon>): List<Favicon> = setOf(
+    open suspend fun tryToFindStandardAndroidChromeIcon(siteUrl: String, extractedFavicons: List<Favicon>): List<Favicon> = setOf(
         tryToFindStandardFaviconWithName(siteUrl, "android-chrome-192x192.png", FaviconType.AndroidChrome, extractedFavicons),
         tryToFindStandardFaviconWithName(siteUrl, "android-chrome-512x512.png", FaviconType.AndroidChrome, extractedFavicons)
     ).filterNotNull()
@@ -51,20 +47,20 @@ open class StandardLocationFaviconFinder(
      *
      * If location does not exist and [siteUrl] is a subdomain, also checks <domain>/apple-touch-icon.png.
      */
-    open fun tryToFindStandardAppleTouchIcon(siteUrl: String, extractedFavicons: List<Favicon>): List<Favicon> = setOf(
+    open suspend fun tryToFindStandardAppleTouchIcon(siteUrl: String, extractedFavicons: List<Favicon>): List<Favicon> = setOf(
         tryToFindStandardFaviconWithName(siteUrl, "apple-touch-icon.png", FaviconType.AppleTouch, extractedFavicons),
         tryToFindStandardFaviconWithName(siteUrl, "apple-touch-icon-precomposed.png", FaviconType.AppleTouchPrecomposed, extractedFavicons)
     ).filterNotNull()
 
-    protected open fun tryToFindStandardFaviconWithName(siteUrl: String, faviconName: String, type: FaviconType, extractedFavicons: List<Favicon>): Favicon? = try {
+    protected open suspend fun tryToFindStandardFaviconWithName(siteUrl: String, faviconName: String, type: FaviconType, extractedFavicons: List<Favicon>): Favicon? = try {
         val url = URL(siteUrl)
         val standardFaviconUrl = url.protocol + "://" + url.host + "/" + faviconName
 
         if (doesNotContainIconWithUrl(extractedFavicons, standardFaviconUrl)) {
             webClient.head(standardFaviconUrl).let { response ->
                 if (response.successful &&
-                    (response.contentType == null || response.contentType?.startsWith("image/") == true)) { // filter out e.g. error pages
-                    return Favicon(standardFaviconUrl, type, null, response.contentType) // TODO: extract size from image url and derive mime type from url
+                    (response.responseDetails?.contentType == null || response.responseDetails?.contentType?.startsWith("image/") == true)) { // filter out e.g. error pages
+                    return Favicon(standardFaviconUrl, type, null, response.responseDetails?.contentType) // TODO: extract size from image url and derive mime type from url
                 } else {
                     // if it's a subdomain, also check domain for standard favicon icon
                     getDomainIfIsSubdomain(url)?.let { domain ->

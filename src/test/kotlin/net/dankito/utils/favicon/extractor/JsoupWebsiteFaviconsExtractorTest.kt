@@ -2,17 +2,19 @@ package net.dankito.utils.favicon.extractor
 
 import assertk.assertThat
 import assertk.assertions.*
+import kotlinx.coroutines.test.runTest
 import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
+import net.dankito.web.client.KtorWebClient
 import kotlin.test.Test
 
 class JsoupWebsiteFaviconsExtractorTest {
 
-    private val underTest = JsoupWebsiteFaviconsExtractor()
+    private val underTest = JsoupWebsiteFaviconsExtractor(KtorWebClient())
 
 
     @Test
-    fun extractOpenGraphImage() {
+    fun extractOpenGraphImage() = runTest {
         val imageUrl = "https://codinux.net/images/favicons/favicon-96x96.png"
         val mimeType = "image/png"
         val size = 200
@@ -33,7 +35,7 @@ class JsoupWebsiteFaviconsExtractorTest {
     }
 
     @Test
-    fun extractMsTileImage() {
+    fun extractMsTileImage() = runTest {
         val size = 144
         val imageUrl = "https://codinux.net/images/favicons/mstile-${sizeString(size)}.png"
         val color = "#FBBB21"
@@ -53,7 +55,7 @@ class JsoupWebsiteFaviconsExtractorTest {
 
 
     @Test
-    fun link_shortcutIcon() {
+    fun link_shortcutIcon() = runTest {
         val imageUrl = "https://codinux.net/favicon.ico"
         val mimeType = "image/x-icon"
 
@@ -70,7 +72,7 @@ class JsoupWebsiteFaviconsExtractorTest {
     }
 
     @Test
-    fun link_icon_typeSet() {
+    fun link_icon_typeSet() = runTest {
         val size = 96
         val mimeType = "image/png"
         val imageUrl = "https://codinux.net/images/favicons/favicon-${sizeString(size)}.png"
@@ -88,7 +90,7 @@ class JsoupWebsiteFaviconsExtractorTest {
     }
 
     @Test
-    fun link_icon_typeNotSet() {
+    fun link_icon_typeNotSet() = runTest {
         val size = 48
         val imageUrl = "https://codinux.net/images/favicons/favicon.ico"
 
@@ -105,7 +107,7 @@ class JsoupWebsiteFaviconsExtractorTest {
     }
 
     @Test
-    fun link_appleTouchIcon() {
+    fun link_appleTouchIcon() = runTest {
         val size = 32
         val imageUrl = "https://codinux.net/images/favicons/apple-touch-icon-${sizeString(size)}.png"
 
@@ -122,7 +124,7 @@ class JsoupWebsiteFaviconsExtractorTest {
     }
 
     @Test
-    fun link_safariMaskIcon() {
+    fun link_safariMaskIcon() = runTest {
         val imageUrl = "https://codinux.net/images/favicons/safari-pinned-tab.svg"
         val color = "#FBBB21"
 
@@ -139,7 +141,7 @@ class JsoupWebsiteFaviconsExtractorTest {
     }
 
     @Test
-    fun link_webManifest() {
+    fun link_webManifest() = runTest {
         // TODO: mock retrieving WebManifest
         val html = """<html>
             <head>

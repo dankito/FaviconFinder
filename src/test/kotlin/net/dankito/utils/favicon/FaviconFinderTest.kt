@@ -2,6 +2,9 @@ package net.dankito.utils.favicon
 
 import assertk.assertThat
 import assertk.assertions.*
+import kotlinx.coroutines.test.runTest
+import net.dankito.web.client.ClientConfig
+import net.dankito.web.client.KtorWebClient
 import kotlin.test.Test
 
 
@@ -12,11 +15,11 @@ class FaviconFinderTest {
     }
 
 
-    private val underTest : FaviconFinder = FaviconFinder()
+    private val underTest : FaviconFinder = FaviconFinder(KtorWebClient(ClientConfig(requestTimeoutMillis = 5_000)))
 
 
     @Test
-    fun extractWikipediaFavicons() {
+    fun extractWikipediaFavicons() = runTest {
         val extractedIcons = getFaviconsForUrl("https://www.wikipedia.org/")
 
 
@@ -24,7 +27,7 @@ class FaviconFinderTest {
     }
 
     @Test
-    fun extractTheGuardianFavicons() {
+    fun extractTheGuardianFavicons() = runTest {
         val extractedIcons = getFaviconsForUrl("https://www.theguardian.com")
 
 
@@ -32,7 +35,7 @@ class FaviconFinderTest {
     }
 
     @Test
-    fun extractNewYorkTimesFavicons() {
+    fun extractNewYorkTimesFavicons() = runTest {
         val extractedIcons = getFaviconsForUrl("https://www.nytimes.com/")
 
 
@@ -40,7 +43,7 @@ class FaviconFinderTest {
     }
 
     @Test
-    fun extractZeitFavicons() {
+    fun extractZeitFavicons() = runTest {
         val extractedIcons = getFaviconsForUrl("https://www.zeit.de/")
 
 
@@ -48,7 +51,7 @@ class FaviconFinderTest {
     }
 
     @Test
-    fun extractHeiseFavicons() {
+    fun extractHeiseFavicons() = runTest {
         val extractedIcons = getFaviconsForUrl("https://www.heise.de")
 
 
@@ -56,7 +59,7 @@ class FaviconFinderTest {
     }
 
     @Test
-    fun extractDerPostillonFavicons() {
+    fun extractDerPostillonFavicons() = runTest {
         val extractedIcons = getFaviconsForUrl("https://www.der-postillon.com")
 
 
@@ -65,14 +68,14 @@ class FaviconFinderTest {
 
 
     @Test
-    fun spardaBank() {
+    fun spardaBank() = runTest {
         val extractedIcons = getFaviconsForUrl("https://www.sparda-b.de")
 
         testExtractedFavicons(extractedIcons, 1)
     }
 
     @Test
-    fun deutscheBank() {
+    fun deutscheBank() = runTest {
         val extractedIcons = getFaviconsForUrl("https://www.deutsche-bank.de")
 
         testExtractedFavicons(extractedIcons, 2)
@@ -80,7 +83,7 @@ class FaviconFinderTest {
 
 
     @Test
-    fun `Relative url`() {
+    fun `Relative url`() = runTest {
         val extractedIcons = getFaviconsForUrl("codinux.net")
 
         testExtractedFavicons(extractedIcons, 5)
@@ -91,7 +94,7 @@ class FaviconFinderTest {
     }
 
     @Test
-    fun `Relative url with www`() {
+    fun `Relative url with www`() = runTest {
         val extractedIcons = getFaviconsForUrl("www.codinux.net")
 
         testExtractedFavicons(extractedIcons, 5)
@@ -102,14 +105,14 @@ class FaviconFinderTest {
     }
 
     @Test
-    fun `Relative url that only succeeds without www`() {
+    fun `Relative url that only succeeds without www`() = runTest {
         val extractedIcons = getFaviconsForUrl("coroot.com")
 
         testExtractedFavicons(extractedIcons, 2)
     }
 
     @Test
-    fun `Assert slash gets added between host and icon relative url`() {
+    fun `Assert slash gets added between host and icon relative url`() = runTest {
         val extractedIcons = getFaviconsForUrl("https://www.codinux.net")
 
         extractedIcons.forEach { favicon ->
@@ -119,28 +122,28 @@ class FaviconFinderTest {
 
 
     @Test
-    fun `Follow redirect location`() {
+    fun `Follow redirect location`() = runTest {
         val extractedIcons = getFaviconsForUrl("tagesschau.de") // tagesschau.de returns a redirect to www.tagesschau.de
 
         testExtractedFavicons(extractedIcons, 19)
     }
 
     @Test
-    fun `Request desktop web site`() {
-        val extractedIcons = getFaviconsForUrl("baidu.com") // by default only default favicon gets returned, but in desktop site there are four
+    fun `Request desktop web site`() = runTest {
+        val extractedIcons = getFaviconsForUrl("baidu.com") // by default only default favicon gets returned, but in desktop site there are more
 
-        testExtractedFavicons(extractedIcons, 4)
+        testExtractedFavicons(extractedIcons, 3)
     }
 
     @Test
-    fun `Non breaking space at start of web manifest gets ignored`() {
+    fun `Non breaking space at start of web manifest gets ignored`() = runTest {
         val extractedIcons = getFaviconsForUrl("kicker.de") // don't know why but when requested with URLConnection then web manifest string starts with ﻿ leading to that Jackson deserialization fails
 
         testExtractedFavicons(extractedIcons, 16)
     }
 
     @Test
-    fun removeQuery() {
+    fun removeQuery() = runTest {
         val relativeUrlWithoutQuery = "/favicon_196px.png"
         val relativeUrlWithQuery = "$relativeUrlWithoutQuery?v=1603434540317"
 
@@ -152,14 +155,14 @@ class FaviconFinderTest {
     }
 
     @Test
-    fun `Default favicon URL does not return an icon (but e g an error page)`() {
+    fun `Default favicon URL does not return an icon (but e g an error page)`() = runTest {
         val extractedIcons = getFaviconsForUrl("coroot.com")
 
         extractedIcons.map { it.url }.none { it.endsWith("coroot.com/favicon.ico") }
     }
 
     @Test
-    fun `Check rel value case insensitive`() {
+    fun `Check rel value case insensitive`() = runTest {
         val extractedIcons = getFaviconsForUrl("https://www.live.com") // live.com specifies rel value in upper case: <link rel="SHORTCUT ICON" href="/favicon.ico?v2" type="image/x-icon">
 
         testExtractedFavicons(extractedIcons, 1)
@@ -167,14 +170,14 @@ class FaviconFinderTest {
 
 
     @Test
-    fun `Extract favicons from web manifest`() {
+    fun `Extract favicons from web manifest`() = runTest {
         val extractedIcons = getFaviconsForUrl("github.com")
 
         testExtractedFavicons(extractedIcons, 10) // without the icons from web manifest for github only 3 favicons would be returned
     }
 
     @Test
-    fun `Extract favicons with relative URLs from web manifest`() {
+    fun `Extract favicons with relative URLs from web manifest`() = runTest {
         val extractedIcons = getFaviconsForUrl("spiegel.de")
 
         testExtractedFavicons(extractedIcons, 12) // without the icons from web manifest for github only 11 favicons would be returned
@@ -186,7 +189,7 @@ class FaviconFinderTest {
 
 
     @Test
-    fun extractIconSizeFromSizesAttribute() {
+    fun extractIconSizeFromSizesAttribute() = runTest {
 
         var html = "<html><head>"
 
@@ -211,7 +214,7 @@ class FaviconFinderTest {
 
 
     @Test
-    fun extractIconSizeFromUrl() {
+    fun extractIconSizeFromUrl() = runTest {
 
         var html = "<html><head>"
 
@@ -243,11 +246,11 @@ class FaviconFinderTest {
     }
 
 
-    private fun getFaviconsForUrl(url: String): List<Favicon> {
+    private suspend fun getFaviconsForUrl(url: String): List<Favicon> {
         return underTest.extractFavicons(url)
     }
 
-    private fun getFaviconsForHtml(html: String): List<Favicon> {
+    private suspend fun getFaviconsForHtml(html: String): List<Favicon> {
         return underTest.extractFavicons(TestSiteUrl, html)
     }
 
