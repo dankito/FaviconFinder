@@ -51,7 +51,7 @@ class JsoupWebsiteFaviconsExtractorTest {
 
         val result = underTest.extractFavicons("", html)
 
-        assertIcon(result, imageUrl, FaviconType.MsTileImage, null, size, color)
+        assertIcon(result, imageUrl, FaviconType.MsTileImage, "image/png", size, color)
     }
 
 
@@ -104,7 +104,7 @@ class JsoupWebsiteFaviconsExtractorTest {
 
         val result = underTest.extractFavicons("", html)
 
-        assertIcon(result, imageUrl, FaviconType.Icon, null, size)
+        assertIcon(result, imageUrl, FaviconType.Icon, "image/x-icon", size)
     }
 
     @Test
@@ -121,7 +121,7 @@ class JsoupWebsiteFaviconsExtractorTest {
 
         val result = underTest.extractFavicons("", html)
 
-        assertIcon(result, imageUrl, FaviconType.AppleTouch, null, size)
+        assertIcon(result, imageUrl, FaviconType.AppleTouch, "image/png", size)
     }
 
     @Test
@@ -138,7 +138,7 @@ class JsoupWebsiteFaviconsExtractorTest {
 
         val result = underTest.extractFavicons("", html)
 
-        assertIcon(result, imageUrl, FaviconType.SafariMaskIcon, color = color)
+        assertIcon(result, imageUrl, FaviconType.SafariMaskIcon, "image/svg+xml", color = color)
     }
 
     @Test

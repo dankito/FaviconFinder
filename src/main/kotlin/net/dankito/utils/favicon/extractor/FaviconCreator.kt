@@ -39,12 +39,12 @@ open class FaviconCreator(
         if (url != null) {
             val urlWithoutQuery = removeQueryFromUrl(url)
 
-            return Favicon(urlUtil.makeLinkAbsolute(urlWithoutQuery, siteUrl), iconType, size ?: extractSizeFromUrl(url), iconMimeType, color)
+            return Favicon(urlUtil.makeLinkAbsolute(urlWithoutQuery, siteUrl), iconType, size ?: extractSizeFromUrl(url),
+                iconMimeType ?: getMimeTypeFromUrl(url), color)
         }
 
         return null
     }
-
 
 
     protected open fun removeQueryFromUrl(url: String): String {
@@ -95,6 +95,18 @@ open class FaviconCreator(
         }
 
         return null
+    }
+
+    protected open fun getMimeTypeFromUrl(url: String): String? = when (url.substringAfterLast('.').lowercase()) {
+        "png" -> "image/png"
+        "svg" -> "image/svg+xml"
+        "ico" -> "image/x-icon" // "image/vnd.microsoft.icon" is the official IANA-registered type, but "image/x-icon" is more widely used
+        "gif" -> "image/gif"
+        "jpg", "jpeg" -> "image/jpeg"
+        "tif", "tiff" -> "image/tiff"
+        "bmp" -> "image/bmp"
+        "webp" -> "image/webp"
+        else -> null
     }
 
 }
