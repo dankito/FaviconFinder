@@ -29,6 +29,8 @@ open class JacksonWebManifestFaviconsExtractor(
         manifest.icons.mapNotNull {
             val type = if (it.src.contains("apple-touch", true)) FaviconType.AppleTouch else FaviconType.Icon
             // a relative icon url is always resolved against manifest's url
+            // TODO: to be standard conformant we should actually check if "Content-Security-Policy: img-src " HTTP header
+            //  is specified for resolving relative icon urls, see https://w3c.github.io/manifest/#content-security-policy
             creator.createFaviconFromSizesString(it.src, absoluteManifestUrl, type, it.type, it.sizes)
         }
     } catch (e: Throwable) {
