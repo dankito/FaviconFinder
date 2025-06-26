@@ -107,8 +107,17 @@ open class JsoupWebsiteFaviconsExtractor(
     protected open fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon> =
         webManifestFaviconsExtractor.extractIconsFromWebManifest(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl))
 
+
     protected open fun findFaviconsInStandardLocations(url: String, extractedFavicons: MutableList<Favicon>) {
         standardLocationFaviconFinder.tryToFindStandardFavicon(url, extractedFavicons)?.let { defaultFavicon ->
+            addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
+        }
+
+        standardLocationFaviconFinder.tryToFindStandardAndroidChromeIcon(url, extractedFavicons)?.let { defaultFavicon ->
+            addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
+        }
+
+        standardLocationFaviconFinder.tryToFindStandardAppleTouchIcon(url, extractedFavicons)?.let { defaultFavicon ->
             addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
         }
     }
