@@ -48,13 +48,23 @@ open class JacksonWebManifestFaviconsExtractor(
               }
 
      */
-    override fun extractIconsFromWebManifest(manifest: WebManifest, manifestAbsoluteUrl: String): List<Favicon> = manifest.icons.mapNotNull {
-        val type = if (it.src.contains("apple-touch", true)) FaviconType.AppleTouch else FaviconType.Icon
-        // a relative icon url is always resolved against manifest's url
+    override fun extractIconsFromWebManifest(manifest: WebManifest, manifestAbsoluteUrl: String): List<Favicon> = manifest.icons.mapNotNull { icon ->
+        val type = getFaviconType(icon)
+        // a relative icon url is always resolved against manifest's url, see e.g.
+        // https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Manifest/Reference/icons#src
         // TODO: to be standard conformant we should actually check if "Content-Security-Policy: img-src " HTTP header
         //  is specified for resolving relative icon urls, see https://w3c.github.io/manifest/#content-security-policy
-        creator.createFaviconFromSizesString(it.src, manifestAbsoluteUrl, type, it.type, it.sizes)
+        creator.createFaviconFromSizesString(icon.src, manifestAbsoluteUrl, type, icon.type, icon.sizes)
     }
+
+    protected open fun getFaviconType(icon: WebManifestIcon): FaviconType =
+        if (icon.src.contains("apple-touch", true)) { // TODO: where is this code coming from? Can this ever be true?
+            FaviconType.AppleTouch
+        } else if (icon.purpose?.contains("maskable") == true) {
+            FaviconType.AndroidChromeMaskable
+        } else { // actually only if `purpose` is null or contains any
+            FaviconType.AndroidChrome
+        }
 
 
 }
