@@ -27,26 +27,26 @@ open class UrlUtil {
         return "https://" + absoluteUrl
     }
 
-    open fun makeLinkAbsolute(url: String, siteUrl: String): String {
+    open fun makeLinkAbsolute(url: String, baseUrl: String): String {
         var absoluteUrl = url
 
         if (url.startsWith("//")) {
-            if (siteUrl.startsWith("https:")) {
+            if (baseUrl.startsWith("https:")) {
                 absoluteUrl = "https:" + url
             } else {
                 absoluteUrl = "http:" + url
             }
         } else if (url.startsWith("/") || url.startsWith("./") || url.startsWith("../")) {
-            tryToMakeUrlAbsolute(url, siteUrl)?.let { absoluteUrl = it }
+            tryToMakeUrlAbsolute(url, baseUrl)?.let { absoluteUrl = it }
         } else if (url.startsWith("http") == false) {
             // url does not start with '/' (we checked above) -> prepend '/' so that resolving url works
-            tryToMakeUrlAbsolute("/" + url, siteUrl)?.let { absoluteUrl = it }
+            tryToMakeUrlAbsolute("/" + url, baseUrl)?.let { absoluteUrl = it }
         }
 
         return absoluteUrl
     }
 
-    protected open fun tryToMakeUrlAbsolute(relativeUrl: String, siteUrl: String): String? {
+    protected open fun tryToMakeUrlAbsolute(relativeUrl: String, baseUrl: String): String? {
         try {
             val relativeUri = URI(relativeUrl)
             if (relativeUri.isAbsolute && relativeUri.scheme.startsWith("http") == false) {
@@ -55,12 +55,12 @@ open class UrlUtil {
         } catch (_: Throwable) { }
 
         try {
-            val uri = URI(siteUrl)
+            val uri = URI(baseUrl)
             return uri.resolve(relativeUrl).toString()
         } catch (_: Throwable) { }
 
         try {
-            val uri = URI(siteUrl)
+            val uri = URI(baseUrl)
 
             val port = if(uri.port > 0) ":" + uri.port else ""
             val separator = if(relativeUrl.startsWith("/")) "" else "/"

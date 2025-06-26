@@ -11,23 +11,23 @@ class UrlUtilTest {
 
 
     @Test
-    fun `makeLinkAbsolute - Make relative url absolute with siteUrl`() {
+    fun `makeLinkAbsolute - Make relative url absolute with baseUrl`() {
         val relativeUrl = "assets/favicons/apple-touch-icon.png"
-        val siteUrl = "https://www.codinux.net"
+        val baseUrl = "https://www.codinux.net"
 
-        val result = underTest.makeLinkAbsolute(relativeUrl, siteUrl)
+        val result = underTest.makeLinkAbsolute(relativeUrl, baseUrl)
 
-        assertThat(result).isEqualTo("$siteUrl/$relativeUrl")
+        assertThat(result).isEqualTo("$baseUrl/$relativeUrl")
     }
 
     @Test
-    fun `makeLinkAbsolute - Make relative url absolute with siteUrl that ends with a slash`() {
+    fun `makeLinkAbsolute - Make relative url absolute with baseUrl that ends with a slash`() {
         val relativeUrl = "assets/favicons/apple-touch-icon.png"
-        val siteUrl = "https://www.codinux.net/"
+        val baseUrl = "https://www.codinux.net/"
 
-        val result = underTest.makeLinkAbsolute(relativeUrl, siteUrl)
+        val result = underTest.makeLinkAbsolute(relativeUrl, baseUrl)
 
-        assertThat(result).isEqualTo("$siteUrl$relativeUrl")
+        assertThat(result).isEqualTo("$baseUrl$relativeUrl")
     }
 
 }
