@@ -32,7 +32,7 @@ open class FaviconExtractorFaviconFinder(
             val json = result.body!!
             val responseBody = JsonSerializer.default.readValue<FaviconExtractorResponse>(json)
 
-            return responseBody.icons.map { Favicon(it.href, FaviconType.Icon, mapSize(it.sizes)) }
+            return responseBody.icons.map { Favicon(it.href, FaviconType.Icon, mapSize(it.sizes)) } // TODO: actually we cannot know the FaviconType
         }
 
         return emptyList()
