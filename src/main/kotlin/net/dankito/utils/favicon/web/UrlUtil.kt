@@ -30,18 +30,15 @@ open class UrlUtil {
     open fun makeLinkAbsolute(url: String, siteUrl: String): String {
         var absoluteUrl = url
 
-        if(url.startsWith("//")) {
-            if(siteUrl.startsWith("https:")) {
+        if (url.startsWith("//")) {
+            if (siteUrl.startsWith("https:")) {
                 absoluteUrl = "https:" + url
-            }
-            else {
+            } else {
                 absoluteUrl = "http:" + url
             }
-        }
-        else if(url.startsWith("/") || url.startsWith("./") || url.startsWith("../")) {
+        } else if (url.startsWith("/") || url.startsWith("./") || url.startsWith("../")) {
             tryToMakeUrlAbsolute(url, siteUrl)?.let { absoluteUrl = it }
-        }
-        else if(url.startsWith("http") == false) {
+        } else if (url.startsWith("http") == false) {
             // url does not start with '/' (we checked above) -> prepend '/' so that resolving url works
             tryToMakeUrlAbsolute("/" + url, siteUrl)?.let { absoluteUrl = it }
         }
@@ -52,15 +49,15 @@ open class UrlUtil {
     protected open fun tryToMakeUrlAbsolute(relativeUrl: String, siteUrl: String): String? {
         try {
             val relativeUri = URI(relativeUrl)
-            if(relativeUri.isAbsolute && relativeUri.scheme.startsWith("http") == false) {
+            if (relativeUri.isAbsolute && relativeUri.scheme.startsWith("http") == false) {
                 return relativeUrl // it's an absolute uri but just doesn't start with http, e.g. mailto: for file:
             }
-        } catch(ignored: Exception) { }
+        } catch (_: Throwable) { }
 
         try {
             val uri = URI(siteUrl)
             return uri.resolve(relativeUrl).toString()
-        } catch(ignored: Exception) { }
+        } catch (_: Throwable) { }
 
         try {
             val uri = URI(siteUrl)
@@ -71,7 +68,7 @@ open class UrlUtil {
             val manuallyCreatedUriString = uri.scheme + "://" + uri.host + port + separator + relativeUrl
             val manuallyCreatedUri = URI(manuallyCreatedUriString)
             return manuallyCreatedUri.toString()
-        } catch(ignored: Exception) { }
+        } catch (_: Throwable) { }
 
         return null
     }
