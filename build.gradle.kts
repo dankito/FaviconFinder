@@ -20,6 +20,13 @@ plugins {
 
 kotlin {
     jvmToolchain(11) // TODO: when new ktor2-web-client version is out, set back to JVM 8
+
+    compilerOptions {
+        // avoid "variable has been optimised out" in debugging mode
+        if (System.getProperty("idea.debugger.dispatch.addr") != null) {
+            freeCompilerArgs.add("-Xdebug")
+        }
+    }
 }
 
 
