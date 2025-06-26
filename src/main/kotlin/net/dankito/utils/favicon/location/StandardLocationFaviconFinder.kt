@@ -22,6 +22,11 @@ open class StandardLocationFaviconFinder(
     private val log = LoggerFactory.getLogger(StandardLocationFaviconFinder::class.java)
 
 
+    /**
+     * Tries to find favicon in its standard location, that is <url_root_path>/favicon.ico.
+     *
+     * If location does not exist and [siteUrl] is a subdomain, also checks <domain>/favicon.ico.
+     */
     open fun tryToFindStandardFavicon(siteUrl: String, extractedFavicons: List<Favicon>): Favicon? = try {
         val url = URL(siteUrl)
         val standardFaviconUrl = url.protocol + "://" + url.host + "/favicon.ico"
