@@ -58,6 +58,18 @@ class JacksonWebManifestFaviconsExtractorTest {
     }
 
 
+    @Test
+    fun relativeIconUrl_GetsResolvedCorrectly() {
+        val manifest = WebManifest(listOf(
+            WebManifestIcon("./android-chrome-192x192.png", IconSize, IconMimeType)
+        ))
+
+        val result = underTest.extractIconsFromWebManifest(manifest, ManifestUrl)
+
+        assertIcon(result, AndroicChromeIconUrl, FaviconType.AndroidChrome)
+    }
+
+
     private fun assertIcon(result: List<Favicon>, iconUrl: String, type: FaviconType, mimeType: String? = IconMimeType, size: String? = IconSize) {
         assertThat(result).hasSize(1)
 
