@@ -4,6 +4,7 @@ import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.Size
 import net.dankito.utils.favicon.extensions.attrOrNull
+import net.dankito.utils.favicon.location.StandardLocationFaviconFinder
 import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
 import net.dankito.utils.favicon.web.UrlUtil
@@ -11,18 +12,14 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import org.slf4j.LoggerFactory
-import java.net.URL
 
 open class JsoupWebsiteFaviconsExtractor(
     protected val webClient: IWebClient = UrlConnectionWebClient.Default,
     protected val faviconCreator: FaviconCreator = FaviconCreator.Default,
     protected val webManifestFaviconsExtractor: WebManifestFaviconsExtractor = JacksonWebManifestFaviconsExtractor.Default,
+    protected val standardLocationFaviconFinder: StandardLocationFaviconFinder = StandardLocationFaviconFinder.Default,
     protected val urlUtil: UrlUtil = UrlUtil.Default,
 ) : WebsiteFaviconsExtractor {
-
-    private val log = LoggerFactory.getLogger(JsoupWebsiteFaviconsExtractor::class.java)
-
 
     override fun extractFavicons(url: String, webSiteHtml: String): List<Favicon> {
         val document = Jsoup.parse(webSiteHtml, url)
@@ -46,29 +43,11 @@ open class JsoupWebsiteFaviconsExtractor(
         val faviconsInWebManifest = extractIconsFromWebManifest(linkElements, url)
         addIfNotAlreadyAdded(extractedFavicons, faviconsInWebManifest)
 
-        tryToFindDefaultFavicon(url, extractedFavicons)?.let { defaultFavicon ->
+        standardLocationFaviconFinder.tryToFindDefaultFavicon(url, extractedFavicons)?.let { defaultFavicon ->
             addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
         }
 
         return extractedFavicons
-    }
-
-    protected open fun tryToFindDefaultFavicon(url: String, extractedFavicons: List<Favicon>): Favicon? = try {
-        val urlInstance = URL(url)
-        val defaultFaviconUrl = urlInstance.protocol + "://" + urlInstance.host + "/favicon.ico"
-        if (doesNotContainIconWithUrl(extractedFavicons, defaultFaviconUrl)) {
-            webClient.head(defaultFaviconUrl).let { response ->
-                if (response.successful &&
-                    (response.contentType == null || response.contentType?.startsWith("text/") == false)) { // filter out e.g. error pages
-                    return Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon)
-                }
-            }
-        }
-
-        null
-    } catch (e: Throwable) {
-        log.error("Could not extract default favicon for url '$url'", e)
-        null
     }
 
     protected open fun extractIconsFromWebManifest(linkAndMetaElements: Elements, siteUrl: String): List<Favicon> =
