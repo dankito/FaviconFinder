@@ -28,15 +28,8 @@ open class JacksonWebManifestFaviconsExtractor(
         val manifest = JsonSerializer.default.readValue<WebManifest>(URL(absoluteManifestUrl))
         manifest.icons.mapNotNull {
             val type = if (it.src.contains("apple-touch", true)) FaviconType.AppleTouch else FaviconType.Icon
-            // some web manifests contain relative icon urls, e.g. spiegel.de:
-            // Manifest URL:
-            //  https://www.spiegel.de/public/spon/json/manifest.json
-            // Icons URLs:
-            // - "./../images/icons/icon-512.png"
-            // - ./../images/icons/icon-192.png -> (https://www.spiegel.de/public/spon/images/icons/icon-192.png)
-            // -> use manifest's url to create absolute favicon url
-            val baseUrl = if (it.src.startsWith('.')) absoluteManifestUrl else siteUrl
-            creator.createFaviconFromSizesString(it.src, baseUrl, type, it.type, it.sizes)
+            // a relative icon url is always resolved against manifest's url
+            creator.createFaviconFromSizesString(it.src, absoluteManifestUrl, type, it.type, it.sizes)
         }
     } catch (e: Throwable) {
         log.error("Could not read icons from web manifest of site $siteUrl", e)
