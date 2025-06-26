@@ -43,12 +43,11 @@ open class JsoupWebsiteFaviconsExtractor(
         val faviconsInWebManifest = extractIconsFromWebManifest(linkElements, url)
         addIfNotAlreadyAdded(extractedFavicons, faviconsInWebManifest)
 
-        standardLocationFaviconFinder.tryToFindStandardFavicon(url, extractedFavicons)?.let { defaultFavicon ->
-            addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
-        }
+        findFaviconsInStandardLocations(url, extractedFavicons)
 
         return extractedFavicons
     }
+
 
     protected open fun extractIconsFromWebManifest(linkAndMetaElements: Elements, siteUrl: String): List<Favicon> =
         linkAndMetaElements.firstOrNull { it.attr("rel") == "manifest" }
@@ -60,6 +59,12 @@ open class JsoupWebsiteFaviconsExtractor(
 
     protected open fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon> =
         webManifestFaviconsExtractor.extractIconsFromWebManifest(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl))
+
+    protected open fun findFaviconsInStandardLocations(url: String, extractedFavicons: MutableList<Favicon>) {
+        standardLocationFaviconFinder.tryToFindStandardFavicon(url, extractedFavicons)?.let { defaultFavicon ->
+            addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
+        }
+    }
 
 
     protected open fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? =
