@@ -6,6 +6,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 open class Favicon(
     open val url : String,
     open val iconType : FaviconType,
+    // TODO: the icon actually may has multiple sizes like for .ico files (a container format) or like in this web manifest example:
+    /*
+        {
+          "src": "icon/hd_hi.ico",
+          "sizes": "72x72 96x96 128x128 256x256"
+        }
+     */
     open var size : Size? = null,
     imageMimeType : String? = null,
     /**
