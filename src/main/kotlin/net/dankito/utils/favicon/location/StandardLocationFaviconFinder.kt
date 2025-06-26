@@ -29,6 +29,9 @@ open class StandardLocationFaviconFinder(
      */
     open fun tryToFindStandardFavicon(siteUrl: String, extractedFavicons: List<Favicon>): Favicon? =
         tryToFindStandardFaviconWithName(siteUrl, "favicon.ico", FaviconType.ShortcutIcon, extractedFavicons)
+            ?: tryToFindStandardFaviconWithName(siteUrl, "favicon-16x16.png", FaviconType.Icon, extractedFavicons)
+            ?: tryToFindStandardFaviconWithName(siteUrl, "favicon-32x32.png", FaviconType.Icon, extractedFavicons)
+            ?: tryToFindStandardFaviconWithName(siteUrl, "favicon.svg", FaviconType.Icon, extractedFavicons)
 
     /**
      * Tries to find Android Chrome icon in its standard location, that is <url_root_path>/android-chrome-192x192.png
