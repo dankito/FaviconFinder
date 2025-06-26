@@ -58,9 +58,7 @@ open class JacksonWebManifestFaviconsExtractor(
     }
 
     protected open fun getFaviconType(icon: WebManifestIcon): FaviconType =
-        if (icon.src.contains("apple-touch", true)) { // TODO: where is this code coming from? Can this ever be true?
-            FaviconType.AppleTouch
-        } else if (icon.purpose?.contains("maskable") == true) {
+        if (icon.purpose?.contains("maskable") == true) {
             FaviconType.AndroidChromeMaskable
         } else { // actually only if `purpose` is null or contains any
             FaviconType.AndroidChrome
