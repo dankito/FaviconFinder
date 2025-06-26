@@ -15,7 +15,7 @@ class FaviconExtractorFaviconFinderTest {
         val result = underTest.findFavicons("https://www.heise.de")
 
         assertThat(result).isNotEmpty()
-        assertThat(result.size).isGreaterThanOrEqualTo(4)
+        assertThat(result::size).isGreaterThanOrEqualTo(4)
     }
 
 }

@@ -75,15 +75,15 @@ class JacksonWebManifestFaviconsExtractorTest {
         assertThat(result).hasSize(1)
 
         val icon = result.first()
-        assertThat(icon.url).isEqualTo(iconUrl)
-        assertThat(icon.iconType).isEqualByComparingTo(type)
-        assertThat(icon.imageMimeType).isEqualTo(mimeType)
+        assertThat(icon::url).isEqualTo(iconUrl)
+        assertThat(icon::iconType).isEqualByComparingTo(type)
+        assertThat(icon::imageMimeType).isEqualTo(mimeType)
 
         val sizeObject = size?.let {
             val (width, height) = it.split('x', limit = 2)
             Size(width.toInt(), height.toInt())
         }
-        assertThat(icon.size).isEqualTo(sizeObject)
+        assertThat(icon::size).isEqualTo(sizeObject)
     }
 
 }

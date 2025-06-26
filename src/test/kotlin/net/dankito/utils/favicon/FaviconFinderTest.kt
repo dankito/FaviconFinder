@@ -86,7 +86,7 @@ class FaviconFinderTest {
         testExtractedFavicons(extractedIcons, 5)
 
         extractedIcons.forEach { favicon ->
-            assertThat(favicon.url).startsWith("https://codinux.net/")
+            assertThat(favicon::url).startsWith("https://codinux.net/")
         }
     }
 
@@ -97,7 +97,7 @@ class FaviconFinderTest {
         testExtractedFavicons(extractedIcons, 5)
 
         extractedIcons.forEach { favicon ->
-            assertThat(favicon.url).startsWith("https://www.codinux.net/")
+            assertThat(favicon::url).startsWith("https://www.codinux.net/")
         }
     }
 
@@ -113,7 +113,7 @@ class FaviconFinderTest {
         val extractedIcons = getFaviconsForUrl("https://www.codinux.net")
 
         extractedIcons.forEach { favicon ->
-            assertThat(favicon.url).startsWith("https://www.codinux.net/")
+            assertThat(favicon::url).startsWith("https://www.codinux.net/")
         }
     }
 
@@ -148,7 +148,7 @@ class FaviconFinderTest {
 
         testExtractedFavicons(extractedIcons, 1)
 
-        assertThat(extractedIcons.first().url).isEqualTo(TestSiteUrl + relativeUrlWithoutQuery)
+        assertThat(extractedIcons.first()::url).isEqualTo(TestSiteUrl + relativeUrlWithoutQuery)
     }
 
     @Test
@@ -180,7 +180,7 @@ class FaviconFinderTest {
         testExtractedFavicons(extractedIcons, 12) // without the icons from web manifest for github only 11 favicons would be returned
 
         extractedIcons.forEach { favicon ->
-            assertThat(favicon.url).doesNotContain("./")
+            assertThat(favicon::url).doesNotContain("./")
         }
     }
 
@@ -205,7 +205,7 @@ class FaviconFinderTest {
         testExtractedFavicons(extractedIcons, 1)
 
         extractedIcons.forEach { favicon ->
-            assertThat(favicon.size).isNotNull()
+            assertThat(favicon::size).isNotNull()
         }
     }
 
@@ -237,7 +237,7 @@ class FaviconFinderTest {
 
         extractedIcons.forEach { favicon ->
             if (favicon.url != TestSiteUrl + "/favicon.ico") { // FaviconFinder adds default icon for passed siteUrl TestSiteUrl
-                assertThat(favicon.size).isNotNull()
+                assertThat(favicon::size).isNotNull()
             }
         }
     }
@@ -253,11 +253,11 @@ class FaviconFinderTest {
 
 
     private fun testExtractedFavicons(extractedIcons: List<Favicon>, countMinimumFavicons: Int) {
-        assertThat(extractedIcons.size).isGreaterThanOrEqualTo(countMinimumFavicons)
+        assertThat(extractedIcons::size).isGreaterThanOrEqualTo(countMinimumFavicons)
 
         for (favicon in extractedIcons) {
-            assertThat(favicon.url).isNotNull()
-            assertThat(favicon.url).startsWith("http")
+            assertThat(favicon::url).isNotNull()
+            assertThat(favicon::url).startsWith("http")
         }
     }
 

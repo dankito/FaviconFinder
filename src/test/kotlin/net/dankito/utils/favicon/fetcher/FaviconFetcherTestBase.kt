@@ -19,7 +19,7 @@ abstract class FaviconFetcherTestBase {
         val result = underTest.fetch("heise.de", 32)
 
         assertThat(result).isNotNull()
-        assertThat(result!!.size).isGreaterThan(500)
+        assertThat(result!!::size).isGreaterThan(500)
     }
 
     @Test
@@ -27,7 +27,7 @@ abstract class FaviconFetcherTestBase {
         val result = underTest.fetch("https://heise.de", 32)
 
         assertThat(result).isNotNull()
-        assertThat(result!!.size).isGreaterThan(500)
+        assertThat(result!!::size).isGreaterThan(500)
     }
 
 }
