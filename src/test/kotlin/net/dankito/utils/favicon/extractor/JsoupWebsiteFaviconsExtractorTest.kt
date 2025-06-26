@@ -1,10 +1,7 @@
 package net.dankito.utils.favicon.extractor
 
 import assertk.assertThat
-import assertk.assertions.hasSize
-import assertk.assertions.isEqualTo
-import assertk.assertions.isNotNull
-import assertk.assertions.isNull
+import assertk.assertions.*
 import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
 import kotlin.test.Test
@@ -162,7 +159,7 @@ class JsoupWebsiteFaviconsExtractorTest {
 
         val favicon = result.first()
         assertThat(favicon::url).isEqualTo(imageUrl)
-        assertThat(favicon::iconType).isEqualTo(iconType)
+        assertThat(favicon::iconType).isEqualByComparingTo(iconType)
         assertThat(favicon::imageMimeType).isEqualTo(mimeType)
 
         if (size == null) {

@@ -2,6 +2,7 @@ package net.dankito.utils.favicon.extractor
 
 import assertk.assertThat
 import assertk.assertions.hasSize
+import assertk.assertions.isEqualByComparingTo
 import assertk.assertions.isEqualTo
 import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
@@ -75,7 +76,7 @@ class JacksonWebManifestFaviconsExtractorTest {
 
         val icon = result.first()
         assertThat(icon.url).isEqualTo(iconUrl)
-        assertThat(icon.iconType).isEqualTo(type)
+        assertThat(icon.iconType).isEqualByComparingTo(type)
         assertThat(icon.imageMimeType).isEqualTo(mimeType)
 
         val sizeObject = size?.let {
