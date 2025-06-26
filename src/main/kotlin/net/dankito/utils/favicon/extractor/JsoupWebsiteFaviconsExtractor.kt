@@ -49,24 +49,6 @@ open class JsoupWebsiteFaviconsExtractor(
     }
 
 
-    protected open fun extractIconsFromWebManifest(linkAndMetaElements: Elements, siteUrl: String): List<Favicon> =
-        linkAndMetaElements.firstOrNull { it.attr("rel") == "manifest" }
-            ?.attr("href")
-            ?.takeIf { it.isNotBlank() }
-            ?.let { manifestUrl -> extractIconsFromWebManifest(manifestUrl, siteUrl) }
-
-            ?: emptyList()
-
-    protected open fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon> =
-        webManifestFaviconsExtractor.extractIconsFromWebManifest(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl))
-
-    protected open fun findFaviconsInStandardLocations(url: String, extractedFavicons: MutableList<Favicon>) {
-        standardLocationFaviconFinder.tryToFindStandardFavicon(url, extractedFavicons)?.let { defaultFavicon ->
-            addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
-        }
-    }
-
-
     protected open fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? =
         linkElement.attr("rel").takeUnless { it.isBlank() }?.let { linkRelation ->
             getFaviconTypeForLinkElements(linkRelation)?.let { faviconType ->
@@ -112,6 +94,24 @@ open class JsoupWebsiteFaviconsExtractor(
     protected open fun isOpenGraphImageDeclaration(metaElement: Element) = metaElement.hasAttr("property") && metaElement.attr("property") == "og:image" && metaElement.hasAttr("content")
 
     protected open fun isMsTileMetaElement(metaElement: Element) = metaElement.hasAttr("name") && metaElement.attr("name") == "msapplication-TileImage" && metaElement.hasAttr("content")
+
+
+    protected open fun extractIconsFromWebManifest(linkAndMetaElements: Elements, siteUrl: String): List<Favicon> =
+        linkAndMetaElements.firstOrNull { it.attr("rel") == "manifest" }
+            ?.attr("href")
+            ?.takeIf { it.isNotBlank() }
+            ?.let { manifestUrl -> extractIconsFromWebManifest(manifestUrl, siteUrl) }
+
+            ?: emptyList()
+
+    protected open fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon> =
+        webManifestFaviconsExtractor.extractIconsFromWebManifest(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl))
+
+    protected open fun findFaviconsInStandardLocations(url: String, extractedFavicons: MutableList<Favicon>) {
+        standardLocationFaviconFinder.tryToFindStandardFavicon(url, extractedFavicons)?.let { defaultFavicon ->
+            addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
+        }
+    }
 
 
     protected open fun addIfNotAlreadyAdded(extractedFavicons: MutableList<Favicon>, additionalCandidates: List<Favicon>) {
