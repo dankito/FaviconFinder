@@ -64,7 +64,9 @@ open class UrlUtil {
             } else {
                 relativeUrl
             }
+
             return uri.resolve(relativeUrlToUse).toString()
+                .replace("../", "") // fix bug if relative url contains more '../' than baseUrl has path segments, that '../' stays in url instead of removing it
         } catch (_: Throwable) { }
 
         try {

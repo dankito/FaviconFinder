@@ -95,6 +95,69 @@ class UrlUtilTest {
     }
 
 
+    /*              Parent-directory relative               */
+
+    @Test
+    fun `makeLinkAbsolute - Path does not end with a slash - relative URL starts with dot dot slash`() {
+        val relativeUrl = "../android-chrome-192x192.png"
+        val baseUrl = "https://codinux.net/images/favicons/site.webmanifest"
+
+        val result = underTest.makeLinkAbsolute(relativeUrl, baseUrl)
+
+        assertThat(result).isEqualTo("https://codinux.net/images/${relativeUrl.substringAfter('/')}")
+    }
+
+    @Test
+    fun `makeLinkAbsolute - Path does not end with a slash - relative URL starts with two dot dot slash`() {
+        val relativeUrl = "../../android-chrome-192x192.png"
+        val baseUrl = "https://codinux.net/images/favicons/site.webmanifest"
+
+        val result = underTest.makeLinkAbsolute(relativeUrl, baseUrl)
+
+        assertThat(result).isEqualTo("https://codinux.net/${relativeUrl.substringAfterLast('/')}")
+    }
+
+    @Test
+    fun `makeLinkAbsolute - Path does not end with a slash - relative URL starts with more dot dot slash than path segments`() {
+        val relativeUrl = "../../../android-chrome-192x192.png"
+        val baseUrl = "https://codinux.net/images/favicons/site.webmanifest"
+
+        val result = underTest.makeLinkAbsolute(relativeUrl, baseUrl)
+
+        assertThat(result).isEqualTo("https://codinux.net/${relativeUrl.substringAfterLast('/')}")
+    }
+
+    @Test
+    fun `makeLinkAbsolute - Path ends with slash - relative URL starts with dot dot slash`() {
+        val relativeUrl = "../android-chrome-192x192.png"
+        val baseUrl = "https://codinux.net/images/favicons/"
+
+        val result = underTest.makeLinkAbsolute(relativeUrl, baseUrl)
+
+        assertThat(result).isEqualTo("https://codinux.net/images/${relativeUrl.substringAfter('/')}")
+    }
+
+    @Test
+    fun `makeLinkAbsolute - Path ends with slash - relative URL starts with two dot dot slash`() {
+        val relativeUrl = "../../android-chrome-192x192.png"
+        val baseUrl = "https://codinux.net/images/favicons/"
+
+        val result = underTest.makeLinkAbsolute(relativeUrl, baseUrl)
+
+        assertThat(result).isEqualTo("https://codinux.net/${relativeUrl.substringAfterLast('/')}")
+    }
+
+    @Test
+    fun `makeLinkAbsolute - Path ends with slash - relative URL starts with more dot dot slash than path segments`() {
+        val relativeUrl = "../../../android-chrome-192x192.png"
+        val baseUrl = "https://codinux.net/images/favicons/"
+
+        val result = underTest.makeLinkAbsolute(relativeUrl, baseUrl)
+
+        assertThat(result).isEqualTo("https://codinux.net/${relativeUrl.substringAfterLast('/')}")
+    }
+
+
     /*              Root relative               */
 
     @Test
