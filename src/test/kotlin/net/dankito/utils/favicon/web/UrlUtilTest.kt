@@ -30,4 +30,25 @@ class UrlUtilTest {
         assertThat(result).isEqualTo("$baseUrl$relativeUrl")
     }
 
+
+    @Test
+    fun `makeLinkAbsolute - Path does not end with a slash - Last path segment gets removed`() {
+        val relativeUrl = "android-chrome-192x192.png"
+        val baseUrl = "https://codinux.net/images/favicons/site.webmanifest"
+
+        val result = underTest.makeLinkAbsolute(relativeUrl, baseUrl)
+
+        assertThat(result).isEqualTo("${baseUrl.substringBeforeLast('/')}/$relativeUrl")
+    }
+
+    @Test
+    fun `makeLinkAbsolute - Path ends with slash - Last path segment is retained`() {
+        val relativeUrl = "android-chrome-192x192.png"
+        val baseUrl = "https://codinux.net/images/favicons/"
+
+        val result = underTest.makeLinkAbsolute(relativeUrl, baseUrl)
+
+        assertThat(result).isEqualTo("$baseUrl$relativeUrl")
+    }
+
 }

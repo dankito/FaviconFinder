@@ -27,6 +27,7 @@ open class UrlUtil {
         return "https://" + absoluteUrl
     }
 
+    // see e.g. https://developer.mozilla.org/en-US/docs/Web/API/URL_API/Resolving_relative_references for all possible use cases (except relative url starting with '//')
     open fun makeLinkAbsolute(url: String, baseUrl: String): String {
         var absoluteUrl = url
 
@@ -38,9 +39,9 @@ open class UrlUtil {
             }
         } else if (url.startsWith("/") || url.startsWith("./") || url.startsWith("../")) {
             tryToMakeUrlAbsolute(url, baseUrl)?.let { absoluteUrl = it }
-        } else if (url.startsWith("http") == false) {
+        } else if (url.startsWith("http", true) == false) {
             // url does not start with '/' (we checked above) -> prepend '/' so that resolving url works
-            tryToMakeUrlAbsolute("/" + url, baseUrl)?.let { absoluteUrl = it }
+            tryToMakeUrlAbsolute(url, baseUrl)?.let { absoluteUrl = it }
         }
 
         return absoluteUrl
@@ -56,14 +57,21 @@ open class UrlUtil {
 
         try {
             val uri = URI(baseUrl)
-            return uri.resolve(relativeUrl).toString()
+            val relativeUrlToUse = if (uri.path.isNullOrEmpty() && relativeUrl.startsWith("/") == false) {
+                // fix that for empty paths URI.resolve() does not add a '/' between baseUrl and relative url, e.g.
+                // "https://codinux.net" + "icon.png" -> "https://codinux.neticon.png" (honestly, URI.resolve()!?)
+                "/$relativeUrl"
+            } else {
+                relativeUrl
+            }
+            return uri.resolve(relativeUrlToUse).toString()
         } catch (_: Throwable) { }
 
         try {
             val uri = URI(baseUrl)
 
-            val port = if(uri.port > 0) ":" + uri.port else ""
-            val separator = if(relativeUrl.startsWith("/")) "" else "/"
+            val port = if (uri.port > 0) ":" + uri.port else ""
+            val separator = if (relativeUrl.startsWith("/")) "" else "/"
 
             val manuallyCreatedUriString = uri.scheme + "://" + uri.host + port + separator + relativeUrl
             val manuallyCreatedUri = URI(manuallyCreatedUriString)
