@@ -4,6 +4,6 @@ import net.dankito.utils.favicon.Favicon
 
 interface WebManifestFaviconsExtractor {
 
-    fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon>
+    fun extractIconsFromWebManifest(manifestAbsoluteUrl: String): List<Favicon>
 
 }

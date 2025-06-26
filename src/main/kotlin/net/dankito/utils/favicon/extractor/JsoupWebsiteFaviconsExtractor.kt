@@ -6,6 +6,7 @@ import net.dankito.utils.favicon.Size
 import net.dankito.utils.favicon.extensions.attrOrNull
 import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
+import net.dankito.utils.favicon.web.UrlUtil
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -17,6 +18,7 @@ open class JsoupWebsiteFaviconsExtractor(
     protected val webClient: IWebClient = UrlConnectionWebClient.Default,
     protected val faviconCreator: FaviconCreator = FaviconCreator.Default,
     protected val webManifestFaviconsExtractor: WebManifestFaviconsExtractor = JacksonWebManifestFaviconsExtractor.Default,
+    protected val urlUtil: UrlUtil = UrlUtil.Default,
 ) : WebsiteFaviconsExtractor {
 
     private val log = LoggerFactory.getLogger(JsoupWebsiteFaviconsExtractor::class.java)
@@ -78,7 +80,7 @@ open class JsoupWebsiteFaviconsExtractor(
             ?: emptyList()
 
     protected open fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon> =
-        webManifestFaviconsExtractor.extractIconsFromWebManifest(manifestUrl, siteUrl)
+        webManifestFaviconsExtractor.extractIconsFromWebManifest(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl))
 
 
     protected open fun mapLinkElementToFavicon(linkElement: Element, siteUrl: String): Favicon? =
