@@ -1,5 +1,8 @@
 # Favicon Finder
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.dankito.utils/favicon-finder/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.dankito.utils/favicon-finder)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 Getting a site's favicon can be cumbersome.
 There are multiple favicon sources and formats (see [Favicon sources and formats](#favicon-sources-and-formats)),
 icons may are specified but do not exist (return a 404),
@@ -14,7 +17,7 @@ either by returning the best matching favicon or a list of available favicons.
 ### Gradle
 
 ```
-implementation("net.dankito.utils:favicon-finder:1.5.1")
+implementation("net.dankito.utils:favicon-finder:1.5.2")
 ```
 
 ### Maven
@@ -23,7 +26,7 @@ implementation("net.dankito.utils:favicon-finder:1.5.1")
 <dependency>
    <groupId>net.dankito.utils</groupId>
    <artifactId>favicon-finder</artifactId>
-   <version>1.5.1</version>
+   <version>1.5.2</version>
 </dependency>
 ```
 
