@@ -31,6 +31,11 @@ open class StandardLocationFaviconFinder(
                 if (response.successful &&
                     (response.contentType == null || response.contentType?.startsWith("image/") == true)) { // filter out e.g. error pages
                     return Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon, null, response.contentType) // TODO: extract size from image url and derive mime type from url
+                } else {
+                    // if it's a subdomain, also check domain for standard favicon icon
+                    getDomainIfIsSubdomain(url)?.let { domain ->
+                        return tryToFindDefaultFavicon(domain, extractedFavicons)
+                    }
                 }
             }
         }
@@ -39,6 +44,17 @@ open class StandardLocationFaviconFinder(
     } catch (e: Throwable) {
         log.error("Could not extract default favicon for url '$siteUrl'", e)
         null
+    }
+
+    protected open fun getDomainIfIsSubdomain(url: URL): String? {
+        val host = url.host
+        val indexOfSecondLastDot = host.lastIndexOf('.', host.lastIndexOf('.') - 1)
+
+        return if (indexOfSecondLastDot != -1) {
+            url.protocol + "://" + host.substring(indexOfSecondLastDot + 1)
+        } else {
+            null
+        }
     }
 
     // TODO: this is the same code as in JsoupWebsiteFaviconsExtractor.doesNotContainIconWithUrl()
