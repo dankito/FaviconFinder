@@ -36,7 +36,7 @@ ext["projectDescription"] = "Extracts the favicons from a web site"
 
 val jsoupVersion: String by project
 val jacksonVersion: String by project
-val slf4jVersion: String by project
+val klfVersion: String by project
 
 val assertKVersion: String by project
 val logbackVersion: String by project
@@ -45,7 +45,7 @@ dependencies {
     implementation("org.jsoup:jsoup:$jsoupVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
-    implementation("org.slf4j:slf4j-api:$slf4jVersion")
+    implementation("net.codinux.log:klf:$klfVersion")
 
 
     testImplementation(kotlin("test"))

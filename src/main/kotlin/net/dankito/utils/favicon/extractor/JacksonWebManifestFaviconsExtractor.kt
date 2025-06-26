@@ -1,12 +1,12 @@
 package net.dankito.utils.favicon.extractor
 
 import com.fasterxml.jackson.module.kotlin.readValue
+import net.codinux.log.logger
 import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.json.JsonSerializer
 import net.dankito.utils.favicon.webmanifest.WebManifest
 import net.dankito.utils.favicon.webmanifest.WebManifestIcon
-import org.slf4j.LoggerFactory
 import java.net.URL
 
 open class JacksonWebManifestFaviconsExtractor(
@@ -18,7 +18,7 @@ open class JacksonWebManifestFaviconsExtractor(
     }
 
 
-    private val log = LoggerFactory.getLogger(JacksonWebManifestFaviconsExtractor::class.java)
+    protected val log by logger()
 
 
     override fun extractIconsFromWebManifest(manifestAbsoluteUrl: String): List<Favicon> = try {
@@ -27,7 +27,7 @@ open class JacksonWebManifestFaviconsExtractor(
 
         extractIconsFromWebManifest(manifest, manifestAbsoluteUrl)
     } catch (e: Throwable) {
-        log.error("Could not read icons from web manifest of url '$manifestAbsoluteUrl'", e)
+        log.error(e) { "Could not read icons from web manifest of url '$manifestAbsoluteUrl'" }
         emptyList()
     }
 

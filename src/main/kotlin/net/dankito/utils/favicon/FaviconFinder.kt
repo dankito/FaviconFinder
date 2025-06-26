@@ -1,9 +1,9 @@
 package net.dankito.utils.favicon
 
+import net.codinux.log.logger
 import net.dankito.utils.favicon.extractor.JsoupWebsiteFaviconsExtractor
 import net.dankito.utils.favicon.extractor.WebsiteFaviconsExtractor
 import net.dankito.utils.favicon.web.*
-import org.slf4j.LoggerFactory
 import kotlin.concurrent.thread
 
 
@@ -17,7 +17,7 @@ open class FaviconFinder @JvmOverloads constructor(
         val IconSizeRegex = Regex("\\d{2,4}[xX×]\\d{2,4}")
     }
 
-    private val log = LoggerFactory.getLogger(FaviconFinder::class.java)
+    protected val log by logger()
 
 
     init {
@@ -30,7 +30,7 @@ open class FaviconFinder @JvmOverloads constructor(
             try {
                 callback(AsyncResult(true, result = extractFavicons(url)))
             } catch(e: Exception) {
-                log.error("Could not get favicons for $url", e)
+                log.error(e) { "Could not get favicons for $url" }
 
                 callback(AsyncResult(false, e))
             }

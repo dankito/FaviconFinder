@@ -1,11 +1,11 @@
 package net.dankito.utils.favicon.extractor
 
+import net.codinux.log.logger
 import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconFinder.Companion.IconSizeRegex
 import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.Size
 import net.dankito.utils.favicon.web.UrlUtil
-import org.slf4j.LoggerFactory
 
 open class FaviconCreator(
     protected val urlUtil: UrlUtil = UrlUtil.Default
@@ -16,7 +16,7 @@ open class FaviconCreator(
     }
 
 
-    private val log = LoggerFactory.getLogger(FaviconCreator::class.java)
+    protected val log by logger()
 
 
     open fun createFaviconFromSizesString(url: String?, siteUrl: String, iconType: FaviconType, iconMimeType: String?, sizesString: String?, color: String? = null): Favicon? =
@@ -56,7 +56,7 @@ open class FaviconCreator(
                 return url.substring(0, indexOfQuestionMark)
             }
         } catch (e: Exception) {
-            log.error("Could not remove query from url $url", e)
+            log.error(e) { "Could not remove query from url $url" }
         }
 
         return url

@@ -1,10 +1,10 @@
 package net.dankito.utils.favicon.location
 
+import net.codinux.log.logger
 import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
-import org.slf4j.LoggerFactory
 import java.net.URL
 
 /**
@@ -19,7 +19,7 @@ open class StandardLocationFaviconFinder(
     }
 
 
-    private val log = LoggerFactory.getLogger(StandardLocationFaviconFinder::class.java)
+    protected val log by logger()
 
 
     /**
@@ -76,7 +76,7 @@ open class StandardLocationFaviconFinder(
 
         null
     } catch (e: Throwable) {
-        log.error("Could not extract standard favicon with name '$faviconName' for url '$siteUrl'", e)
+        log.error(e) { "Could not extract standard favicon with name '$faviconName' for url '$siteUrl'" }
         null
     }
 

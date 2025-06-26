@@ -1,6 +1,6 @@
 package net.dankito.utils.favicon.web
 
-import org.slf4j.LoggerFactory
+import net.codinux.log.logger
 import java.io.FileNotFoundException
 import java.net.HttpURLConnection
 import java.net.URI
@@ -14,7 +14,7 @@ open class UrlConnectionWebClient : IWebClient {
     }
 
 
-    private val log = LoggerFactory.getLogger(UrlConnectionWebClient::class.java)
+    protected val log by logger()
 
 
     override fun get(url: String, requestDesktopWebsite: Boolean): WebResponse {
@@ -98,7 +98,7 @@ open class UrlConnectionWebClient : IWebClient {
     }
 
     protected open fun logAndMapError(url: String, e: Exception): WebResponse {
-        log.error("Could not request $url", e)
+        log.error(e) { "Could not request $url" }
 
         return WebResponse(false, error = e)
     }

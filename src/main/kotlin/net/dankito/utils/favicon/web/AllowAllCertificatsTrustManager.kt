@@ -1,6 +1,6 @@
 package net.dankito.utils.favicon.web
 
-import org.slf4j.LoggerFactory
+import net.codinux.log.logger
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
 import javax.net.ssl.*
@@ -32,7 +32,7 @@ class AllowAllCertificatsTrustManager : X509TrustManager {
 
     private val acceptedIssuers = arrayOf<X509Certificate>()
 
-    private val log = LoggerFactory.getLogger(AllowAllCertificatsTrustManager::class.java)
+    private val log by logger()
 
     fun allowAllCertificates() {
       HttpsURLConnection.setDefaultHostnameVerifier { arg0, arg1 -> true }
@@ -42,7 +42,7 @@ class AllowAllCertificatsTrustManager : X509TrustManager {
         context.init(null, trustManagers, SecureRandom())
         HttpsURLConnection.setDefaultSSLSocketFactory(context.socketFactory)
       } catch (e: Exception) {
-        log.error("Could not allow all SSL connections", e)
+        log.error(e) { "Could not allow all SSL connections" }
       }
     }
   }

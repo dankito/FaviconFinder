@@ -1,8 +1,8 @@
 package net.dankito.utils.favicon
 
+import net.codinux.log.logger
 import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlConnectionWebClient
-import org.slf4j.LoggerFactory
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -14,7 +14,7 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
         const val DEFAULT_MIN_SIZE = 32
     }
 
-    private val log = LoggerFactory.getLogger(FaviconComparator::class.java)
+    protected val log by logger()
 
 
     /**
@@ -152,7 +152,7 @@ open class FaviconComparator(open val webClient : IWebClient = UrlConnectionWebC
                     }
                 }
             }
-        } catch(e: Exception) { log.error("Could not retrieve icon size for url $iconUrl", e) }
+        } catch(e: Exception) { log.error(e) { "Could not retrieve icon size for url $iconUrl" } }
 
         return null to null
     }
