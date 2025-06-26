@@ -30,7 +30,7 @@ open class StandardLocationFaviconFinder(
             webClient.head(defaultFaviconUrl).let { response ->
                 if (response.successful &&
                     (response.contentType == null || response.contentType?.startsWith("image/") == true)) { // filter out e.g. error pages
-                    return Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon)
+                    return Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon, null, response.contentType) // TODO: extract size from image url and derive mime type from url
                 }
             }
         }
