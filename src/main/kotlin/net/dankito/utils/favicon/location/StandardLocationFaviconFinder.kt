@@ -27,11 +27,12 @@ open class StandardLocationFaviconFinder(
      *
      * If location does not exist and [siteUrl] is a subdomain, also checks <domain>/favicon.ico.
      */
-    open fun tryToFindStandardFavicon(siteUrl: String, extractedFavicons: List<Favicon>): Favicon? =
-        tryToFindStandardFaviconWithName(siteUrl, "favicon.ico", FaviconType.ShortcutIcon, extractedFavicons)
-            ?: tryToFindStandardFaviconWithName(siteUrl, "favicon-16x16.png", FaviconType.Icon, extractedFavicons)
-            ?: tryToFindStandardFaviconWithName(siteUrl, "favicon-32x32.png", FaviconType.Icon, extractedFavicons)
-            ?: tryToFindStandardFaviconWithName(siteUrl, "favicon.svg", FaviconType.Icon, extractedFavicons)
+    open fun tryToFindStandardFavicon(siteUrl: String, extractedFavicons: List<Favicon>): List<Favicon> = setOf(
+        tryToFindStandardFaviconWithName(siteUrl, "favicon.ico", FaviconType.ShortcutIcon, extractedFavicons),
+        tryToFindStandardFaviconWithName(siteUrl, "favicon-16x16.png", FaviconType.Icon, extractedFavicons),
+        tryToFindStandardFaviconWithName(siteUrl, "favicon-32x32.png", FaviconType.Icon, extractedFavicons),
+        tryToFindStandardFaviconWithName(siteUrl, "favicon.svg", FaviconType.Icon, extractedFavicons),
+    ).filterNotNull()
 
     /**
      * Tries to find Android Chrome icon in its standard location, that is <url_root_path>/android-chrome-192x192.png
@@ -40,17 +41,20 @@ open class StandardLocationFaviconFinder(
      * If location does not exist and [siteUrl] is a subdomain, also checks <domain>/android-chrome-192x192.png
      * and /android-chrome-512x512.png.
      */
-    open fun tryToFindStandardAndroidChromeIcon(siteUrl: String, extractedFavicons: List<Favicon>): Favicon? =
-        tryToFindStandardFaviconWithName(siteUrl, "android-chrome-192x192.png", FaviconType.AndroidChrome, extractedFavicons)
-            ?: tryToFindStandardFaviconWithName(siteUrl, "android-chrome-512x512.png", FaviconType.AndroidChrome, extractedFavicons)
+    open fun tryToFindStandardAndroidChromeIcon(siteUrl: String, extractedFavicons: List<Favicon>): List<Favicon> = setOf(
+        tryToFindStandardFaviconWithName(siteUrl, "android-chrome-192x192.png", FaviconType.AndroidChrome, extractedFavicons),
+        tryToFindStandardFaviconWithName(siteUrl, "android-chrome-512x512.png", FaviconType.AndroidChrome, extractedFavicons)
+    ).filterNotNull()
 
     /**
      * Tries to find Apple touch icon in its standard location, that is <url_root_path>/apple-touch-icon.png.
      *
      * If location does not exist and [siteUrl] is a subdomain, also checks <domain>/apple-touch-icon.png.
      */
-    open fun tryToFindStandardAppleTouchIcon(siteUrl: String, extractedFavicons: List<Favicon>): Favicon? =
-        tryToFindStandardFaviconWithName(siteUrl, "apple-touch-icon.png", FaviconType.AppleTouch, extractedFavicons)
+    open fun tryToFindStandardAppleTouchIcon(siteUrl: String, extractedFavicons: List<Favicon>): List<Favicon> = setOf(
+        tryToFindStandardFaviconWithName(siteUrl, "apple-touch-icon.png", FaviconType.AppleTouch, extractedFavicons),
+        tryToFindStandardFaviconWithName(siteUrl, "apple-touch-icon-precomposed.png", FaviconType.AppleTouchPrecomposed, extractedFavicons)
+    ).filterNotNull()
 
     protected open fun tryToFindStandardFaviconWithName(siteUrl: String, faviconName: String, type: FaviconType, extractedFavicons: List<Favicon>): Favicon? = try {
         val url = URL(siteUrl)

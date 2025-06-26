@@ -109,17 +109,11 @@ open class JsoupWebsiteFaviconsExtractor(
 
 
     protected open fun findFaviconsInStandardLocations(url: String, extractedFavicons: MutableList<Favicon>) {
-        standardLocationFaviconFinder.tryToFindStandardFavicon(url, extractedFavicons)?.let { defaultFavicon ->
-            addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
-        }
+        addIfNotAlreadyAdded(extractedFavicons, standardLocationFaviconFinder.tryToFindStandardFavicon(url, extractedFavicons))
 
-        standardLocationFaviconFinder.tryToFindStandardAndroidChromeIcon(url, extractedFavicons)?.let { defaultFavicon ->
-            addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
-        }
+        addIfNotAlreadyAdded(extractedFavicons, standardLocationFaviconFinder.tryToFindStandardAndroidChromeIcon(url, extractedFavicons))
 
-        standardLocationFaviconFinder.tryToFindStandardAppleTouchIcon(url, extractedFavicons)?.let { defaultFavicon ->
-            addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
-        }
+        addIfNotAlreadyAdded(extractedFavicons, standardLocationFaviconFinder.tryToFindStandardAppleTouchIcon(url, extractedFavicons))
     }
 
 
