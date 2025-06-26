@@ -13,8 +13,8 @@ class StandardLocationFaviconFinderTest {
 
 
     @Test
-    fun tryToFindDefaultFavicon_nonFoundForSubdomain_TriesDomain() {
-        val result = underTest.tryToFindDefaultFavicon("https://staging.codinux.net", emptyList())
+    fun tryToFindStandardFavicon_nonFoundForSubdomain_TriesDomain() {
+        val result = underTest.tryToFindStandardFavicon("https://staging.codinux.net", emptyList())
 
         assertThat(result).isNotNull()
         assertThat(result!!::url).isEqualTo("https://codinux.net/favicon.ico")

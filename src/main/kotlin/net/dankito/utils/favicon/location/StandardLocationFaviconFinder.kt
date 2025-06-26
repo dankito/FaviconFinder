@@ -22,19 +22,19 @@ open class StandardLocationFaviconFinder(
     private val log = LoggerFactory.getLogger(StandardLocationFaviconFinder::class.java)
 
 
-    open fun tryToFindDefaultFavicon(siteUrl: String, extractedFavicons: List<Favicon>): Favicon? = try {
+    open fun tryToFindStandardFavicon(siteUrl: String, extractedFavicons: List<Favicon>): Favicon? = try {
         val url = URL(siteUrl)
-        val defaultFaviconUrl = url.protocol + "://" + url.host + "/favicon.ico"
+        val standardFaviconUrl = url.protocol + "://" + url.host + "/favicon.ico"
 
-        if (doesNotContainIconWithUrl(extractedFavicons, defaultFaviconUrl)) {
-            webClient.head(defaultFaviconUrl).let { response ->
+        if (doesNotContainIconWithUrl(extractedFavicons, standardFaviconUrl)) {
+            webClient.head(standardFaviconUrl).let { response ->
                 if (response.successful &&
                     (response.contentType == null || response.contentType?.startsWith("image/") == true)) { // filter out e.g. error pages
-                    return Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon, null, response.contentType) // TODO: extract size from image url and derive mime type from url
+                    return Favicon(standardFaviconUrl, FaviconType.ShortcutIcon, null, response.contentType) // TODO: extract size from image url and derive mime type from url
                 } else {
                     // if it's a subdomain, also check domain for standard favicon icon
                     getDomainIfIsSubdomain(url)?.let { domain ->
-                        return tryToFindDefaultFavicon(domain, extractedFavicons)
+                        return tryToFindStandardFavicon(domain, extractedFavicons)
                     }
                 }
             }
@@ -42,7 +42,7 @@ open class StandardLocationFaviconFinder(
 
         null
     } catch (e: Throwable) {
-        log.error("Could not extract default favicon for url '$siteUrl'", e)
+        log.error("Could not extract standard favicon for url '$siteUrl'", e)
         null
     }
 

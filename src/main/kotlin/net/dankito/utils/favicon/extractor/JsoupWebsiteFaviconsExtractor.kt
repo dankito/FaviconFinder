@@ -43,7 +43,7 @@ open class JsoupWebsiteFaviconsExtractor(
         val faviconsInWebManifest = extractIconsFromWebManifest(linkElements, url)
         addIfNotAlreadyAdded(extractedFavicons, faviconsInWebManifest)
 
-        standardLocationFaviconFinder.tryToFindDefaultFavicon(url, extractedFavicons)?.let { defaultFavicon ->
+        standardLocationFaviconFinder.tryToFindStandardFavicon(url, extractedFavicons)?.let { defaultFavicon ->
             addIfNotAlreadyAdded(extractedFavicons, defaultFavicon)
         }
 
