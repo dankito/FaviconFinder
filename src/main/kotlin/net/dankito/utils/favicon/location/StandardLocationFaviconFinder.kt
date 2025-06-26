@@ -29,7 +29,7 @@ open class StandardLocationFaviconFinder(
         if (doesNotContainIconWithUrl(extractedFavicons, defaultFaviconUrl)) {
             webClient.head(defaultFaviconUrl).let { response ->
                 if (response.successful &&
-                    (response.contentType == null || response.contentType?.startsWith("text/") == false)) { // filter out e.g. error pages
+                    (response.contentType == null || response.contentType?.startsWith("image/") == true)) { // filter out e.g. error pages
                     return Favicon(defaultFaviconUrl, FaviconType.ShortcutIcon)
                 }
             }
