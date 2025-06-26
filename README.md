@@ -14,7 +14,7 @@ either by returning the best matching favicon or a list of available favicons.
 ### Gradle
 
 ```
-implementation("net.dankito.utils:favicon-finder:1.5.0")
+implementation("net.dankito.utils:favicon-finder:1.5.1")
 ```
 
 ### Maven
@@ -23,7 +23,7 @@ implementation("net.dankito.utils:favicon-finder:1.5.0")
 <dependency>
    <groupId>net.dankito.utils</groupId>
    <artifactId>favicon-finder</artifactId>
-   <version>1.5.0</version>
+   <version>1.5.1</version>
 </dependency>
 ```
 

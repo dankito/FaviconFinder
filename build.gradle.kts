@@ -28,7 +28,7 @@ repositories {
 
 
 group = "net.dankito.utils"
-version = "1.5.1-SNAPSHOT"
+version = "1.5.1"
 
 ext["sourceCodeRepositoryBaseUrl"] = "github.com/dankito/FaviconFinder"
 ext["projectDescription"] = "Extracts the favicons from a web site"
