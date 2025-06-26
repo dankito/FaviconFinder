@@ -1,6 +1,6 @@
 package net.dankito.utils.favicon.fetcher
 
-import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.web.client.WebClient
 
 /**
  * Fetches the best matching favicon for an url with Yandex'
@@ -8,7 +8,7 @@ import net.dankito.utils.favicon.web.IWebClient
  *
  * Does not support the `preferredSize` parameter and simply ignores its value.
  */
-open class YandexFaviconFetcher(webClient: IWebClient) : FaviconFetcherBase(webClient) {
+open class YandexFaviconFetcher(webClient: WebClient) : FaviconFetcherBase(webClient) {
 
     override val supportsPreferredSizeParameter = false
 

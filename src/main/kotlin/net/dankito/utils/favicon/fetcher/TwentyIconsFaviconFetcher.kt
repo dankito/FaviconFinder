@@ -1,6 +1,6 @@
 package net.dankito.utils.favicon.fetcher
 
-import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.web.client.WebClient
 import kotlin.math.abs
 
 /**
@@ -13,7 +13,7 @@ import kotlin.math.abs
  *
  * For documentation see: [https://github.com/twentyhq/favicon](https://github.com/twentyhq/favicon).
  */
-open class TwentyIconsFaviconFetcher(webClient: IWebClient) : FaviconFetcherBase(webClient) {
+open class TwentyIconsFaviconFetcher(webClient: WebClient) : FaviconFetcherBase(webClient) {
 
     companion object {
         val SupportedSizes = listOf(16, 32, 64, 128, 180, 192)

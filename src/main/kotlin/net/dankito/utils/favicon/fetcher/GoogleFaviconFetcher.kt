@@ -1,6 +1,6 @@
 package net.dankito.utils.favicon.fetcher
 
-import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.web.client.WebClient
 
 /**
  * Fetches the best matching favicon for an url with Google's
@@ -10,7 +10,7 @@ import net.dankito.utils.favicon.web.IWebClient
  *
  * And also a `minSize` and `maxSize` parameter.
  */
-open class GoogleFaviconFetcher(webClient: IWebClient) : FaviconFetcherBase(webClient) {
+open class GoogleFaviconFetcher(webClient: WebClient) : FaviconFetcherBase(webClient) {
 
     override val supportsPreferredSizeParameter = true
 

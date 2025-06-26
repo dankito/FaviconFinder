@@ -8,6 +8,6 @@ interface FaviconFetcher {
 
     val supportsPreferredSizeParameter: Boolean
 
-    fun fetch(url: String, preferredSize: Int? = null): ByteArray?
+    suspend fun fetch(url: String, preferredSize: Int? = null): ByteArray?
 
 }

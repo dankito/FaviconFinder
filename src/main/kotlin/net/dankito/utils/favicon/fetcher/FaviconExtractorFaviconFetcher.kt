@@ -1,6 +1,6 @@
 package net.dankito.utils.favicon.fetcher
 
-import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.web.client.WebClient
 
 /**
  * Fetches the best matching favicon for an url with Favicon Extractor's
@@ -13,7 +13,7 @@ import net.dankito.utils.favicon.web.IWebClient
  *
  * For documentation see: [https://github.com/seadfeng/favicon-downloader](https://github.com/seadfeng/favicon-downloader).
  */
-open class FaviconExtractorFaviconFetcher(webClient: IWebClient) : FaviconFetcherBase(webClient) {
+open class FaviconExtractorFaviconFetcher(webClient: WebClient) : FaviconFetcherBase(webClient) {
 
     override val supportsPreferredSizeParameter = false
 

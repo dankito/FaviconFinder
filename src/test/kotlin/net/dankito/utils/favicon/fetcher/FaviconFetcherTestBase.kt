@@ -3,19 +3,20 @@ package net.dankito.utils.favicon.fetcher
 import assertk.assertThat
 import assertk.assertions.isGreaterThan
 import assertk.assertions.isNotNull
-import net.dankito.utils.favicon.web.IWebClient
-import net.dankito.utils.favicon.web.UrlConnectionWebClient
+import kotlinx.coroutines.test.runTest
+import net.dankito.web.client.KtorWebClient
+import net.dankito.web.client.WebClient
 import kotlin.test.Test
 
 abstract class FaviconFetcherTestBase {
 
-    protected abstract fun getFaviconFetcher(webClient: IWebClient): FaviconFetcher
+    protected abstract fun getFaviconFetcher(webClient: WebClient): FaviconFetcher
 
-    protected val underTest = getFaviconFetcher(UrlConnectionWebClient.Default)
+    protected val underTest = getFaviconFetcher(KtorWebClient())
 
 
     @Test
-    fun heise_de_32x32() {
+    fun heise_de_32x32() = runTest {
         val result = underTest.fetch("heise.de", 32)
 
         assertThat(result).isNotNull()
@@ -23,7 +24,7 @@ abstract class FaviconFetcherTestBase {
     }
 
     @Test
-    fun https_heise_de_32x32() {
+    fun https_heise_de_32x32() = runTest {
         val result = underTest.fetch("https://heise.de", 32)
 
         assertThat(result).isNotNull()

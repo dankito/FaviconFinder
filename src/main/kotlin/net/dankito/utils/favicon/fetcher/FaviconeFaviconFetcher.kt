@@ -1,7 +1,6 @@
 package net.dankito.utils.favicon.fetcher
 
-import net.dankito.utils.favicon.web.IWebClient
-import kotlin.math.abs
+import net.dankito.web.client.WebClient
 
 /**
  * Fetches the best matching favicon for an url with Favicone's
@@ -11,7 +10,7 @@ import kotlin.math.abs
  *
  * For documentation see: [https://favicone.com/](https://favicone.com/).
  */
-open class FaviconeFaviconFetcher(webClient: IWebClient) : FaviconFetcherBase(webClient) {
+open class FaviconeFaviconFetcher(webClient: WebClient) : FaviconFetcherBase(webClient) {
 
     companion object {
         const val MaxSize = 256

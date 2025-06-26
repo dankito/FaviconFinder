@@ -1,9 +1,9 @@
 package net.dankito.utils.favicon.fetcher
 
-import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.web.client.WebClient
 
 class DuckDuckGoFaviconFetcherTest : FaviconFetcherTestBase() {
 
-    override fun getFaviconFetcher(webClient: IWebClient) = DuckDuckGoFaviconFetcher(webClient)
+    override fun getFaviconFetcher(webClient: WebClient) = DuckDuckGoFaviconFetcher(webClient)
 
 }

@@ -1,9 +1,9 @@
 package net.dankito.utils.favicon.fetcher
 
-import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.web.client.WebClient
 
 class TwentyIconsFaviconFetcherTest : FaviconFetcherTestBase() {
 
-    override fun getFaviconFetcher(webClient: IWebClient) = TwentyIconsFaviconFetcher(webClient)
+    override fun getFaviconFetcher(webClient: WebClient) = TwentyIconsFaviconFetcher(webClient)
 
 }

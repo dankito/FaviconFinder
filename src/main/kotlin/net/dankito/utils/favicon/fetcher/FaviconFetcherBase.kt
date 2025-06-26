@@ -1,10 +1,11 @@
 package net.dankito.utils.favicon.fetcher
 
 import net.codinux.log.logger
-import net.dankito.utils.favicon.web.IWebClient
 import net.dankito.utils.favicon.web.UrlUtil
+import net.dankito.web.client.WebClient
+import net.dankito.web.client.get
 
-abstract class FaviconFetcherBase(protected val webClient: IWebClient, protected val urlUtil: UrlUtil = UrlUtil.Default) : FaviconFetcher {
+abstract class FaviconFetcherBase(protected val webClient: WebClient, protected val urlUtil: UrlUtil = UrlUtil.Default) : FaviconFetcher {
 
     protected abstract fun getFaviconFetcherUrl(url: String, preferredSize: Int?): String
 
@@ -12,12 +13,12 @@ abstract class FaviconFetcherBase(protected val webClient: IWebClient, protected
     protected val log by logger()
 
 
-    override fun fetch(url: String, preferredSize: Int?): ByteArray? = try {
+    override suspend fun fetch(url: String, preferredSize: Int?): ByteArray? = try {
         val fetcherUrl = getFaviconFetcherUrl(url, preferredSize)
-        val response = webClient.get(fetcherUrl, true) // actually only required for FaviconExtractor to set the User-Agent (requestDesktopWebsite=true)
+        val response = webClient.get<ByteArray>(fetcherUrl)
 
         if (response.successful) {
-            response.receivedData
+            response.body
         } else {
             null
         }

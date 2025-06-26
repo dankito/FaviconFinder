@@ -1,6 +1,6 @@
 package net.dankito.utils.favicon.fetcher
 
-import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.web.client.WebClient
 
 /**
  * Fetches the best matching favicon for an url with DuckDuckGo's
@@ -8,7 +8,7 @@ import net.dankito.utils.favicon.web.IWebClient
  *
  * Does not support the `preferredSize` parameter.
  */
-open class DuckDuckGoFaviconFetcher(webClient: IWebClient) : FaviconFetcherBase(webClient) {
+open class DuckDuckGoFaviconFetcher(webClient: WebClient) : FaviconFetcherBase(webClient) {
 
     override val supportsPreferredSizeParameter = false
 

@@ -18,7 +18,7 @@ plugins {
 
 
 kotlin {
-    jvmToolchain(8)
+    jvmToolchain(11) // TODO: when new ktor2-web-client version is out, set back to JVM 8
 }
 
 
@@ -36,8 +36,10 @@ ext["projectDescription"] = "Extracts the favicons from a web site"
 
 val jsoupVersion: String by project
 val jacksonVersion: String by project
+val webClientVersion: String by project
 val klfVersion: String by project
 
+val coroutinesVersion: String by project
 val assertKVersion: String by project
 val logbackVersion: String by project
 
@@ -45,10 +47,16 @@ dependencies {
     implementation("org.jsoup:jsoup:$jsoupVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
+    implementation("net.dankito.web:web-client-api:$webClientVersion")
+
     implementation("net.codinux.log:klf:$klfVersion")
 
 
     testImplementation(kotlin("test"))
+    
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
+
+    testImplementation("net.dankito.web:ktor2-web-client:$webClientVersion")
 
     testImplementation("com.willowtreeapps.assertk:assertk:$assertKVersion")
 

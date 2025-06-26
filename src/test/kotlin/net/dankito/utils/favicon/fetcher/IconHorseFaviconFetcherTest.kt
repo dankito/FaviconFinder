@@ -1,11 +1,11 @@
 package net.dankito.utils.favicon.fetcher
 
-import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.web.client.WebClient
 import kotlin.test.Ignore
 
 @Ignore
 class IconHorseFaviconFetcherTest : FaviconFetcherTestBase() {
 
-    override fun getFaviconFetcher(webClient: IWebClient) = IconHorseFaviconFetcher(webClient)
+    override fun getFaviconFetcher(webClient: WebClient) = IconHorseFaviconFetcher(webClient)
 
 }

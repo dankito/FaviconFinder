@@ -1,6 +1,6 @@
 package net.dankito.utils.favicon.fetcher
 
-import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.web.client.WebClient
 
 /**
  * Fetches the best matching favicon for an url with Favicon.is'
@@ -9,7 +9,7 @@ import net.dankito.utils.favicon.web.IWebClient
  * Does not support the `preferredSize` parameter, only a `larger=true` query param. But it's
  * not possible to specify desired size directly.
  */
-open class FaviconIsFaviconFetcher(webClient: IWebClient) : FaviconFetcherBase(webClient) {
+open class FaviconIsFaviconFetcher(webClient: WebClient) : FaviconFetcherBase(webClient) {
 
     override val supportsPreferredSizeParameter = false
 

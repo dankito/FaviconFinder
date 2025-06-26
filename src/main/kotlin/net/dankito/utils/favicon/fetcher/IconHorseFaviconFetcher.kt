@@ -1,6 +1,6 @@
 package net.dankito.utils.favicon.fetcher
 
-import net.dankito.utils.favicon.web.IWebClient
+import net.dankito.web.client.WebClient
 
 /**
  * Fetches the best matching favicon for an url with Icon Horse's
@@ -12,7 +12,7 @@ import net.dankito.utils.favicon.web.IWebClient
  *
  * Warning: Returns often HTTP status 503!
  */
-open class IconHorseFaviconFetcher(webClient: IWebClient, protected val apiKey: String? = null) : FaviconFetcherBase(webClient) {
+open class IconHorseFaviconFetcher(webClient: WebClient, protected val apiKey: String? = null) : FaviconFetcherBase(webClient) {
 
     override val supportsPreferredSizeParameter = apiKey != null
 
