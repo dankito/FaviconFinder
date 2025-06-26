@@ -31,6 +31,23 @@ open class JacksonWebManifestFaviconsExtractor(
         emptyList()
     }
 
+
+    // TODO: there can also be localized icons, see https://w3c.github.io/manifest/#localizing-image-resources:
+    /*
+            {
+              "lang": "en-US",
+              "icons": [
+                { "src": "icon/lowres.png", "sizes": "64x64" },
+                { "src": "icon/hires.png", "sizes": "256x256" }
+              ],
+              "icons_localized": {
+                "fr": [
+                  { "src": "icon/lowres_fr.png", "sizes": "64x64" },
+                  { "src": "icon/hires_fr.png", "sizes": "256x256" }
+                ]
+              }
+
+     */
     override fun extractIconsFromWebManifest(manifest: WebManifest, manifestAbsoluteUrl: String): List<Favicon> = manifest.icons.mapNotNull {
         val type = if (it.src.contains("apple-touch", true)) FaviconType.AppleTouch else FaviconType.Icon
         // a relative icon url is always resolved against manifest's url
