@@ -9,6 +9,7 @@ import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.Size
 import net.dankito.utils.favicon.webmanifest.WebManifest
 import net.dankito.utils.favicon.webmanifest.WebManifestIcon
+import net.dankito.web.client.KtorWebClient
 import kotlin.test.Test
 
 class JacksonWebManifestFaviconsExtractorTest {
@@ -22,7 +23,7 @@ class JacksonWebManifestFaviconsExtractorTest {
     }
 
 
-    private val underTest = JacksonWebManifestFaviconsExtractor()
+    private val underTest = JacksonWebManifestFaviconsExtractor(KtorWebClient())
 
 
     @Test

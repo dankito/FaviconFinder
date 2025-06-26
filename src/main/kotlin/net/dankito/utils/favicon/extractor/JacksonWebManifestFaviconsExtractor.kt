@@ -1,31 +1,31 @@
 package net.dankito.utils.favicon.extractor
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import net.codinux.log.logger
 import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
-import net.dankito.utils.favicon.json.JsonSerializer
 import net.dankito.utils.favicon.webmanifest.WebManifest
 import net.dankito.utils.favicon.webmanifest.WebManifestIcon
-import java.net.URL
+import net.dankito.web.client.WebClient
+import net.dankito.web.client.get
 
 open class JacksonWebManifestFaviconsExtractor(
+    protected val webClient: WebClient,
     protected val creator: FaviconCreator = FaviconCreator.Default,
 ) : WebManifestFaviconsExtractor {
-
-    companion object {
-        val Default = JacksonWebManifestFaviconsExtractor()
-    }
 
 
     protected val log by logger()
 
 
-    override fun extractIconsFromWebManifest(manifestAbsoluteUrl: String): List<Favicon> = try {
-        // don't know why but when requested with URLConnection then web manifest string starts with ﻿ leading to that Jackson deserialization fails
-        val manifest = JsonSerializer.default.readValue<WebManifest>(URL(manifestAbsoluteUrl))
+    override suspend fun extractIconsFromWebManifest(manifestAbsoluteUrl: String): List<Favicon> = try {
+        val response = webClient.get<WebManifest>(manifestAbsoluteUrl)
 
-        extractIconsFromWebManifest(manifest, manifestAbsoluteUrl)
+        if (response.successful && response.body != null) {
+            extractIconsFromWebManifest(response.body!!, manifestAbsoluteUrl)
+        } else {
+            log.error(response.error) { "Could not retrieve WebManifest from url '$manifestAbsoluteUrl'" }
+            emptyList()
+        }
     } catch (e: Throwable) {
         log.error(e) { "Could not read icons from web manifest of url '$manifestAbsoluteUrl'" }
         emptyList()

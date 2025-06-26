@@ -15,7 +15,7 @@ import org.jsoup.select.Elements
 open class JsoupWebsiteFaviconsExtractor(
     protected val webClient: WebClient,
     protected val faviconCreator: FaviconCreator = FaviconCreator.Default,
-    protected val webManifestFaviconsExtractor: WebManifestFaviconsExtractor = JacksonWebManifestFaviconsExtractor.Default,
+    protected val webManifestFaviconsExtractor: WebManifestFaviconsExtractor = JacksonWebManifestFaviconsExtractor(webClient),
     protected val standardLocationFaviconFinder: StandardLocationFaviconFinder = StandardLocationFaviconFinder(webClient),
     protected val urlUtil: UrlUtil = UrlUtil.Default,
 ) : WebsiteFaviconsExtractor {
@@ -95,7 +95,7 @@ open class JsoupWebsiteFaviconsExtractor(
     protected open fun isMsTileMetaElement(metaElement: Element) = metaElement.hasAttr("name") && metaElement.attr("name") == "msapplication-TileImage" && metaElement.hasAttr("content")
 
 
-    protected open fun extractIconsFromWebManifest(linkAndMetaElements: Elements, siteUrl: String): List<Favicon> =
+    protected open suspend fun extractIconsFromWebManifest(linkAndMetaElements: Elements, siteUrl: String): List<Favicon> =
         linkAndMetaElements.firstOrNull { it.attr("rel") == "manifest" }
             ?.attr("href")
             ?.takeIf { it.isNotBlank() }
@@ -103,7 +103,7 @@ open class JsoupWebsiteFaviconsExtractor(
 
             ?: emptyList()
 
-    protected open fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon> =
+    protected open suspend fun extractIconsFromWebManifest(manifestUrl: String, siteUrl: String): List<Favicon> =
         webManifestFaviconsExtractor.extractIconsFromWebManifest(urlUtil.makeLinkAbsolute(manifestUrl, siteUrl))
 
 

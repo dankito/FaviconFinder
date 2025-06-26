@@ -37,7 +37,6 @@ ext["projectDescription"] = "Extracts the favicons from a web site"
 
 val kotlinxSerializationVersion: String by project
 val jsoupVersion: String by project
-val jacksonVersion: String by project
 val webClientVersion: String by project
 val klfVersion: String by project
 
@@ -49,7 +48,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxSerializationVersion")
 
     implementation("org.jsoup:jsoup:$jsoupVersion")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
 
     implementation("net.dankito.web:web-client-api:$webClientVersion")
 
