@@ -22,9 +22,10 @@ open class StandardLocationFaviconFinder(
     private val log = LoggerFactory.getLogger(StandardLocationFaviconFinder::class.java)
 
 
-    open fun tryToFindDefaultFavicon(url: String, extractedFavicons: List<Favicon>): Favicon? = try {
-        val urlInstance = URL(url)
-        val defaultFaviconUrl = urlInstance.protocol + "://" + urlInstance.host + "/favicon.ico"
+    open fun tryToFindDefaultFavicon(siteUrl: String, extractedFavicons: List<Favicon>): Favicon? = try {
+        val url = URL(siteUrl)
+        val defaultFaviconUrl = url.protocol + "://" + url.host + "/favicon.ico"
+
         if (doesNotContainIconWithUrl(extractedFavicons, defaultFaviconUrl)) {
             webClient.head(defaultFaviconUrl).let { response ->
                 if (response.successful &&
@@ -36,7 +37,7 @@ open class StandardLocationFaviconFinder(
 
         null
     } catch (e: Throwable) {
-        log.error("Could not extract default favicon for url '$url'", e)
+        log.error("Could not extract default favicon for url '$siteUrl'", e)
         null
     }
 
