@@ -1,6 +1,5 @@
 package net.dankito.utils.favicon.finder
 
-import com.fasterxml.jackson.module.kotlin.readValue
 import net.dankito.utils.favicon.Favicon
 import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.Size

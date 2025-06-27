@@ -1,8 +1,5 @@
 package net.dankito.utils.favicon
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-
-
 open class Favicon(
     open val url : String,
     open val iconType : FaviconType,
@@ -39,13 +36,13 @@ open class Favicon(
      * Temporary value to indicate if tried to determine image size so that we don't
      * fetch image data multiple times.
      */
-    @JsonIgnore
+//    @JsonIgnore
     open var triedToRetrieveSize: Boolean = false
 
     /**
      * Temporary value that holds image's data if we retrieved it e.g. to determine its size.
      */
-    @JsonIgnore
+//    @JsonIgnore
     open var imageBytes: ByteArray? = null
 
 

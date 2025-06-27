@@ -7,7 +7,7 @@ pluginManagement {
     }
 
     plugins {
-        kotlin("jvm") version kotlinVersion
+        kotlin("multiplatform") version kotlinVersion
 
         kotlin("plugin.serialization") version kotlinVersion
     }
