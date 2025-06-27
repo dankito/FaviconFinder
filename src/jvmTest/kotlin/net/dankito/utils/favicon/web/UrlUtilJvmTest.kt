@@ -5,9 +5,9 @@ import assertk.assertions.isEqualTo
 import kotlin.test.Test
 
 
-class UrlUtilTest {
+class UrlUtilJvmTest {
 
-    private val underTest = UrlUtil()
+    private val underTest = UrlUtilJvm()
 
 
     @Test

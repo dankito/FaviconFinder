@@ -9,12 +9,8 @@ import net.dankito.web.client.*
 open class FaviconFinder @JvmOverloads constructor(
     protected open val webClient : WebClient,
     protected open val faviconsExtractor: WebsiteFaviconsExtractor = JsoupWebsiteFaviconsExtractor(webClient),
-    protected open val urlUtil: UrlUtil = UrlUtil.Default
+    protected open val urlUtil: UrlUtilJvm = UrlUtilJvm.Default
 ) {
-
-    companion object {
-        val IconSizeRegex = Regex("\\d{2,4}[xX×]\\d{2,4}")
-    }
 
 
     open suspend fun extractFavicons(url: String) : List<Favicon> =

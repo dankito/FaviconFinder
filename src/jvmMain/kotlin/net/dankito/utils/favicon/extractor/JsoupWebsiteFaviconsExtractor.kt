@@ -5,7 +5,7 @@ import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.Size
 import net.dankito.utils.favicon.extensions.attrOrNull
 import net.dankito.utils.favicon.location.StandardLocationFaviconFinder
-import net.dankito.utils.favicon.web.UrlUtil
+import net.dankito.utils.favicon.web.UrlUtilJvm
 import net.dankito.web.client.WebClient
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -17,7 +17,7 @@ open class JsoupWebsiteFaviconsExtractor(
     protected val faviconCreator: FaviconCreator = FaviconCreator.Default,
     protected val webManifestFaviconsExtractor: WebManifestFaviconsExtractor = JacksonWebManifestFaviconsExtractor(webClient),
     protected val standardLocationFaviconFinder: StandardLocationFaviconFinder = StandardLocationFaviconFinder(webClient),
-    protected val urlUtil: UrlUtil = UrlUtil.Default,
+    protected val urlUtil: UrlUtilJvm = UrlUtilJvm.Default,
 ) : WebsiteFaviconsExtractor {
 
     override suspend fun extractFavicons(url: String, webSiteHtml: String): List<Favicon> {

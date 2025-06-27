@@ -2,17 +2,18 @@ package net.dankito.utils.favicon.extractor
 
 import net.codinux.log.logger
 import net.dankito.utils.favicon.Favicon
-import net.dankito.utils.favicon.FaviconFinder.Companion.IconSizeRegex
 import net.dankito.utils.favicon.FaviconType
 import net.dankito.utils.favicon.Size
-import net.dankito.utils.favicon.web.UrlUtil
+import net.dankito.utils.favicon.web.UrlUtilJvm
 
 open class FaviconCreator(
-    protected val urlUtil: UrlUtil = UrlUtil.Default
+    protected val urlUtil: UrlUtilJvm = UrlUtilJvm.Default
 ) {
 
     companion object {
         val Default = FaviconCreator()
+
+        val IconSizeRegex = Regex("\\d{2,4}[xX×]\\d{2,4}")
     }
 
 
